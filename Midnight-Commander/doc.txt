@@ -15,11 +15,11 @@ Search	    Ctrl-s, Alt-s	         Start a quick filename search in the directory
 
 Meta+Enter	                         Insert 'current object'1 to command line. 
 
-Meta+t	                             Change panel view ('Full','Brief','Long') 
+Meta+t	                                Change panel view ('Full','Brief','Long') 
 
-Meta+Shift+H                         Display directory history.    
+Meta+Shift+H                            Display directory history.    
 
-Ctrl+Space	                         Show directory size. 
+Ctrl+Space	                            Show directory size. 
 
 # View panel modes 
 
