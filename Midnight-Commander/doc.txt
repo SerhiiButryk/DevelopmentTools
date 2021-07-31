@@ -1,0 +1,71 @@
+# Explanation to the description of key combinations
+
+Meta - "Alternate" key, or "Alt", or "Meta", also can be replaced with a single "Esc" or "Escape";
+Esc - "Escape" key or "Esc"; 
+
+# File panel actions
+
+CopySingle	Shift-F5, F15	
+MoveSingle	Shift-F6, F16
+
+Search	    Ctrl-s, Alt-s	         Start a quick filename search in the directory listing 
+
++	                                 Select a group of files. (regular expression can be used)
+\	                                 Unselect a group of files. (regular expression can be used)
+
+Meta+Enter	                         Insert 'current object'1 to command line. 
+
+Meta+t	                             Change panel view ('Full','Brief','Long') 
+
+Meta+Shift+H                         Display directory history.    
+
+Ctrl+Space	                         Show directory size. 
+
+# View panel modes 
+
+Ctrl+x,i	                         Set the other panel display mode to information.
+
+Ctrl+x,q	                         Set the other panel display mode to quick view. 
+
+Meta+o	                             If the currently selected file is a directory, load that directory on the other panel and moves the selection to the next file. 
+
+Meta+i	                             Make the current directory of the current panel also the current directory of the other panel.
+
+Ctrl-U                               Swap left and right panel
+
+Alt+p, Alt+n                         Navigate between command line history
+
+# Quick actions
+
+Quick cd          Alt-c
+
+Command history   Meta+h	    
+
+Chmod             Ctrl+x,c
+
+Sym link          Ctrl+x,s
+
+Edit symlink      Ctrl+x,Ctrl+s	
+
+# Find commands
+
+Find file.        Meta+Shift+? (Directories should be specified with ':' split character)
+
+# Close windows
+
+Press Esc twice   Close dialog or window
+
+# Insert actions
+
+Inser file name   Alt+Enter
+in command line  
+
+Inser full path   Alt+Shift+Enter
+in command line  
+
+# Change mc editor
+.selected_editor  Edit this file
+
+More info:
+
+Overview: https://www.youtube.com/watch?v=rddUniuHuWM
