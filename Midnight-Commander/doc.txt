@@ -13,13 +13,13 @@ Search	    Ctrl-s, Alt-s	         Start a quick filename search in the directory
 +	                                 Select a group of files. (regular expression can be used)
 \	                                 Unselect a group of files. (regular expression can be used)
 
-Meta+Enter	                       Insert 'current object'1 to command line. 
+Meta+Enter	                         Insert 'current object'1 to command line. 
 
-Meta+t	                           Change panel view ('Full','Brief','Long') 
+Meta+t	                             Change panel view ('Full','Brief','Long') 
 
-Meta+Shift+H                       Display directory history.    
+Meta+Shift+H                         Display directory history.    
 
-Ctrl+Space	                       Show directory size. 
+Ctrl+Space	                         Show directory size. 
 
 # View panel modes 
 
@@ -27,13 +27,13 @@ Ctrl+x,i	                         Set the other panel display mode to informatio
 
 Ctrl+x,q	                         Set the other panel display mode to quick view. 
 
-Meta+o	                           If the currently selected file is a directory, load that directory on the other panel and moves the selection to the next file. 
+Meta+o	                             If the currently selected file is a directory, load that directory on the other panel and moves the selection to the next file. 
 
-Meta+i	                           Make the current directory of the current panel also the current directory of the other panel.
+Meta+i	                             Make the current directory of the current panel also the current directory of the other panel.
 
-Ctrl-U                             Swap left and right panel
+Ctrl-U                               Swap left and right panel
 
-Alt+p, Alt+n                       Navigate between command line history
+Alt+p, Alt+n                         Navigate between command line history
 
 # Quick actions
 
