@@ -13,13 +13,13 @@ Search	    Ctrl-s, Alt-s	         Start a quick filename search in the directory
 +	                                 Select a group of files. (regular expression can be used)
 \	                                 Unselect a group of files. (regular expression can be used)
 
-Meta+Enter	                         Insert 'current object'1 to command line. 
+Meta+Enter	                       Insert 'current object'1 to command line. 
 
-Meta+t	                             Change panel view ('Full','Brief','Long') 
+Meta+t	                           Change panel view ('Full','Brief','Long') 
 
-Meta+Shift+H                         Display directory history.    
+Meta+Shift+H                       Display directory history.    
 
-Ctrl+Space	                         Show directory size. 
+Ctrl+Space	                       Show directory size. 
 
 # View panel modes 
 
@@ -27,45 +27,43 @@ Ctrl+x,i	                         Set the other panel display mode to informatio
 
 Ctrl+x,q	                         Set the other panel display mode to quick view. 
 
-Meta+o	                             If the currently selected file is a directory, load that directory on the other panel and moves the selection to the next file. 
+Meta+o	                           If the currently selected file is a directory, load that directory on the other panel and moves the selection to the next file. 
 
-Meta+i	                             Make the current directory of the current panel also the current directory of the other panel.
+Meta+i	                           Make the current directory of the current panel also the current directory of the other panel.
 
-Ctrl-U                               Swap left and right panel
+Ctrl-U                             Swap left and right panel
 
-Alt+p, Alt+n                         Navigate between command line history
+Alt+p, Alt+n                       Navigate between command line history
 
 # Quick actions
 
-Quick cd          Alt-c
+Quick cd             Alt-c
 
-Command history   Meta+h	    
+Command history      Meta+h	    
 
-Chmod             Ctrl+x,c
+Chmod                Ctrl+x,c
 
-Sym link          Ctrl+x,s
+Sym link             Ctrl+x,s
 
-Edit symlink      Ctrl+x,Ctrl+s	
+Edit symlink         Ctrl+x,Ctrl+s	
 
 # Find commands
 
-Find file.        Meta+Shift+? (Directories should be specified with ':' split character)
+Find file.           Meta+Shift+? (Directories should be specified with ':' split character)
 
 # Close windows
 
-Press Esc twice   Close dialog or window
+Press Esc twice      Close dialog or window
 
 # Insert actions
 
-Inser file name   Alt+Enter
+Inser file name      Alt+Enter
 in command line  
 
-Inser full path   Alt+Shift+Enter
+Inser full path      Alt+Shift+Enter
 in command line  
 
 # Change mc editor
-.selected_editor  Edit this file
+.selected_editor     Edit this file
 
-More info:
-
-Overview: https://www.youtube.com/watch?v=rddUniuHuWM
+More info: https://www.youtube.com/watch?v=rddUniuHuWM
