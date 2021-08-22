@@ -1,41 +1,65 @@
+/**
+ *
+ *  Midnight-Commander basic and advanced usage
+ *
+ */
+
 # Explanation to the description of key combinations
 
 Meta - "Alternate" key, or "Alt", or "Meta", also can be replaced with a single "Esc" or "Escape";
 Esc - "Escape" key or "Esc"; 
 
-# File panel actions
+/**
+ *
+ *  File panel actions
+ *
+ */
 
 CopySingle	Shift-F5, F15	
 MoveSingle	Shift-F6, F16
 
-Search	    Ctrl-s, Alt-s	         Start a quick filename search in the directory listing 
+/**
+ *
+ *  Search
+ *
+ */	    
 
-+	                                 Select a group of files. (regular expression can be used)
-\	                                 Unselect a group of files. (regular expression can be used)
+Ctrl-s, Alt-s - Start a quick filename search in the directory listing 
 
-Meta+Enter	                         Insert 'current object'1 to command line. 
++  - Select a group of files. (regular expression can be used)
+\  - Unselect a group of files. (regular expression can be used)
 
-Meta+t	                                 Change panel view ('Full','Brief','Long') 
+Meta+Enter - Insert 'current object'1 to command line. 
 
-Meta+Shift+H                             Display directory history.    
+Meta+t - Change panel view ('Full','Brief','Long') 
 
-Ctrl+Space	                         Show directory size. 
+Meta+Shift+H - Display directory history.    
 
-# View panel modes 
+Ctrl+Space - Show directory size. 
 
-Ctrl+x,i	                         Set the other panel display mode to information.
+/**
+ *
+ *  View panel modes
+ *
+ */
 
-Ctrl+x,q	                         Set the other panel display mode to quick view. 
+Ctrl+x,i - Set the other panel display mode to information.
 
-Meta+o	                             If the currently selected file is a directory, load that directory on the other panel and moves the selection to the next file. 
+Ctrl+x,q - Set the other panel display mode to quick view. 
 
-Meta+i	                             Make the current directory of the current panel also the current directory of the other panel.
+Meta+o - If the currently selected file is a directory, load that directory on the other panel and moves the selection to the next file. 
 
-Ctrl-U                               Swap left and right panel
+Meta+i - Make the current directory of the current panel also the current directory of the other panel.
 
-Alt+p, Alt+n                         Navigate between command line history
+Ctrl-U - Swap left and right panel.
 
-# Quick actions
+Alt+p, Alt+n - Navigate between command line history.
+
+/**
+ *
+ *  Quick actions
+ *
+ */
 
 Quick cd             Alt-c
 
@@ -63,7 +87,16 @@ in command line
 Inser full path      Alt+Shift+Enter
 in command line  
 
-# Change mc editor
-.selected_editor     Edit this file
+/**
+ *
+ *  Change editor
+ *
+ */
 
-More info: https://www.youtube.com/watch?v=rddUniuHuWM
+/**
+ *
+ *  More info
+ *
+ */
+
+Overview: https://www.youtube.com/watch?v=rddUniuHuWM
