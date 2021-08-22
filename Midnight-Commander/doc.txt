@@ -93,6 +93,8 @@ in command line
  *
  */
 
+.selected_editor - Edit this file
+
 /**
  *
  *  More info
