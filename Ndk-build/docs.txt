@@ -1,0 +1,136 @@
+/**
+ *
+ *  Ndk-build - Android tools to compile and build C/C++ code for Android 
+ *
+ *  hello-NDK - demo program to try and experiment with ndk-build
+ *
+ */
+
+--- Android NDK ---
+
+Android uses a set of tools to build and run C/C++ code with Android application (NDK).
+
+Android uses 2 different build tools :
+1) CMake (preferrable)
+2) ndk-build (based on make files)
+
+--- Ndk-build ---
+
+Ndk-build uses 2 make files to describe building process for C/C++ code.
+1) Android.mk
+2) Application.mk
+
+The syntax of the Android.mk allows you to group your sources into modules. 
+A module can be : 
+1) Static library 
+2) Shared library 
+3) Standalone executable
+
+--- Basic syntax ---
+
+# Defines the var which indicates the location of this mk file in file tree
+LOCAL_PATH := $(call my-dir)
+
+# The CLEAR_VARS variable points to a special GNU Makefile that clears many LOCAL_XXX variables for you
+# It does not clear LOCAL_PAT  
+include $(CLEAR_VARS)
+
+NDK-build can build 4 types of libraries :
+
+1) Executable - include $(BUILD_EXECUTABLE)
+2) Shared - include $(BUILD_SHARED_LIBRARY)
+3) Static - include $(BUILD_STATIC_LIBRARY)
+4) Prebuild shared - include $(PREBUILT_SHARED_LIBRARY)
+
+NDK-build also defines some variable :
+
+TARGET_ARCH - (arm, arm64, x86, or x86_64)
+TARGET_PLATFORM - (android-22, for example)
+TARGET_ARCH_ABI - (armeabi-v7a, arm64-v8a, x86 or x86_64)
+-------------------------------------------------------------------------------
+
+--- Build project ---
+
+$ cd hello-NDK/root/jni
+$ ndk-build NDK_APPLICATION_MK=./Application.mk
+
+# Clean build
+$ ndk-build clean NDK_APPLICATION_MK=./Application.mk
+
+# Verbose build
+$ ndk-build NDK_APPLICATION_MK=./Application.mk V=1
+
+How to debug .mk makefiles
+
+$(error error message)
+$(warning warning message)
+$(info information message)
+
+// Check variable
+$(info LOCAL_PATH=$(LOCAL_PATH))
+$(info BUILD_MODE is $(BUILD_MODE) for device $(BUILD_MODE))
+
+-------------------------------------------------------------------------------
+
+// Run to build project with verbose logs
+$ ndk-build NDK_APPLICATION_MK=./MyApplication.mk V=1
+
+// Build for multiple target architectures
+ APP_ABI := armeabi armeabi-v7a mips x86
+
+ The TARGET_ARCH and TARGET_ARCH_ABI is slightly different: 
+ TARGET_ARCH reports the architecture name; while TARGET_ARCH_ABI 
+ reports architecture along with the instruction set version. 
+ For example, if the current APP_ABI is “armeabi-v7a”, the 
+ TARGET_ARCH will only show “arm”, while the TARGET_ARCH_ABI 
+ will be “armeabi-v7a”. Keep this in mind, so that you can take 
+ full advantage of these two variables.
+
+/ ----------------------------------- Code example ---------------------------- \
+
+ ifeq ($(TARGET_ARCH),x86)
+    GPU_FAMILY=powervr
+    OPENCL_LIB := PVROCL
+    OPENCL_INC_DIR    := $(OPENCL_COMMON)/include/CL12/
+    OPENCL_LIB_DIR    := $(OPENCL_COMMON)/libs/$(GPU_FAMILY)_$(TARGET_ARCH)/
+    LOCAL_LDLIBS    := -llog  -L$(OPENCL_LIB_DIR) -l$(OPENCL_LIB) 
+    MYMODULE_NAME:=mymodule_$(GPU_FAMILY)
+    include OTHER_MK_FILES.mk
+endif
+
+ifeq ($(TARGET_ARCH),arm)
+    #Adreno
+    GPU_FAMILY:=adreno
+    OPENCL_LIB := OpenCL
+    OPENCL_INC_DIR    := $(OPENCL_COMMON)/include/CL12/
+    OPENCL_LIB_DIR    := $(OPENCL_COMMON)/libs/$(GPU_FAMILY)_$(TARGET_ARCH)/
+    LOCAL_LDLIBS    := -llog  -L$(OPENCL_LIB_DIR) -l$(OPENCL_LIB) 
+    MYMODULE_NAME:=mymodule_$(GPU_FAMILY)
+    include OTHER_MK_FILES.mk
+
+    #Mali
+    GPU_FAMILY:=mali
+    OPENCL_LIB := GLES_mali
+    OPENCL_INC_DIR    := $(OPENCL_COMMON)/include/CL11/
+    OPENCL_LIB_DIR    := $(OPENCL_COMMON)/libs/$(GPU_FAMILY)_$(TARGET_ARCH)/
+    LOCAL_LDLIBS    := -llog  -L$(OPENCL_LIB_DIR) -l$(OPENCL_LIB) 
+    MYMODULE_NAME:=mymodule_$(GPU_FAMILY)
+    include OTHER_MK_FILES.mk
+endif
+
+/ ------------------------------------ Code example ------------------------------------ \
+
+// Directories structure
+
++-- libs
+|   +-- armeabi-v7a
+|       +-- libmymodule_adreno.so
+|       +-- libmymodule_mali.so
+|   +-- x86
+|       +-- libmymodule_powervr.so
+
+-----------------------------------------------------------------------------------------
+
+More information:
+
+http://web.guohuiwang.com/technical-notes/androidndk1

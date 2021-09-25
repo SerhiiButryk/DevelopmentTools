@@ -1,0 +1,132 @@
+/**
+ *
+ *  Git
+ *
+ */
+
+// Git visual tool -> gitk
+// Git merge tool -> git mergetool
+// Git diff tool -> git difftool
+
+---  Config Git to use p4merger
+https://www.deviantdev.com/journal/setup-p4merge-as-mergediff-tool
+https://www.youtube.com/watch?v=NjQCrzX2_fE
+
+---  PATCH
+git format-patch -1 9921ac0990fc1afc0eb871a15554840aa724f894 -o patches
+
+---  SQUASH
+git rebase -I HEAD~N
+
+---  CONFIG GLOBAL VARIABLES
+
+git config --global user.name ""
+git config --global user.email ""
+git config --list
+
+---  GIT HELP
+
+git help <verb>
+
+---  GIT INITIALIZE EMPTY REPO
+
+git init
+
+---  TO STOP TRACK THE REPO JUST REMOVE .git DIRECTORY
+
+rm -rf .git
+
+---  ADD ALL CURRENTLY UNTRACHED OR CHANGED FILES TO STAGE AREA
+
+git add -A
+git add -A my_dir/ - add modifiesd and deleted files
+git add --no-all my_dir/ - add only modified files
+git add -u (updated) - not add untracked files
+git add .
+
+---  GREATE BRANCH
+
+git branch <branch-name>
+git checkout <branch-name>
+
+---  REMOVE FILE FROM A STAGE AREA
+
+git reset <file>
+git reset
+
+---  CLONE REPO
+
+git clone <url> <where to clone>
+
+---  VIEW REMOTE REPO INFO
+
+git remote -v
+
+---  VIEW LOCAL AND REMOTE BRANCHES
+
+git branch -a
+
+---  PUSH BRANCH TO REMOTE REPO
+
+git push -u <remote-repo> <local-branch>
+
+---  MERGE BRANCH INTO MASTER
+
+git merge <branch-name>
+
+git pull <remote-repo-name> <branch-name>
+git push <remote-repo-name> <branch-name>
+
+---  DELETE BRANCH LOCALY OR REMOTLY
+
+git branch -d <branch-name>
+git push origin --delete <branch-name>
+
+---  SHOW FILES WHICH WAS MEANT TO COMMIT
+
+git log --stat
+
+---  CHERRY-PICK
+
+git cherry-pick <hash>
+
+---  RESET COMMIT
+
+git reset --soft <hash>
+git reset [mixed reset]
+git reset --hard <hash>
+
+---  GET RID OFF UNTRACKED FILES/DIRECTORIES
+
+git clean -df
+
+---  SHOW your commits in the order when you last reference them
+
+git reflog
+
+---  STASH
+--- 
+---  CRETATE STASH
+
+git stash save "message"
+git stash push -m "message"
+
+git stash list
+
+git stash apply <id>
+git stash pop
+
+git stash drop <id>
+git stash clear
+
+---  REVERT COMMIT WITHOUT CHANGING HISTORY
+
+git revert [git-hash-commit]
+
+---  Revert changes
+
+git checkout — <file_name>
+
+---  Detach (move) subdirectory into separate Git repository
+
+https://stackoverflow.com/questions/359424/detach-move-subdirectory-into-separate-git-repository/17864475#17864475

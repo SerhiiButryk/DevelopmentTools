@@ -1,0 +1,96 @@
+/**
+ *
+ *  ADB - Android tools
+ *
+ */
+
+--- Apk location ---
+
+Internal storage: /data/app/app.package.name-t2tip43AexOplAoWlN1KCQ==/base.apk
+System storage: /data/data/app.package.name
+External storage: Android/data/app.package.name
+
+--- UNLOCK BOOT LOADER ---
+
+Settings -> OEM unlocking -> ON
+
+adb reboot bootloader 
+fastboot oem lock / fastboot oem ulock 
+fastboot reboot
+
+--- Install in Workspace ---
+
+adb shell pm list users
+adb install -r --user 18 internal-debug-work.apk
+
+--- CPU CHECK ---
+
+adb shell getprop ro.product.cpu.abi
+
+--- SIGN ---
+
+/Library/Android/sdk/build-tools/30.0.0/apksigner sign --ks /Desktop/key AppKinetics-App-debug.apk
+
+--- uninstall package ---
+
+adb uninstall <package-name>
+
+--- list packages ---
+
+adb shell pm list packages
+
+--- current activity ---
+
+adb shell dumpsys window windows | grep -E 'mCurrentFocus|mFocusedApp'
+
+--- grant permissions ---
+
+adb shell pm grant [package name] [permission name]
+adb shell pm grant uk.co.richyhbm.monochromatic android.permission.WRITE_SECURE_SETTINGS
+
+--- text input ---
+
+adb shell input text
+
+--- app force stope ---
+
+adb shell am force-stop <PACKAGE>
+
+--- current API version code ---
+
+adb shell getprop | grep ro.build.version
+
+--- Launch activity ---
+
+adb shell am start -n yourpackagename/.activityname
+
+--- device rotation ---
+
+adb shell content insert --uri content://settings/system --bind name:s:user_rotation --bind value:i:0
+
+--- reboot device ---
+
+adb reboot
+
+--- Command to get Android device info via adb ---
+
+adb shell getprop | \
+grep "model\|version.sdk\|manufacturer\|ro.serialno\|product.name\|brand\|version.release\|build.id\|security_patch" | \
+sed 's/ro\.//g' && \
+echo "[device.imei]: [$(adb shell service call iphonesubinfo 1 | \
+awk -F "'" '{print $2}' | \
+sed '1 d'| tr -d '\n' | tr -d '.' | tr -d ' ')]"
+
+--- rotation ---
+
+adb shell content insert --uri content://settings/system --bind name:s:accelerometer_rotation --bind value:i:0
+adb shell content insert --uri content://settings/system --bind name:s:user_rotation --bind value:i:1
+adb shell content insert --uri content://settings/system --bind name:s:user_rotation --bind value:i:0
+
+---keyevent ---
+
+adb shell input keyevent 82
+
+--- Enable apps from unknown sources ---
+
+adb shell settings put global verifier_verify_adb_installs 0

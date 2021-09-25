@@ -1,0 +1,25 @@
+/**
+ *
+ *  GCC
+ *
+ */
+
+--- Options That Control Optimization ---
+
+https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html
+
+--- GCC Help ---
+
+$ g++ --help
+
+--- Measure compilation time ---
+
+$ /usr/bin/time g++ test.cpp -std=c++17
+
+--- Warning options ---
+
+-ansi -pedantic -Wall -Wextra -Weffc++
+
+--- Static vs dynamic libraries ---
+
+https://medium.com/@StueyGK/static-libraries-vs-dynamic-libraries-af78f0b5f1e4

@@ -1,0 +1,13 @@
+/**
+ *
+ *  Nm is a program to list symbols from object files 
+ *
+ */
+
+ Docs: https://linux.die.net/man/1/nm
+
+--- Show symbols ---
+
+$ nm -g -C --defined-only *.o
+$ nm a.out | c++filt -t | less
+$ nm -a a.out | c++filt
