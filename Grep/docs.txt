@@ -1,6 +1,6 @@
 /**
  *
- *  Grep command basic and advanced usage
+ *  Grep - Search tool
  *
  */
 

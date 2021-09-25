@@ -1,6 +1,6 @@
 /**
  *
- *  Midnight-Commander basic and advanced usage
+ *  Midnight-Commander - Unix terminal tool
  *
  */
 

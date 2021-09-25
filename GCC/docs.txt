@@ -1,10 +1,10 @@
 /**
  *
- *  GCC
+ *  GCC - Compiler for C / C++ language
  *
  */
 
---- Options That Control Optimization ---
+--- Options that control optimization ---
 
 https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html
 

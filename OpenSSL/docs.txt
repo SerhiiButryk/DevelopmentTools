@@ -1,6 +1,6 @@
 /**
  *
- *  OpenSSL
+ *  OpenSSL - Program for crypto operations 
  *
  */
 

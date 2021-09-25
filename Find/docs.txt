@@ -1,0 +1,15 @@
+/**
+ *
+ *  Find - Command for searching files
+ *
+ */
+
+ # Case insecitive search 
+
+ $ find . -iname "main*" -type f
+
+ # Search by file meta data
+
+ $ find . -type f -mmin -10 // Find file which was created less than 10 minutes ago  
+
+ 

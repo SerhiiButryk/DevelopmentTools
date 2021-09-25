@@ -1,6 +1,6 @@
 /**
  *
- *  Git
+ *  Git - Version control tool
  *
  */
 
@@ -9,13 +9,16 @@
 // Git diff tool -> git difftool
 
 ---  Config Git to use p4merger
+
 https://www.deviantdev.com/journal/setup-p4merge-as-mergediff-tool
 https://www.youtube.com/watch?v=NjQCrzX2_fE
 
 ---  PATCH
+
 git format-patch -1 9921ac0990fc1afc0eb871a15554840aa724f894 -o patches
 
 ---  SQUASH
+
 git rebase -I HEAD~N
 
 ---  CONFIG GLOBAL VARIABLES

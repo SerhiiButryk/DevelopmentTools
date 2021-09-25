@@ -1,6 +1,10 @@
 /**
  *
+<<<<<<< HEAD
  *  Nm is a program to list symbols from object files 
+=======
+ *  Nm - Program to list symbols from object files 
+>>>>>>> Updated docs
  *
  */
 

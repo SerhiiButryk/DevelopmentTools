@@ -48,15 +48,15 @@ adb shell dumpsys window windows | grep -E 'mCurrentFocus|mFocusedApp'
 adb shell pm grant [package name] [permission name]
 adb shell pm grant uk.co.richyhbm.monochromatic android.permission.WRITE_SECURE_SETTINGS
 
---- text input ---
+--- Text input ---
 
 adb shell input text
 
---- app force stope ---
+--- App force stope ---
 
 adb shell am force-stop <PACKAGE>
 
---- current API version code ---
+--- Current API version ---
 
 adb shell getprop | grep ro.build.version
 
@@ -64,11 +64,11 @@ adb shell getprop | grep ro.build.version
 
 adb shell am start -n yourpackagename/.activityname
 
---- device rotation ---
+--- Device rotation ---
 
 adb shell content insert --uri content://settings/system --bind name:s:user_rotation --bind value:i:0
 
---- reboot device ---
+--- Reboot device ---
 
 adb reboot
 
@@ -81,13 +81,13 @@ echo "[device.imei]: [$(adb shell service call iphonesubinfo 1 | \
 awk -F "'" '{print $2}' | \
 sed '1 d'| tr -d '\n' | tr -d '.' | tr -d ' ')]"
 
---- rotation ---
+--- Rotation ---
 
 adb shell content insert --uri content://settings/system --bind name:s:accelerometer_rotation --bind value:i:0
 adb shell content insert --uri content://settings/system --bind name:s:user_rotation --bind value:i:1
 adb shell content insert --uri content://settings/system --bind name:s:user_rotation --bind value:i:0
 
----keyevent ---
+---Keyevent ---
 
 adb shell input keyevent 82
 
@@ -105,3 +105,5 @@ adb shell pm list packages --user 10 | grep "rim"
 
 Remove Work Profile
 Settings -> Accounts -> Remove Work Profile
+
+adb shell settings put global verifier_verify_adb_installs 0
