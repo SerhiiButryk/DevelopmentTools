@@ -94,3 +94,14 @@ adb shell input keyevent 82
 --- Enable apps from unknown sources ---
 
 adb shell settings put global verifier_verify_adb_installs 0
+
+--- Uninstall app from Work Profile ---
+
+List users
+adb shell pm list users
+
+Find app
+adb shell pm list packages --user 10 | grep "rim" 
+
+Remove Work Profile
+Settings -> Accounts -> Remove Work Profile
