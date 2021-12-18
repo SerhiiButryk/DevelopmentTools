@@ -6,8 +6,7 @@
 
 # Explanation to the description of key combinations
 
-Meta - "Alternate" key, or "Alt", or "Meta", also can be replaced with a single "Esc" or "Escape";
-Esc - "Escape" key or "Esc"; 
+Meta - "Alt", "Ctrl" or "Esc" key depending on OS (mac or linux) 
 
 /**
  *
@@ -15,8 +14,13 @@ Esc - "Escape" key or "Esc";
  *
  */
 
-CopySingle	Shift-F5, F15	
-MoveSingle	Shift-F6, F16
+Copy single: F5	
+
+Move single: F6
+
+Copy single in the current directory:	Shift + F5	
+
+Move single	in the current directory: Shift + F6
 
 /**
  *
@@ -24,18 +28,18 @@ MoveSingle	Shift-F6, F16
  *
  */	    
 
-Ctrl-s, Alt-s - Start a quick filename search in the directory listing 
+Ctrl + s or Alt + s: Start a quick filename search in the directory listing 
 
 +  - Select a group of files. (regular expression can be used)
 \  - Unselect a group of files. (regular expression can be used)
 
-Meta+Enter - Insert 'current object'1 to command line. 
+Meta + Enter: Insert 'current object'1 to command line. 
 
-Meta+t - Change panel view ('Full','Brief','Long') 
+Meta + t: Change panel view ('Full','Brief','Long') 
 
-Meta+Shift+H - Display directory history.    
+Meta + Shift + H: Display directory history.    
 
-Ctrl+Space - Show directory size. 
+Ctrl + Space: Show directory size. 
 
 /**
  *
@@ -43,17 +47,13 @@ Ctrl+Space - Show directory size.
  *
  */
 
-Ctrl+x,i - Set the other panel display mode to information.
+Meta + o: If the currently selected file is a directory, load that directory on the other panel and moves the selection to the next file. 
 
-Ctrl+x,q - Set the other panel display mode to quick view. 
+Meta + i: Make the current directory of the current panel also the current directory of the other panel.
 
-Meta+o - If the currently selected file is a directory, load that directory on the other panel and moves the selection to the next file. 
+Ctrl + U: Swap left and right panel.
 
-Meta+i - Make the current directory of the current panel also the current directory of the other panel.
-
-Ctrl-U - Swap left and right panel.
-
-Alt+p, Alt+n - Navigate between command line history.
+Alt + p, Alt + n: Navigate between command line history.
 
 /**
  *
@@ -61,15 +61,22 @@ Alt+p, Alt+n - Navigate between command line history.
  *
  */
 
-Quick cd             Alt-c
+Quick cd             Meta + c
 
-Command history      Meta+h	    
+Quick change 
+directory history    Esc + c and then Esc + h
 
-Chmod                Ctrl+x,c
+Command history      Meta + h	    
 
-Sym link             Ctrl+x,s
+Chmod                Ctrl + x, c
 
-Edit symlink         Ctrl+x,Ctrl+s	
+Sym link             Ctrl + x, s
+
+Edit symlink         Ctrl + x, Ctrl + s	
+
+Print current 
+working directory 
+in command line      Esc + a
 
 # Find commands
 
@@ -81,10 +88,10 @@ Press Esc twice      Close dialog or window
 
 # Insert actions
 
-Inser file name      Alt+Enter
+Inser file name      Alt + Enter
 in command line  
 
-Inser full path      Alt+Shift+Enter
+Inser full path      Alt + Shift + Enter
 in command line  
 
 /**
