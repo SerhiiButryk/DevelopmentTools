@@ -4,15 +4,6 @@
  *
  */
 
-# Grep version
-
-$ grep -V
-
-/**
- *
- *  Basic usage
- *
- */
 
 # Simple search in file
 
@@ -48,7 +39,11 @@ history | grep --max-count=5 git
 
 grep -wiro -C 2  "Tom" .
 
---exclude --include --exclude-dir
+/**
+ *
+ *  Globbing
+ *
+ */
 
 # Search for a word in .txt files
 
@@ -70,9 +65,13 @@ grep -iwro --include=\*.{txt,cpp} --exclude-dir={build, temp} "Tom"
  *
  */
 
-# Find a line which contian vivek or raj word
+# Find a line which contian vivek or raj word (OR option)
  
 grep -E 'vivek|raj' temp.txt
+
+# All the lines that contain both “Dev” and “Tech” in it (in the same order (AND option)
+
+grep -E 'Dev.*Tech' employee.txt
 
 # Find only line which begging with vivek word
 
