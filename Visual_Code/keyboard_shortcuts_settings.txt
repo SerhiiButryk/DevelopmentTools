@@ -1,0 +1,8 @@
+[
+    // Back navigation
+    { "key": "alt+[",            "command": "workbench.action.navigateBack" },
+    // Forward navigation
+    { "key": "alt+]",          "command": "workbench.action.navigateForward" },
+    // Dublicate line
+    { "key": "ctrl+d",          "command": "editor.action.duplicateSelection" }
+]
