@@ -5,38 +5,8 @@
 # Program demontraits basic structure of Bash programm language.
 # Program asks for User name information from User and dispays it on the screen.
 
-# Utils functions
-
-# Prints text in green color
-print_message() {
-
-    # https://stackoverflow.com/questions/5947742/how-to-change-the-output-color-of-echo-in-linux
-    GREEN_COLOR='\033[0;32m'
-    RESET_COLOR='\033[0m'
-
-    # Format passed text
-    printf "${GREEN_COLOR}$1${RESET_COLOR}\n"
-
-}
-
-# Prints text in red color
-print_error() {
-    
-    # https://stackoverflow.com/questions/5947742/how-to-change-the-output-color-of-echo-in-linux
-    RED_COLOR='\033[0;31m'
-    RESET_COLOR='\033[0m'
-
-    # Format passed text
-    printf "${RED_COLOR}$1${RESET_COLOR}\n"
-
-}
-
-# Global variables
-SCRIPT_FILE_NAME=$0
-SCRIPT_WORING_DIRECTORY=$(pwd)
-
-# Print info about this script
-print_message "Running script: $SCRIPT_FILE_NAME in directory $SCRIPT_WORING_DIRECTORY"
+# Execute Shell script with utility functions needed for this script
+. utility_functions.sh
 
 # Global variables
 USER_NAME=""
@@ -76,6 +46,8 @@ print_names() {
     fi
 
 }
+
+print_script_debug_info
 
 ask_for_user_names "" ""
 print_names

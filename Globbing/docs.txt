@@ -1,0 +1,25 @@
+/**
+ *
+ *  Globbing - a pattern for mathing files and pathes in Linux
+ *
+ */
+
+ More info: https://www.javatpoint.com/linux-file-globbing
+
+ Special charactes:
+
+ * - matches any charactes
+ ? - macthes one character
+ [] - matches single or range of characters
+ ! - not operator 
+
+ Example of string patterns:
+
+ 1. office*
+ 2. *office*
+ 3. *.txt
+ 4. office?.*
+ 5. office[A2].* (matches officeA. + any extenction or office2. + any extenction strings)
+ 6. office[!2]* (does not matche office2 )
+ 7. [a-z].txt
+ 8. [0-9].txt
