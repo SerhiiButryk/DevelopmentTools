@@ -1,0 +1,11 @@
+/**
+ *
+ *  Java tools and settings
+ *
+ */
+
+# Install certificates for Java keystore
+ 
+$ sudo $JAVA_HOME/bin/keytool -import -alias cert_alias -keystore $JAVA_HOME/jre/lib/security/cacerts -file cert_file_name
+
+Default password for keystore: changeit

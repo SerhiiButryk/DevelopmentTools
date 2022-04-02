@@ -26,10 +26,6 @@ echo "Passed parameters: $@"
 # Prints 1 parameter if any
 echo "Your first parameter is $1"
 
-MY_DIR_NAME="SamplDir"
-# If directory does not exist then create it
-[ -d $MY_DIR_NAME ] || mkdir $MY_DIR_NAME 
-
 # --------------- 3. Strings ---------------
 
 str1=""
@@ -108,3 +104,34 @@ then
 else
     echo "You can not drive next year"
 fi	
+
+# --------------- 5. Output redirectios ---------------
+
+stdin - 0
+stdout - 1
+stderr - 2
+
+/dev/null - Virtual device (or virtual file) where anyone can write to. All written data is discarded. 
+
+Examples:
+
+# Show error output
+$ ping google.com 1> /dev/null 
+
+# Show non error output
+$ ping google.com 2> /dev/null 
+
+# Redirect stdout and stderr to /dev/null
+$ ping google.com > /dev/null 2>&1
+
+# Get input from a file
+$ cat < hello.txt
+
+# --------------- 6. Piping ---------------
+
+# If you want to pipe both the stderr and stdout to the next command, then use the “|&” instead.
+
+Examples:
+
+# Piping stdout and stderr to cat command
+$ anything |& cat
