@@ -8,6 +8,10 @@
 
 --- Show symbols ---
 
+// List symbols from obj / exec file
 $ nm -g -C --defined-only *.o
 $ nm a.out | c++filt -t | less
 $ nm -a a.out | c++filt
+
+// List symbols from so file
+ nm -gDC lib_name.so | grep --color symbol_name
