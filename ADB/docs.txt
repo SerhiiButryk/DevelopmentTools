@@ -4,6 +4,10 @@
  *
  */
 
+--- Activity stack ---
+
+adb shell dumpsys activity top | grep --color -A 4 "ACTIVITY"
+
 --- Apk location ---
 
 Internal storage: /data/app/app.package.name-t2tip43AexOplAoWlN1KCQ==/base.apk
