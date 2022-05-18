@@ -4,6 +4,11 @@
  *
  */
 
+--- CPU usage ---
+
+adb shell dumpsys cpuinfo
+adb shell "top -n 1"
+
 --- Activity stack ---
 
 adb shell dumpsys activity top | grep --color -A 4 "ACTIVITY"
