@@ -1,0 +1,38 @@
+# Execute bashrc
+if [ -f ~/.bashrc ]; then
+    source ~/.bashrc
+fi    
+
+# Env variables
+export ANDROID_HOME="[location]"
+export ANDROID_SDK="[location]"
+export ANDROID_NDK="[location]"
+export ANDROID_NDK_ROOT="[location]"
+export ANDROID_NDK_HOME="[location]"
+
+# Java 1.8
+JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_221.jdk/Contents/Home"
+# JAVA 11
+#JAVA_HOME="/Applications/Android Studio.app/Contents/jre/Contents/Home" 
+export JAVA_HOME
+
+# Other locations
+SDK_BASH_TOOLS="[location]"
+ANDROID_TOOLS="[location]"
+VISUAL_CODE="/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+DOXYGEN_HOME="/Applications/Doxygen.app/Contents/Resources"
+
+# Path env variable
+PATH_LOCAL=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin
+
+# Setting PATH for Python 2.7
+# The original version is saved in .bash_profile.pysave
+PYTHON="/Library/Frameworks/Python.framework/Versions/2.7/bin:${PATH}"
+
+export PATH="$PATH_LOCAL:$VISUAL_CODE:$ANDROID_SDK/tools:$ANDROID_SDK/platform-tools:$ANDROID_NDK:$JAVA_HOME:$SDK_BASH_TOOLS:$ANDROID_TOOLS:$DOXYGEN_HOME:$PYTHON"
+
+# Custom aliases
+alias dinput="adb shell input text"
+
+# Stop Gradle
+alias gradlestop="./gradlew --stop && find ~/.gradle/ -name \"*.lock\" -delete" 
