@@ -109,3 +109,4 @@ in command line
  */
 
 Overview: https://www.youtube.com/watch?v=rddUniuHuWM
+Hot keys: https://midnight-commander.org/rufork/docs/mc_hotkeys_en.pdf
