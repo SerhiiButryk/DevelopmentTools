@@ -1,6 +1,6 @@
 /**
  *
- *  Javac - Java compiler
+ *  javac - Java compiler
  *
  */
 

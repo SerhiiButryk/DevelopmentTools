@@ -1,6 +1,6 @@
 /**
  *
- *  Find - Command for searching files
+ *  find - Command for searching files
  *
  */
 

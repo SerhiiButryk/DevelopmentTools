@@ -1,6 +1,6 @@
 /**
  *
- *  Grep - Search tool
+ *  grep - Search tool
  *
  */
 

@@ -1,6 +1,6 @@
 /**
  *
- *  ADB - Android tools
+ *  adb - Android tools
  *
  */
 

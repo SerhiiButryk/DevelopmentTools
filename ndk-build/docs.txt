@@ -1,6 +1,6 @@
 /**
  *
- *  Ndk-build - Android tools to compile and build C/C++ code for Android 
+ *  ndk-build - Android tools to compile and build C/C++ code for Android 
  *
  *  hello-NDK - demo program to try and experiment with ndk-build
  *

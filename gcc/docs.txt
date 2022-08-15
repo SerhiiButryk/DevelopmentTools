@@ -1,6 +1,6 @@
 /**
  *
- *  GCC - Compiler for C / C++ language
+ *  gcc - Compiler for C / C++ language
  *
  */
 

@@ -1,6 +1,6 @@
 /**
  *
- *  Ldd - Program to print shared object dependencies
+ *  ldd - Program to print shared object dependencies
  *
  */
 

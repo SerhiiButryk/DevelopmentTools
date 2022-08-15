@@ -1,6 +1,6 @@
 /**
  *
- *  Git - Version control tool
+ *  git - Version control tool
  *
  */
 

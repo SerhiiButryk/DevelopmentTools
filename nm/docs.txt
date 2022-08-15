@@ -1,6 +1,6 @@
 /**
  *
- *  Nm - a program to list symbols from object files 
+ *  nm - a program to list symbols from object files 
  *
  */
 

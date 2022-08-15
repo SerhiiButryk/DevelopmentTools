@@ -1,0 +1,17 @@
+/**
+ *
+ *  ps - a program to list unix processes
+ *
+ */
+
+ --- View all processes ---
+
+ $ ps axu
+
+ --- View all processes by user ---
+
+ $ ps -u {USERNAME}
+
+ --- View processes by PID ---
+
+ $ ps a -p {PID}
