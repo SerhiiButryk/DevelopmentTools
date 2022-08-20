@@ -19,7 +19,7 @@ git format-patch -1 9921ac0990fc1afc0eb871a15554840aa724f894 -o patches
 
 ---  SQUASH
 
-git rebase -I HEAD~N
+git rebase -i HEAD~N
 
 ---  CONFIG GLOBAL VARIABLES
 
