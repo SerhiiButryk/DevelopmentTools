@@ -13,6 +13,10 @@
 https://www.deviantdev.com/journal/setup-p4merge-as-mergediff-tool
 https://www.youtube.com/watch?v=NjQCrzX2_fE
 
+--- DELETE REMOTE BRANCH
+
+git push origin --delete my_remote_branch
+
 ---  PATCH
 
 git format-patch -1 9921ac0990fc1afc0eb871a15554840aa724f894 -o patches
