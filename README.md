@@ -20,11 +20,18 @@ https://sujaiantony.wordpress.com/2011/12/28/an-android-101-an-overview-on-binde
 
 # Bash helper built-in functions
 
-basename - strip directory and suffix from filenames 
+basename - strip directory and suffix from filenames
+
 dirname - strip last component from file name
+
 uniq - report or omit repeated lines
+
 sort - sort lines of text files
+
 less - opposite of more
-getopts - parse options 
+
+getopts - parse options
+
 shift - positional parameters are shifted to the left by a number
+
 pushd, popd - navigation in dir tree
