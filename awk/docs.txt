@@ -1,0 +1,9 @@
+/**
+ *
+ *  awk - a program to process text
+ *
+ */
+
+ --- Output only 1 field from a line ---
+
+$ cat test.txt | awk '{print $1}'

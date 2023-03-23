@@ -7,6 +7,7 @@
  --- View all processes ---
 
  $ ps axu
+ $ ps -A
 
  --- View all processes by user ---
 
@@ -15,3 +16,7 @@
  --- View processes by PID ---
 
  $ ps a -p {PID}
+
+ --- Kill process ---
+
+ $ ps aux | grep some_name | grep -v grep | awk '{print $2}' | xargs kill -9

@@ -1,0 +1,21 @@
+/**
+ *
+ *  curl - networking tool
+ *
+ */
+
+ ------ POST request ------
+
+ $ curl -X POST --form "file=@1.txt" -v http://example.com
+
+ ------ POST request ------
+
+$ curl -X POST -H "Authorization: Bearer <token>" http://example.com -v -d 'post_body'
+
+ ------ Kerberos auth ------
+
+ $ curl -v -k --negosiate -u user_name:pass http://example.com
+
+ ------ NTLM auth ------
+
+ $ curl -v -k --ntlm -u user_name:pass http://example.com
