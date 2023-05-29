@@ -23,3 +23,10 @@ Example: /home/serhii/Android/Sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/linu
 
 Example:
 /home/serhii/Android/Sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-dwarfdump /path/to/your/sharedlibrary/my.so | grep file_name_for_check.cpp
+
+------- Set breakpoints -------
+
+$ (lldb) breakpoint set -n function_name
+$ (lldb) breakpoint set -f file_name.cpp -l line_number
+
+$ (lldb) breakpoint list
