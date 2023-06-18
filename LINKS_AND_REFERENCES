@@ -7,19 +7,12 @@ Quick cheet-sheets: https://devhints.io/bash
 # Bash helper built-in functions
 
 basename - strip directory and suffix from filenames
-
 dirname - strip last component from file name
-
 uniq - report or omit repeated lines
-
 sort - sort lines of text files
-
 less - opposite of more
-
 getopts - parse options
-
 shift - positional parameters are shifted to the left by a number
-
 pushd, popd - navigation in dir tree
 
 # Linux
@@ -34,3 +27,18 @@ https://sujaiantony.wordpress.com/2011/12/28/an-android-101-an-overview-on-binde
 
 # Google Play policy generator
 https://www.termsfeed.com/privacy-policy-generator/
+
+# A set of urls and tutorials about mobile development: 
+https://www.tinkoff.ru/career/it/interview/mobile/
+https://github.com/androiddevnotes/awesome-android-learning-resources 
+https://github.com/Kotlin/kotlinx.coroutines/blob/master/docs/topics/coroutines-guide.md
+
+# Basic questions for interview:
+https://dou.ua/lenta/articles/interview-questions-android-developer/
+
+# How doesJVM work ?
+https://www.geeksforgeeks.org/jvm-works-jvm-architecture/
+https://blog.jamesdbloom.com/JVMInternals.html
+
+# JVM Specification:
+https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-1.html#jvms-1.2

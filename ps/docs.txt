@@ -20,3 +20,10 @@
  --- Kill process ---
 
  $ ps aux | grep some_name | grep -v grep | awk '{print $2}' | xargs kill -9
+
+--- List opened file descriptors on Unix ---
+ps -ef // get process id
+ls -l /proc/pid/fd // list opened file descriptors
+
+--- Show running JVM instances ---
+ps -ef | grep java
