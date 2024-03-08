@@ -40,7 +40,7 @@ https://www.termsfeed.com/privacy-policy-generator/
 ## Tutorials about mobile development
 
 https://www.tinkoff.ru/career/it/interview/mobile/
-https://github.com/androiddevnotes/awesome-android-learning-resources 
+https://github.com/androiddevnotes/awesome-android-learning-resources
 https://github.com/Kotlin/kotlinx.coroutines/blob/master/docs/topics/coroutines-guide.md
 
 ## Basic questions for interview
@@ -83,9 +83,9 @@ https://ibotpeaches.github.io/Apktool/
 
 # Code search 🧨
 
-Android
+Android:
 https://cs.android.com/ 
 
-Everything
+Everything:
 https://sourcegraph.com/search 
 https://www.tabnine.com/code
