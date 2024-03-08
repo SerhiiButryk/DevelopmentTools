@@ -11,12 +11,19 @@ Quick cheet-sheets: https://devhints.io/bash
 ## Bash built-in functions
 
 basename - strip directory and suffix from filenames
+
 dirname - strip last component from file name
+
 uniq - report or omit repeated lines
+
 sort - sort lines of text files
+
 less - opposite of more
+
 getopts - parse options
+
 shift - positional parameters are shifted to the left by a number
+
 pushd, popd - navigation in dir tree
 
 # Linux 🏝
@@ -70,8 +77,7 @@ https://www.charlesproxy.com/
 Wireshark
 https://www.wireshark.org/ 
 
-Other tools:
-
+Other tools: 
 netstat
 lsoft
 tcpdump
@@ -83,9 +89,9 @@ https://ibotpeaches.github.io/Apktool/
 
 # Code search 🧨
 
-Android:
+Android: 
 https://cs.android.com/ 
 
-Everything:
+Everything: 
 https://sourcegraph.com/search 
 https://www.tabnine.com/code
