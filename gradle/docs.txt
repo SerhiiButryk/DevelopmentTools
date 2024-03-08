@@ -1,5 +1,5 @@
 /**
  *
- *  Short gradle reference
+ * Gradle commands reference
  *
  */

@@ -1,3 +1,91 @@
-# Cheat-Sheets
+# Cheat sheets & Developer tools
 
-This repository provides short docs for common developer tools.
+This repository provides short docs & refs for common developer tools.
+
+# Bash/Shell 🍓
+
+Docs: https://tldp.org/LDP/abs/html/index.html
+
+Quick cheet-sheets: https://devhints.io/bash
+
+## Bash built-in functions
+
+basename - strip directory and suffix from filenames
+dirname - strip last component from file name
+uniq - report or omit repeated lines
+sort - sort lines of text files
+less - opposite of more
+getopts - parse options
+shift - positional parameters are shifted to the left by a number
+pushd, popd - navigation in dir tree
+
+# Linux 🏝
+
+Docs: http://linuxintro.org/wiki/Main_Page
+
+# Android ♨️
+
+## File descriptors
+
+https://developpaper.com/an-article-helps-you-understand-android-file-descriptors/
+
+## Binder and aidl in Android
+
+https://sujaiantony.wordpress.com/2011/12/28/an-android-101-an-overview-on-binder-framework/
+
+## Google Play policy generator
+
+https://www.termsfeed.com/privacy-policy-generator/
+
+## Tutorials about mobile development
+
+https://www.tinkoff.ru/career/it/interview/mobile/
+https://github.com/androiddevnotes/awesome-android-learning-resources 
+https://github.com/Kotlin/kotlinx.coroutines/blob/master/docs/topics/coroutines-guide.md
+
+## Basic questions for interview
+
+https://dou.ua/lenta/articles/interview-questions-android-developer/
+
+## How does JVM work ?
+
+https://www.geeksforgeeks.org/jvm-works-jvm-architecture/
+https://blog.jamesdbloom.com/JVMInternals.html
+
+## JVM Specification
+
+https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-1.html#jvms-1.2
+
+# Network debugging 🗼
+
+Har viewer
+http://www.softwareishard.com/har/viewer/
+
+POSTMAN
+https://www.postman.com/ 
+
+Chales
+https://www.charlesproxy.com/
+
+Wireshark
+https://www.wireshark.org/ 
+
+Other tools:
+
+netstat
+lsoft
+tcpdump
+
+# Android debugging 🗡
+
+Apk tools
+https://ibotpeaches.github.io/Apktool/
+
+# Code search 🧨
+
+Android
+https://cs.android.com/ 
+
+Everything
+https://sourcegraph.com/search 
+https://www.tabnine.com/code

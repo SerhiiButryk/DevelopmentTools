@@ -1,6 +1,6 @@
 /**
  *
- *  adb - Android tools
+ *  adb - Tool for Android development
  *
  */
 
@@ -80,15 +80,6 @@ adb shell content insert --uri content://settings/system --bind name:s:user_rota
 --- Reboot device ---
 
 adb reboot
-
---- Command to get Android device info via adb ---
-
-adb shell getprop | \
-grep "model\|version.sdk\|manufacturer\|ro.serialno\|product.name\|brand\|version.release\|build.id\|security_patch" | \
-sed 's/ro\.//g' && \
-echo "[device.imei]: [$(adb shell service call iphonesubinfo 1 | \
-awk -F "'" '{print $2}' | \
-sed '1 d'| tr -d '\n' | tr -d '.' | tr -d ' ')]"
 
 --- Rotation ---
 

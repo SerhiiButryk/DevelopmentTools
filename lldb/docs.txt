@@ -1,5 +1,5 @@
 /*
-* Compiler for C/C++ code
+* Debugger for C/C++ code
 *
 */
 
