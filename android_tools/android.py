@@ -39,22 +39,22 @@ def printHelp():
 # 
 
 KEY_STORE_PATH = "/Users/sbutr/.android/debug.keystore"
-BUILD_TOOLS = "/Users/sbutr/Library/Android/sdk/build-tools/34.0.0/"
 KEY_PASS="android"
 KEY_ALIAS="androiddebugkey"
 
-android_text_input_command = ["adb", "shell", "input", "text"]
-android_top_activity_command = ["adb", "shell", "dumpsys", "activity", "|", "grep", "mCurrentFocus=Window"]
-android_zipalign_command = ["zipalign", "-p", "-f", "-v"]
+android_text_input_command = "adb shell input text "
+android_top_activity_command = "adb shell dumpsys activity | grep mCurrentFocus=Window"
+android_zipalign_command = "zipalign -p -f -v"
 
 #
 #  Functions & Classes
 # 
 
-class CommandRunner:
+class Runner:
 
     # Check if we have the passed argumnets
-    def hasCommand(this, args_list):
+    @classmethod
+    def hasCommand(cls, args_list):
         value = ""
         found = False
         # Iterate over a list of arguments starting from 1 element
@@ -70,22 +70,40 @@ class CommandRunner:
         return (value, found) 
    
     # Executes shell command   
-    def run(this, command):
-        this.runInternal(command, False)
+    @classmethod
+    def run(cls, command):
+        cls.runInternalUsingSubprocessRun(command, False)
 
     # Executes shell command
-    def runAndLog(this, command):
-        -this.runInternal(command, True)
+    @classmethod
+    def runAndLog(cls, command):
+        cls.runInternalUsingSubprocessRun(command, True)
+
+    @classmethod
+    def runWithPipes(cls, command):
+        return cls.runInternalUsingCheckoutRun(command, False)
 
     # Executes shell command
-    def runInternal(this, command, logs):
+    @classmethod
+    def runInternalUsingSubprocessRun(cls, command, logs):
         if logs:
             Log.I(Green("Executing command: " + str(command) + "\n"))
         result = subprocess.run(command)
         if logs:
             Log.I(Green("Done. Code: " + str(result.returncode) + "\n")) 
 
-    def exit(this):
+    @classmethod
+    def runInternalUsingCheckoutRun(cls, command, logs):
+        if logs:
+            Log.I(Green("Executing command: " + str(command) + "\n"))
+        
+        output = subprocess.check_output(["bash", "-c", command])
+        text_result = output.decode('utf-8')
+
+        return text_result
+
+    @classmethod
+    def exit(cls):
         # End the program
         sys.exit()
 
@@ -131,72 +149,116 @@ class Log:
         else:
             print(formatted, end="")
 
+def isLinux() -> bool:
+    return os.uname().sysname == 'Linux'
+
+def isMac() -> bool:
+    return os.uname().sysname == 'Darwin'
+
+def getAndroidBuildToolsPath() -> str:
+
+    android_home = os.getenv('ANDROID_HOME')
+    if android_home is None:
+        Log.E("Variable 'ANDROID_HOME' is not set. Please, set this variable.")
+        return ""
+
+    command = ""
+
+    if isLinux():
+        # On Linux you need to add '-P' option for 'grep'
+        # Grep matching string like this "35.0.0"
+        command = "ls " + android_home + "/build-tools" + "| sort -r | grep -P \"\d{2}.\d{1}.\d{1}$\" | head -n 1"
+    
+    elif isMac():
+        # On MAC you need to add '-E' option for 'grep'
+        # Grep matching string like this "35.0.0"
+        command = "ls " + android_home + "/build-tools" + "| sort -r | grep -E \"\d{2}.\d{1}.\d{1}$\" | head -n 1"
+
+    else:
+        Log.E("getAndroidBuildToolsPath(): Failed to select OS")
+    
+    version = Runner.runWithPipes(command)
+    path = android_home + "/build-tools/" + version.strip() + "/"
+    
+    Log.I("Build tools path: '{}'\n".format(path))
+    return path
+
 # 
-# Start  
+# The start  
 # 
 
-# Parse arguments and run commands
-            
-runner = CommandRunner()            
+##############################################################################################
 
-TEXT, COMMAND_ENTER_TEXT_FOUND = runner.hasCommand(["-i", "-input"])
+TEXT, COMMAND_ENTER_TEXT_FOUND = Runner.hasCommand(["-i", "-input"])
 
 if COMMAND_ENTER_TEXT_FOUND:
-    Log.I("Entering text:\n")
-    android_text_input_command.append(TEXT)
-    runner.runAndLog(android_text_input_command)
-    runner.exit()
+    Log.I("Entering: '{}'\n".format(TEXT))
+    result = Runner.runWithPipes("adb shell input text " + TEXT)
+    Log.I("Done\n")
+    # print("Test")
+    Runner.exit()
 
-_, COMMAND_SHOW_TOP_ACTIVITY_FOUND = runner.hasCommand(["-top-activity"])
+##############################################################################################
+
+_, COMMAND_SHOW_TOP_ACTIVITY_FOUND = Runner.hasCommand(["-top-activity"])
 
 if COMMAND_SHOW_TOP_ACTIVITY_FOUND:
     Log.I("Top activity:\n")
-    runner.run(android_top_activity_command)
-    runner.exit()
+    result = Runner.runWithPipes("adb shell dumpsys activity | grep mCurrentFocus=Window")
+    Log.I(result)
+    Runner.exit()
 
-_, COMMAND_DEVICE_INFO_FOUND = runner.hasCommand(["-info"])
+##############################################################################################
+
+_, COMMAND_DEVICE_INFO_FOUND = Runner.hasCommand(["-info"])
 
 if COMMAND_DEVICE_INFO_FOUND:
 
-    Log.I(Green("Release version:\n"))   
-    runner.run(["adb", "shell", "getprop", "ro.build.version.release"])
+    result = Runner.runWithPipes("adb shell getprop ro.build.version.release")
+    Log.I(Green("Release version: ") + result)
 
-    Log.I(Green("Release or code name version:\n"))
-    runner.run(["adb", "shell", "getprop", "ro.build.version.release_or_codename"])
+    result = Runner.runWithPipes("adb shell getprop ro.build.version.release_or_codename")
+    Log.I(Green("Release or code name version: ") + result)
 
-    Log.I(Green("Build ID:\n"))   
-    runner.run(["adb", "shell", "getprop", "ro.build.id"])
+    result = Runner.runWithPipes("adb shell getprop ro.build.id")
+    Log.I(Green("Build ID: ") + result)
 
-    Log.I(Green("Manufacturer:\n"))   
-    runner.run(["adb", "shell", "getprop", "ro.product.manufacturer"])
+    result = Runner.runWithPipes("adb shell getprop ro.product.manufacturer")
+    Log.I(Green("Manufacturer: ") + result)
 
-    Log.I(Green("Device model:\n"))   
-    runner.run(["adb", "shell", "getprop", "ro.product.model"])
+    result = Runner.runWithPipes("adb shell getprop ro.product.model")
+    Log.I(Green("Device model: ") + result)
 
-    Log.I(Green("Supported ABI list:\n"))
-    runner.run(["adb", "shell", "getprop", "ro.product.cpu.abilist"])
+    result = Runner.runWithPipes("adb shell getprop ro.product.cpu.abilist")
+    Log.I(Green("Supported ABI list: ") + result)
 
-    Log.I(Green("SDK version:\n"))   
-    runner.run(["adb", "shell", "getprop", "ro.build.version.sdk"])
+    result = Runner.runWithPipes("adb shell getprop ro.build.version.sdk")
+    Log.I(Green("SDK version: ") + result)
 
-    runner.exit()
+    Runner.exit()
 
-TEXT, COMMAND_ENTER_CREDENTIALS_FOUND = runner.hasCommand(["-enter-creads"])
+##############################################################################################
+
+TEXT, COMMAND_ENTER_CREDENTIALS_FOUND = Runner.hasCommand(["-enter-creads"])
 
 if COMMAND_ENTER_CREDENTIALS_FOUND:
 
     strings = TEXT.split(':')
 
-    Log.I("Entering text:\n")
+    Log.I("Entering text...\n")
 
-    runner.run(["adb", "shell", "input", "text", strings[0]])
-    runner.run(["adb", "shell", "input", "keyevent", "66"])
-    runner.run(["adb", "shell", "input", "text", strings[1]])
-    runner.run(["adb", "shell", "input", "keyevent", "66"])
+    Runner.runWithPipes("adb shell input text " + strings[0])
+    Runner.runWithPipes("adb shell input keyevent 66")
+    Runner.runWithPipes("adb shell input text " + strings[1])
+    Runner.runWithPipes("adb shell input keyevent 66")
 
-    runner.exit()
+    Log.I("Done\n")
 
-APK_NAME, COMMAND_RESIGN_APK_FOUND = runner.hasCommand(["-resign-apk"])
+    Runner.exit()
+
+##############################################################################################
+
+APK_NAME, COMMAND_RESIGN_APK_FOUND = Runner.hasCommand(["-resign-apk"])
 
 if COMMAND_RESIGN_APK_FOUND and APK_NAME:
     
@@ -207,41 +269,49 @@ if COMMAND_RESIGN_APK_FOUND and APK_NAME:
     # 4. Zip
     # 5. Run zipalign
     # 6. Resign with selected keystore  
+
+    build_tools_path = getAndroidBuildToolsPath()
+
+    # If cannot get path then exit
+    if not build_tools_path:
+        Log.I("Stopped due to an error. Cannot proceed")
+        Runner.exit()
     
     Log.I("Unzipping...")
 
-    # Make temp dir
-    runner.run(["rm", "-rf", "temp"])
-    runner.run(["mkdir", "temp"])
+    # Create temp dir
+    Runner.runWithPipes("rm -rf temp")
+    Runner.runWithPipes("mkdir temp")
 
     # Unzip
-    runner.run(["unzip", "-q", APK_NAME, "-d", "temp"])
+    Runner.runWithPipes("unzip -q " + APK_NAME + " -d temp")
 
     # Remove META-INF/
-    runner.run(["rm", "-rf", "temp/META-INF"])
+    Runner.runWithPipes("rm -rf temp/META-INF")
 
     Log.I("Zipping...")
 
     # Zip
     os.chdir("temp")
-    runner.run(["zip", "-q", "-0", "-r", "../temp.apk", ".", "-i", "*"])
+    Runner.runWithPipes("zip -q -0 -r ../temp.apk . -i *")
     os.chdir("..")
 
     Log.I("Signing...")
 
     # Zipalign
-    runner.run([BUILD_TOOLS + "zipalign", "-p", "-f", "4", "temp.apk", "out.apk"])
+    Runner.runWithPipes(build_tools_path + "zipalign -p -f 4 temp.apk out.apk")
 
     # Sign
-    runner.run([BUILD_TOOLS + "apksigner", "sign", "--ks", KEY_STORE_PATH, "--ks-pass", "pass:" + KEY_PASS, "--ks-key-alias", KEY_ALIAS, "out.apk"])
+    command = build_tools_path + "apksigner sign --ks " +  KEY_STORE_PATH + " --ks-pass pass: " + KEY_PASS + " --ks-key-alias " + KEY_ALIAS + " out.apk"
+    Runner.runWithPipes(command)
 
-    Log.I("Done")
+    Log.I("Done\n")
     
-    runner.exit()
+    Runner.exit()
 
 # Looks like provided args are incorrect, so show a help
 Log.E("Sorry, cannot execute this command. Please, make sure that the arguments are correct.\n")
 
 printHelp()
 
-# End 
+# The end 
