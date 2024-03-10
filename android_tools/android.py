@@ -42,10 +42,6 @@ KEY_STORE_PATH = "/Users/sbutr/.android/debug.keystore"
 KEY_PASS="android"
 KEY_ALIAS="androiddebugkey"
 
-android_text_input_command = "adb shell input text "
-android_top_activity_command = "adb shell dumpsys activity | grep mCurrentFocus=Window"
-android_zipalign_command = "zipalign -p -f -v"
-
 #
 #  Functions & Classes
 # 
