@@ -38,7 +38,7 @@ def printHelp():
 # CONSTANTS
 # 
 
-KEY_STORE_PATH = "/Users/sbutr/.android/debug.keystore"
+KEY_STORE_PATH = ".android/debug.keystore"
 KEY_PASS="android"
 KEY_ALIAS="androiddebugkey"
 
@@ -178,6 +178,15 @@ def getAndroidBuildToolsPath() -> str:
     
     Log.I("Build tools path: '{}'\n".format(path))
     return path
+
+def getAndroidKeystorePath() -> str:
+
+    home = os.getenv('HOME')   
+    if home is None:
+        Log.E("Variable 'HOME' is not set. Please, set this variable.")
+        return "" 
+    
+    return home + "/" + KEY_STORE_PATH
 
 # 
 # The start  
