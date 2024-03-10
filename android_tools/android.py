@@ -35,7 +35,7 @@ def printHelp():
     Log.I("Example: ./android.py -enter-creads email:password\n");
 
 # 
-# CONSTANTS and shell commands
+# CONSTANTS
 # 
 
 KEY_STORE_PATH = "/Users/sbutr/.android/debug.keystore"
