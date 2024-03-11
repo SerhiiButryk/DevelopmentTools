@@ -4,9 +4,13 @@
  *
  */
 
---- View certificate ---
+# View SSL certificate (PEM file) using openssl
 
- $ openssl x509 -text -noout -in cert.cr
+$ openssl x509 -in aaa_cert.pem -noout -text
+
+# Connect with proxy
+
+$ curl -x localhost:8888 -k http://gd-lviv22.gd.sw.rim.net
 
  -----------------------
 
