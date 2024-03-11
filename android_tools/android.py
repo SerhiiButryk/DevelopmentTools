@@ -163,12 +163,12 @@ def getAndroidBuildToolsPath() -> str:
     if isLinux():
         # On Linux you need to add '-P' option for 'grep'
         # Grep matching string like this "35.0.0"
-        command = "ls " + android_home + "/build-tools" + "| sort -r | grep -P \"\d{2}.\d{1}.\d{1}$\" | head -n 1"
+        command = "ls " + android_home + "/build-tools" + "| sort -r | grep -P \"\\d{2}.\\d{1}.\\d{1}$\" | head -n 1"
     
     elif isMac():
         # On MAC you need to add '-E' option for 'grep'
         # Grep matching string like this "35.0.0"
-        command = "ls " + android_home + "/build-tools" + "| sort -r | grep -E \"\d{2}.\d{1}.\d{1}$\" | head -n 1"
+        command = "ls " + android_home + "/build-tools" + "| sort -r | grep -E \"\\d{2}.\\d{1}.\\d{1}$\" | head -n 1"
 
     else:
         Log.E("getAndroidBuildToolsPath(): Failed to select OS")
