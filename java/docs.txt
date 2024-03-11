@@ -5,7 +5,18 @@
  */
 
 # Install certificates for Java keystore
- 
-$ sudo $JAVA_HOME/bin/keytool -import -alias cert_alias -keystore $JAVA_HOME/jre/lib/security/cacerts -file cert_file_name
+
+JAVA 8
+
+sudo $JAVA_HOME/bin/keytool -import -alias root_CA1 -keystore $JAVA_HOME/jre/lib/security/cacerts -file $downloaded_cert_file 
+sudo $JAVA_HOME/bin/keytool -importcert -file <cert> -cacerts -keypass changeit -storepass changeit -noprompt -alias <alias>
 
 Default password for keystore: changeit
+
+Java 11 /Java 17
+
+$ ./bin/keytool -importcert -file <cert> -cacerts -keypass changeit -storepass changeit -noprompt -alias <alias>
+
+$ sudo ./bin/keytool -importcert -file ~/Downloads/Cert.crt -keypass changeit -storepass changeit -keystore ./lib/security/cacerts -alias root_CA1
+
+Where <alias> is a random uniq name for this cert in the java cert storage 
