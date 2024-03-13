@@ -31,14 +31,21 @@ def printHelp():
     Log.I(Green("-info") + " - Prints info about connected device\n");
     Log.I("Example: ./android.py -info\n");
 
-    Log.I(Green("-enter-creads") + " - Enters the next 2 strings in the 2 text fileds if has focus\n");
-    Log.I("Example: ./android.py -enter-creads email:password\n");
+    Log.I(Green("-enter-creds") + " - Enters the next 2 strings in the 2 text fileds if has focus\n");
+    Log.I("Example: ./android.py -enter-creds email:password\n");
+
+    Log.I(Green("-process-info") + " - Shows proccess info for a process\n");
+    Log.I("Example: ./android.py -process-info 13380\n");
+    Log.I("Or\n");
+    Log.I("Example: ./android.py -process-info com.example.my.package.name\n");
+
+    Log.I(Green("-cert-info") + " - Shows certificate signature info for apk\n");
+    Log.I("Example: ./android.py -cert-info my.apk\n");
 
 # 
 # CONSTANTS
 # 
 
-KEY_STORE_PATH = ".android/debug.keystore"
 KEY_PASS="android"
 KEY_ALIAS="androiddebugkey"
 
@@ -93,8 +100,14 @@ class Runner:
         if logs:
             Log.I(Green("Executing command: " + str(command) + "\n"))
         
-        output = subprocess.check_output(["bash", "-c", command])
-        text_result = output.decode('utf-8')
+        text_result = ""
+
+        try:
+            output = subprocess.check_output(["bash", "-c", command])
+            text_result = output.decode('utf-8')
+        except subprocess.CalledProcessError:
+            if logs:
+                Log.I("Command retruned non zero status code")
 
         return text_result
 
@@ -176,17 +189,24 @@ def getAndroidBuildToolsPath() -> str:
     version = Runner.runWithPipes(command)
     path = android_home + "/build-tools/" + version.strip() + "/"
     
-    Log.I("Build tools path: '{}'\n".format(path))
+    Log.I("Selected build tools: '{}'\n".format(path))
     return path
 
+# Get deafult Android keystore path
 def getAndroidKeystorePath() -> str:
+
+    KEY_STORE_PATH = ".android/debug.keystore"
 
     home = os.getenv('HOME')   
     if home is None:
         Log.E("Variable 'HOME' is not set. Please, set this variable.")
         return "" 
     
-    return home + "/" + KEY_STORE_PATH
+    keystore = home + "/" + KEY_STORE_PATH
+
+    Log.I("Selected key store file: '{}'\n".format(keystore))
+
+    return keystore
 
 # 
 # The start  
@@ -244,7 +264,7 @@ if COMMAND_DEVICE_INFO_FOUND:
 
 ##############################################################################################
 
-TEXT, COMMAND_ENTER_CREDENTIALS_FOUND = Runner.hasCommand(["-enter-creads"])
+TEXT, COMMAND_ENTER_CREDENTIALS_FOUND = Runner.hasCommand(["-enter-creds"])
 
 if COMMAND_ENTER_CREDENTIALS_FOUND:
 
@@ -282,36 +302,76 @@ if COMMAND_RESIGN_APK_FOUND and APK_NAME:
         Log.I("Stopped due to an error. Cannot proceed")
         Runner.exit()
     
-    Log.I("Unzipping...")
+    Log.I("Unzipping...\n")
 
     # Create temp dir
     Runner.runWithPipes("rm -rf temp")
     Runner.runWithPipes("mkdir temp")
 
     # Unzip
-    Runner.runWithPipes("unzip -q " + APK_NAME + " -d temp")
+    Runner.runWithPipes("unzip -q " + APK_NAME + " -d temp/")
 
     # Remove META-INF/
     Runner.runWithPipes("rm -rf temp/META-INF")
 
-    Log.I("Zipping...")
+    # Ask for modification
+    Log.I(Green("Now it's time to modify the app. Please, add changes to [temp/] or click any key to continue...\n"))
+    input()
+
+    Log.I("Zipping...\n")
 
     # Zip
     os.chdir("temp")
-    Runner.runWithPipes("zip -q -0 -r ../temp.apk . -i *")
+    Runner.runWithPipes("zip -0 -r temp.zip *")
     os.chdir("..")
 
-    Log.I("Signing...")
+    Log.I("Signing...\n")
 
     # Zipalign
-    Runner.runWithPipes(build_tools_path + "zipalign -p -f 4 temp.apk out.apk")
+    Runner.runWithPipes(build_tools_path + "zipalign -p -f 4 temp/temp.zip resigned-app.apk")
 
     # Sign
-    command = build_tools_path + "apksigner sign --ks " +  KEY_STORE_PATH + " --ks-pass pass: " + KEY_PASS + " --ks-key-alias " + KEY_ALIAS + " out.apk"
+    command = build_tools_path + "apksigner sign --ks " +  getAndroidKeystorePath() + " --ks-pass pass:" + KEY_PASS + " --ks-key-alias " + KEY_ALIAS + " resigned-app.apk"
     Runner.runWithPipes(command)
+
+    Log.I("See file: resigned-app.apk\n")
 
     Log.I("Done\n")
     
+    Runner.exit()
+
+##############################################################################################
+
+PID, COMMAND_PROCESS_INFO_FOUND = Runner.hasCommand(["-process-info"])
+
+if COMMAND_PROCESS_INFO_FOUND and PID:
+
+    result = Runner.runWithPipes("adb shell ps -A | grep " + PID)
+
+    if not result:
+        Log.I("Process is not alive\n")
+    else:
+        Log.I(result)
+
+    Runner.exit()
+
+##############################################################################################
+
+APK, COMMAND_CERT_INFO_FOUND = Runner.hasCommand(["-cert-info"])
+
+if COMMAND_CERT_INFO_FOUND and APK:
+
+    build_tools_path = getAndroidBuildToolsPath()
+
+    # If cannot get path then exit
+    if not build_tools_path:
+        Log.I("Stopped due to an error. Cannot proceed")
+        Runner.exit()
+
+    result = Runner.runWithPipes(build_tools_path + "apksigner verify --print-certs " + APK)
+
+    Log.I(result)
+
     Runner.exit()
 
 # Looks like provided args are incorrect, so show a help
