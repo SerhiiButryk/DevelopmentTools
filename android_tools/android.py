@@ -9,8 +9,8 @@ import os
 # Utility script for Android
 #
 
-def Red(mes): return "\033[91m {}\033[00m" .format(mes)
-def Green(mes): return "\033[92m {}\033[00m" .format(mes)
+def Red(mes): return "\033[91m{}\033[00m" .format(mes)
+def Green(mes): return "\033[92m{}\033[00m" .format(mes)
 
 # 
 # A HELP 
