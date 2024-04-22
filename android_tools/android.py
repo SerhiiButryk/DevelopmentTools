@@ -25,8 +25,10 @@ def printHelp():
     Log.I(Green("-top-activity") + " - Prints current top activity\n");
     Log.I("Example: ./android.py -top-activity\n");
 
-    Log.I(Green("-resign-apk") + " - Resigns apk with default keystore\n");
+    Log.I(Green("-resign-apk, -no-prompt") + " - Resigns apk with default keystore\n");
     Log.I("Example: ./android.py -resign-apk app_name.apk\n");
+    Log.I("Or\n");
+    Log.I("Example: ./android.py -resign-apk -no-prompt app_name.apk\n");
 
     Log.I(Green("-info") + " - Prints info about connected device\n");
     Log.I("Example: ./android.py -info\n");
@@ -62,14 +64,15 @@ class Runner:
         found = False
         # Iterate over a list of arguments starting from 1 element
         for index, arg in enumerate(sys.argv[1:]):    
+            # Search for options and args.
             for elem in args_list:
                 if elem == arg:
-                    # If it has the next argument, then get it
-                    if (index + 1) < len(sys.argv[1:]):
-                        value = sys.argv[index+2]
-                    # An arg is found
-                    return (value, True)
-        # An arg is not found     
+                    # Option is found.
+                    found = True
+            # Search for args.
+            # If it doesn't start from '-' symbol then get it
+            if not arg.startswith('-'):
+                value = arg
         return (value, found) 
    
     # Executes shell command   
@@ -284,6 +287,7 @@ if COMMAND_ENTER_CREDENTIALS_FOUND:
 ##############################################################################################
 
 APK_NAME, COMMAND_RESIGN_APK_FOUND = Runner.hasCommand(["-resign-apk"])
+_, SHOULD_PROMPT = Runner.hasCommand(["-no-prompt"])
 
 if COMMAND_RESIGN_APK_FOUND and APK_NAME:
     
@@ -314,9 +318,10 @@ if COMMAND_RESIGN_APK_FOUND and APK_NAME:
     # Remove META-INF/
     Runner.runWithPipes("rm -rf temp/META-INF")
 
-    # Ask for modification
-    Log.I(Green("Now it's time to modify the app. Please, add changes to [temp/] or click any key to continue...\n"))
-    input()
+    if SHOULD_PROMPT:
+        # Ask for modification
+        Log.I(Green("Now it's time to modify the app. Please, add changes to [temp/] or click any key to continue...\n"))
+        input()
 
     Log.I("Zipping...\n")
 
