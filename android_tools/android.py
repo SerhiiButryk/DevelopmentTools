@@ -44,6 +44,9 @@ def printHelp():
     Log.I(Green("-cert-info") + " - Shows certificate signature info for apk\n");
     Log.I("Example: ./android.py -cert-info my.apk\n");
 
+    Log.I(Green("-package-info") + " - Shows detailed package info for app\n");
+    Log.I("Example: ./android.py -package-info my.good.package\n");
+
 # 
 # CONSTANTS
 # 
@@ -62,15 +65,15 @@ class Runner:
     def hasCommand(cls, args_list):
         value = ""
         found = False
-        # Iterate over a list of arguments starting from 1 element
+        # Iterate over a list of arguments starting from the first element
         for index, arg in enumerate(sys.argv[1:]):    
             # Search for options and args.
             for elem in args_list:
                 if elem == arg:
                     # Option is found.
                     found = True
-            # Search for args.
-            # If it doesn't start from '-' symbol then get it
+            # Search for arg values.
+            # If it doesn't start with '-' symbol then get it
             if not arg.startswith('-'):
                 value = arg
         return (value, found) 
@@ -162,10 +165,10 @@ class Log:
             print(formatted, end="")
 
 def isLinux() -> bool:
-    return os.uname().sysname == 'Linux'
+    return sys.platform == 'linux'
 
 def isMac() -> bool:
-    return os.uname().sysname == 'Darwin'
+    return sys.platform == 'darwin'
 
 def getAndroidBuildToolsPath() -> str:
 
@@ -211,6 +214,19 @@ def getAndroidKeystorePath() -> str:
 
     return keystore
 
+def hasAnyDevices() -> bool:
+
+    res = Runner.runWithPipes("adb devices")
+
+    lines = res.count('\n')
+
+    if lines > 2:
+        return True
+
+    Log.E("Device list is empty. No devices currently available.\n")    
+    return False
+
+
 # 
 # The start  
 # 
@@ -220,6 +236,10 @@ def getAndroidKeystorePath() -> str:
 TEXT, COMMAND_ENTER_TEXT_FOUND = Runner.hasCommand(["-i", "-input"])
 
 if COMMAND_ENTER_TEXT_FOUND:
+
+    if hasAnyDevices() == False:
+        Runner.exit()
+
     Log.I("Entering: '{}'\n".format(TEXT))
     result = Runner.runWithPipes("adb shell input text " + TEXT)
     Log.I("Done\n")
@@ -231,6 +251,10 @@ if COMMAND_ENTER_TEXT_FOUND:
 _, COMMAND_SHOW_TOP_ACTIVITY_FOUND = Runner.hasCommand(["-top-activity"])
 
 if COMMAND_SHOW_TOP_ACTIVITY_FOUND:
+
+    if hasAnyDevices() == False:
+        Runner.exit()
+
     Log.I("Top activity:\n")
     result = Runner.runWithPipes("adb shell dumpsys activity | grep mCurrentFocus=Window")
     Log.I(result)
@@ -241,6 +265,9 @@ if COMMAND_SHOW_TOP_ACTIVITY_FOUND:
 _, COMMAND_DEVICE_INFO_FOUND = Runner.hasCommand(["-info"])
 
 if COMMAND_DEVICE_INFO_FOUND:
+
+    if hasAnyDevices() == False:
+        Runner.exit()
 
     result = Runner.runWithPipes("adb shell getprop ro.build.version.release")
     Log.I(Green("Release version: ") + result)
@@ -271,6 +298,9 @@ TEXT, COMMAND_ENTER_CREDENTIALS_FOUND = Runner.hasCommand(["-enter-creds"])
 
 if COMMAND_ENTER_CREDENTIALS_FOUND:
 
+    if hasAnyDevices() == False:
+        Runner.exit()
+
     strings = TEXT.split(':')
 
     Log.I("Entering text...\n")
@@ -290,6 +320,9 @@ APK_NAME, COMMAND_RESIGN_APK_FOUND = Runner.hasCommand(["-resign-apk"])
 _, SHOULD_PROMPT = Runner.hasCommand(["-no-prompt"])
 
 if COMMAND_RESIGN_APK_FOUND and APK_NAME:
+
+    if hasAnyDevices() == False:
+        Runner.exit()
     
     # Steps to resign app:
     # 1. Unzip.
@@ -351,6 +384,9 @@ PID, COMMAND_PROCESS_INFO_FOUND = Runner.hasCommand(["-process-info"])
 
 if COMMAND_PROCESS_INFO_FOUND and PID:
 
+    if hasAnyDevices() == False:
+        Runner.exit()
+
     result = Runner.runWithPipes("adb shell ps -A | grep " + PID)
 
     if not result:
@@ -366,6 +402,9 @@ APK, COMMAND_CERT_INFO_FOUND = Runner.hasCommand(["-cert-info"])
 
 if COMMAND_CERT_INFO_FOUND and APK:
 
+    if hasAnyDevices() == False:
+        Runner.exit()
+
     build_tools_path = getAndroidBuildToolsPath()
 
     # If cannot get path then exit
@@ -379,8 +418,27 @@ if COMMAND_CERT_INFO_FOUND and APK:
 
     Runner.exit()
 
+##############################################################################################
+
+PACKAGE_NAME, COMMAND_PACKAGE_INFO_FOUND = Runner.hasCommand(["-package-info"])
+
+if COMMAND_PACKAGE_INFO_FOUND and PACKAGE_NAME:
+
+    if hasAnyDevices() == False:
+        Runner.exit()
+
+    result = Runner.runWithPipes("adb shell dumpsys package " + PACKAGE_NAME)
+
+    Log.I(Green("START") + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n")
+
+    Log.I(result)
+
+    Log.I(Green("END") + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n")
+
+    Runner.exit()
+
 # Looks like provided args are incorrect, so show a help
-Log.E("Sorry, cannot execute this command. Please, make sure that the arguments are correct.\n")
+Log.E("Sorry, cannot execute this command. Please, make sure that the arguments are correct. Showing help\n")
 
 printHelp()
 
