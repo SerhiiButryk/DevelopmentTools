@@ -8,24 +8,6 @@ Docs: https://tldp.org/LDP/abs/html/index.html
 
 Quick cheet-sheets: https://devhints.io/bash
 
-## Bash built-in functions
-
-basename - strip directory and suffix from filenames
-
-dirname - strip last component from file name
-
-uniq - report or omit repeated lines
-
-sort - sort lines of text files
-
-less - opposite of more
-
-getopts - parse options
-
-shift - positional parameters are shifted to the left by a number
-
-pushd, popd - navigation in dir tree
-
 # Linux 🏝
 
 Docs: http://linuxintro.org/wiki/Main_Page
