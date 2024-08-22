@@ -429,11 +429,11 @@ if COMMAND_PACKAGE_INFO_FOUND and PACKAGE_NAME:
 
     result = Runner.runWithPipes("adb shell dumpsys package " + PACKAGE_NAME)
 
-    Log.I(Green("START") + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n")
+    Log.I(Green("START >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"))
 
     Log.I(result)
 
-    Log.I(Green("END") + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n")
+    Log.I(Green("END >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"))
 
     Runner.exit()
 
