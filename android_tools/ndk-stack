@@ -1,0 +1,5 @@
+/*
+  Decode crash stack
+*/
+
+/Users/sbutr/Library/Android/sdk/ndk/21.3.6528147/ndk-stack -sym ~/my-symbols/armeabi-v7a/ -dump ~/Desktop/crash
