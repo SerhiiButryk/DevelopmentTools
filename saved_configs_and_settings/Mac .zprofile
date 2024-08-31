@@ -1,4 +1,4 @@
-echo "DEBUG> Running .zprofile"
+echo "DEBUG: Running .zprofile"
 
 # Install path for homebrew
 eval "$(/opt/homebrew/bin/brew shellenv)"
