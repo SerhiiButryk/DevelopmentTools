@@ -77,3 +77,7 @@ https://cs.android.com/
 Everything: 
 https://sourcegraph.com/search 
 https://www.tabnine.com/code
+
+# Android AI for translation
+
+https://chatgpt.com/g/g-2o7uPNVl0-android-string-resource-translator
