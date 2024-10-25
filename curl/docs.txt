@@ -19,3 +19,7 @@ $ curl -X POST -H "Authorization: Bearer <token>" http://example.com -v -d 'post
  ------ NTLM auth ------
 
  $ curl -v -k --ntlm -u user_name:pass http://example.com
+
+------ Download a file ------
+
+curl -o filename.txt https://reqbin.com/echo
