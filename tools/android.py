@@ -56,6 +56,9 @@ def printHelp():
     Log.I(Green("-build") + " - Build apk from decompiled code\n")
     Log.I("Example: ./android.py -build folder_with_decompiled_apk_code\n")
 
+    Log.I(Green("-nsym debugData/ crash_logs.txt") + " - Symbolicate Native crash\n")
+    Log.I("Example: ./android.py -nsym ~/my-symbols/armeabi-v7a/ crash_logs.txt\n")
+
 # 
 # CONSTANTS
 # 
@@ -67,39 +70,55 @@ KEY_ALIAS="androiddebugkey"
 #  Functions & Classes
 # 
 
-class Runner:
+# Check if we have the passed argumnets
+def hasCommand(args_list) -> list:
+    value = ""
+    found = False
+    
+    # Iterate over a list of arguments starting from the first element
+    for index, arg in enumerate(sys.argv[1:]):    
+        
+        # Search for options and args.
+        for elem in args_list:
+            if elem == arg:
+                # Option is found.
+                found = True
+        
+        # Search for arg values.
+        # If it doesn't start with '-' symbol then get it
+        if not arg.startswith('-'):
+            value = arg
+        
+        # To exclude matches which have more flags 
+        # and some of them can be matched
+        if arg.startswith('-') and arg not in args_list:
+            found = False       
+            return (value, found)
+        
+    return (value, found) 
 
-    # Check if we have the passed argumnets
-    @classmethod
-    def hasCommand(cls, args_list):
-        value = ""
-        found = False
-        # Iterate over a list of arguments starting from the first element
-        for index, arg in enumerate(sys.argv[1:]):    
-            # Search for options and args.
-            for elem in args_list:
-                if elem == arg:
-                    # Option is found.
-                    found = True
-            # Search for arg values.
-            # If it doesn't start with '-' symbol then get it
-            if not arg.startswith('-'):
-                value = arg
-        return (value, found) 
-   
-    # Executes shell command   
-    @classmethod
-    def run(cls, command):
-        cls.runInternalUsingSubprocessRun(command, False)
+def hasSingleCommand(arg) -> bool:
+    for index, a in enumerate(sys.argv[1:]):
+        if arg == a:
+            return True
+    return False
+
+def getArgWithValue(argument) -> str:
+    for index, arg in enumerate(sys.argv[1:]):  
+        if argument == arg:
+            nextArg = sys.argv[index + 2]
+            return nextArg         
+    return ""
+
+def path(arg) -> str:
+    return os.path.realpath(os.path.expanduser(arg))
+
+class Runner:
 
     # Executes shell command
     @classmethod
-    def runAndLog(cls, command):
-        cls.runInternalUsingSubprocessRun(command, True)
-
-    @classmethod
-    def runWithPipes(cls, command):
-        return cls.runInternalUsingCheckoutRun(command, False)
+    def run(cls, command, logs = False):
+        return cls.runInternalUsingCheckoutRun(command, logs)
 
     # Executes shell command
     @classmethod
@@ -127,7 +146,7 @@ class Runner:
         return text_result
 
     @classmethod
-    def stop(cls):
+    def exit(cls):
         # End the program
         sys.exit()
 
@@ -201,11 +220,35 @@ def getAndroidBuildToolsPath() -> str:
     else:
         Log.E("getAndroidBuildToolsPath(): Failed to select OS")
     
-    version = Runner.runWithPipes(command)
+    version = Runner.run(command)
     path = android_home + "/build-tools/" + version.strip() + "/"
     
     Log.I("Selected build tools: '{}'\n".format(path))
     return path
+
+def getNDKPath() -> str:
+    android_home = os.getenv('ANDROID_HOME')
+    if android_home is None:
+        Log.E("Variable 'ANDROID_HOME' is not set. Please, set this variable.")
+        return ""
+
+    command = ""
+
+    if isLinux():
+        # On Linux you need to add '-P' option for 'grep'
+        # Grep matching string like this "35.0.0"
+        command = "ls " + android_home + "/ndk" + "| sort -r | grep -P \"\\d{2}.\\d{1}.\\d{7}$\" | head -n 1"
+    
+    elif isMac():
+        # On MAC you need to add '-E' option for 'grep'
+        # Grep matching string like this "35.0.0"
+        command = "ls " + android_home + "/ndk" + "| sort -r | grep -E \"\\d{2}.\\d{1}.\\d{7}$\" | head -n 1"
+
+    else:
+        Log.E("getNDKPath(): Failed to select OS")
+
+    version = Runner.run(command)
+    return android_home + "/ndk/" + version.strip() + "/"
 
 # Get deafult Android keystore path
 def getAndroidKeystorePath() -> str:
@@ -234,7 +277,7 @@ def getRetracePath() -> str:
 
 def hasAnyDevices() -> bool:
 
-    res = Runner.runWithPipes("adb devices")
+    res = Runner.run("adb devices")
 
     lines = res.count('\n')
 
@@ -251,96 +294,96 @@ def hasAnyDevices() -> bool:
 
 ##############################################################################################
 
-TEXT, COMMAND_ENTER_TEXT_FOUND = Runner.hasCommand(["-i", "-input"])
+TEXT, COMMAND_ENTER_TEXT_FOUND = hasCommand(["-i", "-input"])
 
 if COMMAND_ENTER_TEXT_FOUND:
 
     if hasAnyDevices() == False:
-        Runner.stop()
+        Runner.exit()
 
     Log.I("Entering: '{}'\n".format(TEXT))
-    result = Runner.runWithPipes("adb shell input text " + TEXT)
+    result = Runner.run("adb shell input text " + TEXT)
     Log.I("Done\n")
     # print("Test")
-    Runner.stop()
+    Runner.exit()
 
 ##############################################################################################
 
-_, COMMAND_SHOW_TOP_ACTIVITY_FOUND = Runner.hasCommand(["-top-activity"])
+_, COMMAND_SHOW_TOP_ACTIVITY_FOUND = hasCommand(["-top-activity"])
 
 if COMMAND_SHOW_TOP_ACTIVITY_FOUND:
 
     if hasAnyDevices() == False:
-        Runner.stop()
+        Runner.exit()
 
     Log.I("Top activity:\n")
-    result = Runner.runWithPipes("adb shell dumpsys activity | grep mCurrentFocus=Window")
+    result = Runner.run("adb shell dumpsys activity | grep mCurrentFocus=Window")
     Log.I(result)
-    Runner.stop()
+    Runner.exit()
 
 ##############################################################################################
 
-_, COMMAND_DEVICE_INFO_FOUND = Runner.hasCommand(["-info"])
+_, COMMAND_DEVICE_INFO_FOUND = hasCommand(["-info"])
 
 if COMMAND_DEVICE_INFO_FOUND:
 
     if hasAnyDevices() == False:
-        Runner.stop()
+        Runner.exit()
 
-    result = Runner.runWithPipes("adb shell getprop ro.build.version.release")
+    result = Runner.run("adb shell getprop ro.build.version.release")
     Log.I(Green("Release version: ") + result)
 
-    result = Runner.runWithPipes("adb shell getprop ro.build.version.release_or_codename")
+    result = Runner.run("adb shell getprop ro.build.version.release_or_codename")
     Log.I(Green("Release or code name version: ") + result)
 
-    result = Runner.runWithPipes("adb shell getprop ro.build.id")
+    result = Runner.run("adb shell getprop ro.build.id")
     Log.I(Green("Build ID: ") + result)
 
-    result = Runner.runWithPipes("adb shell getprop ro.product.manufacturer")
+    result = Runner.run("adb shell getprop ro.product.manufacturer")
     Log.I(Green("Manufacturer: ") + result)
 
-    result = Runner.runWithPipes("adb shell getprop ro.product.model")
+    result = Runner.run("adb shell getprop ro.product.model")
     Log.I(Green("Device model: ") + result)
 
-    result = Runner.runWithPipes("adb shell getprop ro.product.cpu.abilist")
+    result = Runner.run("adb shell getprop ro.product.cpu.abilist")
     Log.I(Green("Supported ABI list: ") + result)
 
-    result = Runner.runWithPipes("adb shell getprop ro.build.version.sdk")
+    result = Runner.run("adb shell getprop ro.build.version.sdk")
     Log.I(Green("SDK version: ") + result)
 
-    Runner.stop()
+    Runner.exit()
 
 ##############################################################################################
 
-TEXT, COMMAND_ENTER_CREDENTIALS_FOUND = Runner.hasCommand(["-enter-creds"])
+TEXT, COMMAND_ENTER_CREDENTIALS_FOUND = hasCommand(["-enter-creds"])
 
 if COMMAND_ENTER_CREDENTIALS_FOUND:
 
     if hasAnyDevices() == False:
-        Runner.stop()
+        Runner.exit()
 
     strings = TEXT.split(':')
 
     Log.I("Entering text...\n")
 
-    Runner.runWithPipes("adb shell input text " + strings[0])
-    Runner.runWithPipes("adb shell input keyevent 66")
-    Runner.runWithPipes("adb shell input text " + strings[1])
-    Runner.runWithPipes("adb shell input keyevent 66")
+    Runner.run("adb shell input text " + strings[0])
+    Runner.run("adb shell input keyevent 66")
+    Runner.run("adb shell input text " + strings[1])
+    Runner.run("adb shell input keyevent 66")
 
     Log.I("Done\n")
 
-    Runner.stop()
+    Runner.exit()
 
 ##############################################################################################
 
-APK_NAME, COMMAND_RESIGN_APK_FOUND = Runner.hasCommand(["-resign-apk"])
-_, SHOULD_PROMPT = Runner.hasCommand(["-no-prompt"])
+APK_NAME, COMMAND_RESIGN_APK_FOUND = hasCommand(["-resign-apk", "-no-prompt"])
+SHOULD_PROMPT = hasSingleCommand("-no-prompt")
 
 if COMMAND_RESIGN_APK_FOUND and APK_NAME:
 
     if hasAnyDevices() == False:
-        Runner.stop()
+        Runner.exit()
     
     # Steps to resign app:
     # 1. Unzip.
@@ -355,19 +398,19 @@ if COMMAND_RESIGN_APK_FOUND and APK_NAME:
     # If cannot get path then exit
     if not build_tools_path:
         Log.I("Stopped due to an error. Cannot proceed")
-        Runner.stop()
+        Runner.exit()
     
     Log.I("Unzipping...\n")
 
     # Create temp dir
-    Runner.runWithPipes("rm -rf temp")
-    Runner.runWithPipes("mkdir temp")
+    Runner.run("rm -rf temp")
+    Runner.run("mkdir temp")
 
     # Unzip
-    Runner.runWithPipes("unzip -q " + APK_NAME + " -d temp/")
+    Runner.run("unzip -q " + APK_NAME + " -d temp/")
 
     # Remove META-INF/
-    Runner.runWithPipes("rm -rf temp/META-INF")
+    Runner.run("rm -rf temp/META-INF")
 
     if not SHOULD_PROMPT:
         # Ask for modification
@@ -378,74 +421,74 @@ if COMMAND_RESIGN_APK_FOUND and APK_NAME:
 
     # Zip
     os.chdir("temp")
-    Runner.runWithPipes("zip -0 -r temp.zip *")
+    Runner.run("zip -0 -r temp.zip *")
     os.chdir("..")
 
     Log.I("Signing...\n")
 
     # Zipalign
-    Runner.runWithPipes(build_tools_path + "zipalign -p -f 4 temp/temp.zip resigned-app.apk")
+    Runner.run(build_tools_path + "zipalign -p -f 4 temp/temp.zip resigned-app.apk")
 
     # Sign
     command = build_tools_path + "apksigner sign --ks " +  getAndroidKeystorePath() + " --ks-pass pass:" + KEY_PASS + " --ks-key-alias " + KEY_ALIAS + " resigned-app.apk"
-    Runner.runWithPipes(command)
+    Runner.run(command)
 
     Log.I("Find file: resigned-app.apk\n")
 
     Log.I("Done\n")
     
-    Runner.stop()
+    Runner.exit()
 
 ##############################################################################################
 
-PID, COMMAND_PROCESS_INFO_FOUND = Runner.hasCommand(["-process-info"])
+PID, COMMAND_PROCESS_INFO_FOUND = hasCommand(["-process-info"])
 
 if COMMAND_PROCESS_INFO_FOUND and PID:
 
     if hasAnyDevices() == False:
-        Runner.stop()
+        Runner.exit()
 
-    result = Runner.runWithPipes("adb shell ps -A | grep " + PID)
+    result = Runner.run("adb shell ps -A | grep " + PID)
 
     if not result:
         Log.I("Process is not alive\n")
     else:
         Log.I(result)
 
-    Runner.stop()
+    Runner.exit()
 
 ##############################################################################################
 
-APK, COMMAND_CERT_INFO_FOUND = Runner.hasCommand(["-cert-info"])
+APK, COMMAND_CERT_INFO_FOUND = hasCommand(["-cert-info"])
 
 if COMMAND_CERT_INFO_FOUND and APK:
 
     if hasAnyDevices() == False:
-        Runner.stop()
+        Runner.exit()
 
     build_tools_path = getAndroidBuildToolsPath()
 
     # If cannot get path then exit
     if not build_tools_path:
         Log.I("Stopped due to an error. Cannot proceed")
-        Runner.stop()
+        Runner.exit()
 
-    result = Runner.runWithPipes(build_tools_path + "apksigner verify --print-certs " + APK)
+    result = Runner.run(build_tools_path + "apksigner verify --print-certs " + APK)
 
     Log.I(result)
 
-    Runner.stop()
+    Runner.exit()
 
 ##############################################################################################
 
-PACKAGE_NAME, COMMAND_PACKAGE_INFO_FOUND = Runner.hasCommand(["-package-info"])
+PACKAGE_NAME, COMMAND_PACKAGE_INFO_FOUND = hasCommand(["-package-info"])
 
 if COMMAND_PACKAGE_INFO_FOUND and PACKAGE_NAME:
 
     if hasAnyDevices() == False:
-        Runner.stop()
+        Runner.exit()
 
-    result = Runner.runWithPipes("adb shell dumpsys package " + PACKAGE_NAME)
+    result = Runner.run("adb shell dumpsys package " + PACKAGE_NAME)
 
     Log.I(Green("START >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"))
 
@@ -453,11 +496,11 @@ if COMMAND_PACKAGE_INFO_FOUND and PACKAGE_NAME:
 
     Log.I(Green("END >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"))
 
-    Runner.stop()
+    Runner.exit()
 
 ##############################################################################################
 
-APK_NAME, COMMAND_DECOMPILE_APK = Runner.hasCommand(["-decomp"])
+APK_NAME, COMMAND_DECOMPILE_APK = hasCommand(["-decomp"])
 
 if COMMAND_DECOMPILE_APK and APK_NAME:
 
@@ -465,21 +508,21 @@ if COMMAND_DECOMPILE_APK and APK_NAME:
     Log.I("...\n")
 
     destFolder = "output"
-    Runner.runWithPipes("apktool d " + APK_NAME + " -o " + destFolder)
+    Runner.run("apktool d " + APK_NAME + " -o " + destFolder)
 
     Log.I(Green("Done. Find folder: '" + destFolder + "'\n"))
 
-    Runner.stop()
+    Runner.exit()
 
 ##############################################################################################    
 
-_, COMMAND_SYMB_CRASH_STACK = Runner.hasCommand(["-sym"])
+_, COMMAND_SYMB_CRASH_STACK = hasCommand(["-sym"])
 
 if COMMAND_SYMB_CRASH_STACK:
 
     if len(sys.argv) < 4:
         Log.E("Sorry. Not enoght arguments.")            
-        Runner.stop()
+        Runner.exit()
 
     mappingFile = sys.argv[2]
     crashLogFile = sys.argv[3]
@@ -487,23 +530,44 @@ if COMMAND_SYMB_CRASH_STACK:
     retrace_path = getRetracePath()
     outFile = "result.txt"
 
-    Runner.runWithPipes("java -jar " + retrace_path + "/retrace.jar " + mappingFile + " " + crashLogFile + " > " + outFile)
+    Runner.run("java -jar " + retrace_path + "/retrace.jar " + mappingFile + " " + crashLogFile + " > " + outFile)
 
     Log.I(Green("Done. Find file: '" + outFile + "'\n"))
 
-    Runner.stop()
+    Runner.exit()
 
 ##############################################################################################
 
-APK_FOLDER, COMMAND_BUILD_APK = Runner.hasCommand(["-build"])
+APK_FOLDER, COMMAND_BUILD_APK = hasCommand(["-build"])
 
 if COMMAND_BUILD_APK and APK_FOLDER:
 
-    Runner.runWithPipes("apktool -v b " + APK_FOLDER)
+    Runner.run("apktool -v b " + APK_FOLDER)
 
     Log.I(Green("Done\n"))
 
-    Runner.stop()
+    Runner.exit()
+
+NEXT, COMMAND_SYM_NATIVE_CRASH = hasCommand(["-nsym"])
+if COMMAND_SYM_NATIVE_CRASH:
+
+    if len(sys.argv) < 4:
+        Log.E("Not enough arguments. Sorry.\n")
+        Runner.exit()    
+    
+    symbols = getArgWithValue("-nsym")
+    logs = path(NEXT)
+    ndk = getNDKPath()
+
+    print("Folder with symbols: " + symbols)
+    print("Crash logs: " + logs)
+    print("NDK: " + ndk)
+
+    # Example: /Users/sbutr/Library/Android/sdk/ndk/21.3.6528147/ndk-stack -sym ~/my-symbols/armeabi-v7a/ -dump ~/Desktop/crash 
+    Runner.run(ndk + "ndk-stack -sym " + symbols + " -dump " + logs)
+
+    Log.I(Green("Done\n"))
+    Runner.exit()
 
 # Looks like provided args are not correct, so show a help
 Log.E("Sorry, cannot execute this command. \nPlease, make sure that the arguments are correct. A help:\n")
