@@ -13,7 +13,7 @@ def Red(mes): return "\033[91m{}\033[00m" .format(mes)
 def Green(mes): return "\033[92m{}\033[00m" .format(mes)
 
 # 
-# A HELP 
+# A help 
 # 
 
 def printHelp():
@@ -60,7 +60,7 @@ def printHelp():
     Log.I("Example: ./android.py -nsym ~/my-symbols/armeabi-v7a/ crash_logs.txt\n")
 
 # 
-# CONSTANTS
+# Constants
 # 
 
 KEY_PASS="android"
@@ -288,11 +288,9 @@ def hasAnyDevices() -> bool:
     return False
 
 
-# 
-# The start  
-# 
-
-##############################################################################################
+#
+# Start of the program
+#
 
 TEXT, COMMAND_ENTER_TEXT_FOUND = hasCommand(["-i", "-input"])
 
