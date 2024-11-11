@@ -24,21 +24,40 @@ def initParser() -> None:
     def path_arg(arg):
             return os.path.realpath(os.path.expanduser(arg))
 
-    parser.add_argument('-show-sym', 
-                        nargs=2,
+    parser.add_argument('-search-sym', 
+                        nargs=2,  # Check if correct !
                         required=False,
                         metavar="",
                         default=None,
                         help='display symbol table for the provided file (.so or .a lib)\n' +
-                        Green('example: $ cpptool.py -show-sym my_lib.a my_magic_symbol \n'))
+                        Green('example: $ cpptool.py -search-sym my_lib.a my_magic_symbol \n'))
     
     parser.add_argument('-n', 
-                        nargs=1,
+                        nargs=1,  # Check if correct !
                         required=False,
                         metavar="",
                         default=None,
                         help='number of lines to display\n' +
-                        Green('example: $ cpptool.py -n 10 -show-sym my_lib.a my_magic_symbol\n'))
+                        Green('example: $ cpptool.py -n 10 -search-sym my_lib.a my_magic_symbol\n'))
+    
+    parser.add_argument('-show-dep-libs', 
+                        nargs=1, # Check if correct !
+                        required=False,
+                        metavar="",
+                        default=None,
+                        help='display libraries which the provided file depends on\n' +
+                        Green('example: $ cpptool.py -show-dep-libs my_prog\n'))
+    
+    parser.add_argument('-show-file-info', 
+                        nargs=1, # Check if correct !
+                        required=False,
+                        metavar="",
+                        default=None,
+                        help='display all available header information, including the symbol table and relocation entries\n' +
+                        'See refs & docs:\n' +
+                        'https://man7.org/linux/man-pages/man5/elf.5.html\n' +
+                        'https://medium.com/@allypetitt/reverse-engineering-analyzing-headers-23dc84075cd\n' +
+                        Green('example: $ cpptool.py -show-file-info my_prog\n'))
 
 def parseArgs():
     return parser.parse_args()
@@ -97,20 +116,40 @@ try:
     args = parseArgs()
 
     # Display symbol table for the provided file (.so or .a lib)
-    if args.show_sym:
+    if args.search_sym:
 
         numberOfLines = ""
         if args.n:
             numberOfLines = "| head -n " + args.n[0]
 
-        fileName = args.show_sym[0]
-        symbol = args.show_sym[1]
+        fileName = args.search_sym[0]
+        symbol = args.search_sym[1]
         
         result = Runner.run("objdump -tC " + fileName + " | grep --color " + symbol + " " + numberOfLines)
         print(result)
 
         print(Green("Done"))
         exit()
+
+    if args.show_dep_libs:
+
+        fileName = args.show_dep_libs[0]
+
+        result = Runner.run("ldd " + fileName)
+        print(result)
+
+        print(Green("Done"))
+        exit()
+
+    if args.show_file_info:
+
+        fileName = args.show_file_info[0]
+
+        result = Runner.run("objdump -x " + fileName)
+        print(result)
+
+        print(Green("Done"))
+        exit()    
 
 except argparse.ArgumentError:
     print("Sorry, you have provided incorrect arguments. See the help.\n")     
