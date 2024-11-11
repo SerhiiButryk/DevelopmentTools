@@ -59,6 +59,14 @@ def initParser() -> None:
                         'https://medium.com/@allypetitt/reverse-engineering-analyzing-headers-23dc84075cd\n' +
                         Green('example: $ cpptool.py -show-file-info my_prog\n'))
 
+    parser.add_argument('-print-sym-table', 
+                        nargs=1, # Check if correct !
+                        required=False,
+                        metavar="",
+                        default=None,
+                        help='Print the symbol table entries of the file\n' +
+                        Green('example: $ cpptool.py -print-sym-table my_prog\n'))                        
+
 def parseArgs():
     return parser.parse_args()
 
@@ -150,6 +158,16 @@ try:
 
         print(Green("Done"))
         exit()    
+
+    if args.print_sym_table:
+
+        fileName = args.print_sym_table[0]
+
+        result = Runner.run("objdump -t " + fileName)
+        print(result)
+
+        print(Green("Done"))
+        exit()
 
 except argparse.ArgumentError:
     print("Sorry, you have provided incorrect arguments. See the help.\n")     
