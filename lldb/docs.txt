@@ -1,6 +1,5 @@
 /*
-* Debugger for C/C++ code
-*
+*  C/C++ Debugger
 */
 
 ------- Tell lldb where the source code is. The debbuger will use it for all matched references -------
@@ -30,3 +29,9 @@ $ (lldb) breakpoint set -n function_name
 $ (lldb) breakpoint set -f file_name.cpp -l line_number
 
 $ (lldb) breakpoint list
+
+# Symbol lookup
+$ (lldb) image lookup -vn symbol
+
+# Log thread frames
+$ (lldb) thread backtrace
