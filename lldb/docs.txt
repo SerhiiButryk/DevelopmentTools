@@ -33,5 +33,12 @@ $ (lldb) breakpoint list
 # Symbol lookup
 $ (lldb) image lookup -vn symbol
 
+# Dump all threads
+$ (lldb) bt all
+
 # Log thread frames
 $ (lldb) thread backtrace
+
+# Inspect simple variables
+$ (lldb) p <var>
+$ (lldb) po <obj>
