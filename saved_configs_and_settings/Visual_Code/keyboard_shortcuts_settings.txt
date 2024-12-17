@@ -1,3 +1,7 @@
+// Command: Open keyboard shourtcuts
+
+// Linux
+
 [
     // Back navigation
     { "key": "alt+[",            "command": "workbench.action.navigateBack" },
@@ -5,4 +9,15 @@
     { "key": "alt+]",          "command": "workbench.action.navigateForward" },
     // Dublicate line
     { "key": "ctrl+d",          "command": "editor.action.duplicateSelection" }
+]
+
+// Mac 
+
+[
+     // Back navigation
+     { "key": "cmd+[",            "command": "workbench.action.navigateBack" },
+     // Forward navigation
+     { "key": "cmd+]",          "command": "workbench.action.navigateForward" },
+     // Dublicate line
+     { "key": "cmd+d",          "command": "editor.action.duplicateSelection" }
 ]
