@@ -5,6 +5,8 @@ import sys
 import inspect
 import os
 
+from urllib.request import urlretrieve
+
 # 
 # Utility script for Android
 #
@@ -506,7 +508,80 @@ if COMMAND_DECOMPILE_APK and APK_NAME:
     Log.I("...\n")
 
     destFolder = "output"
-    Runner.run("apktool d " + APK_NAME + " -o " + destFolder)
+
+    apkTool = "apktool"
+    apkToolJar = "apktool_2.11.0.jar"
+
+    noFiles = os.path.isfile(apkTool) == False or os.path.isfile(apkToolJar) == False
+    platfromIsSupported = isLinux() == True or isMac() == True
+    
+    if noFiles and platfromIsSupported:
+
+        if os.path.isfile(apkTool) == False:
+
+            Log.I("Installing apktool for the first time...\n")     
+
+            url = ""
+            if isLinux():
+                url = ("https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool")
+            elif isMac():
+                url = ("https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/osx/apktool")
+
+            filename = "apktool"
+
+            try:
+                file, headers = urlretrieve(url, filename)
+                res = False
+
+                for name, value in headers.items():
+                    if name == "Content-Length" and int(value) > 0:
+                        Log.I("Success {Content-Length: " + value + "}\n")
+                        res = True
+                        break
+
+                if res == False:
+                    Log.E("Content is 0. Failed. Stopped.\n")
+                    Runner.exit()
+
+                #  7 - rwe
+                #  4 - r
+                os.chmod(file, 0o744)
+
+            except:
+                Log.E("Failed to download apktool. Try again later. Stopped\n")
+                Runner.exit()
+
+        if os.path.isfile(apkToolJar) == False:
+
+            try:
+            
+                Log.I("Downloading apktool_2.11.0.jar for the first time\n")
+
+                url = ("https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_2.11.0.jar")
+                filename = "apktool_2.11.0.jar"
+
+                _, headers = urlretrieve(url, filename)
+                res == False
+
+                for name, value in headers.items():
+                    if name == "Content-Length" and int(value) > 0:
+                        Log.I("Success {Content-Length: " + value + "}\n")
+                        res = True
+                        break
+
+                if res == False:
+                    Log.E("Content is 0. Failed. Stopped.\n")
+                    Runner.exit()
+
+            except:
+                Log.E("Failed to download apktool jar. Try again later. Stopped\n")
+                Runner.exit()
+    else:                        
+        Log.E("Sorry, your platform is not supported. Script supports only Mac and Linux platfroms. Stopped.\n")
+        Runner.exit()
+                
+
+    Runner.run("./apktool d " + APK_NAME + " -o " + destFolder)
 
     Log.I(Green("Done. Find folder: '" + destFolder + "'\n"))
 
