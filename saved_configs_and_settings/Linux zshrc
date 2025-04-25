@@ -116,4 +116,4 @@ alias lastdir="dirs -v"
 alias dirsz="du -sh"
 
 # Syntax highlighting settings https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md
-source ./zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
