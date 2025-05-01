@@ -5,27 +5,32 @@ import sys
 import inspect
 import os
 import shutil
-
+from typing import List, Tuple, Optional
 from urllib.request import urlretrieve
-from zipfile import ZipFile 
+from zipfile import ZipFile
 
 # 
 # Utility script for Android
 # 
 # It is developed for Linux and Mac OS
-# Note that some bugs coud be present.
+# Note that some bugs could be present.
 #
 
-def Red(mes): return f"\033[91m{mes}\033[00m"
-def Green(mes): return f"\033[92m{mes}\033[00m"
-def Blue(mes): return f"\033[0;34m{mes}\033[00m"
+def Red(mes: str) -> str:
+    return f"\033[91m{mes}\033[00m"
+
+def Green(mes: str) -> str:
+    return f"\033[92m{mes}\033[00m"
+
+def Blue(mes: str) -> str:
+    return f"\033[0;34m{mes}\033[00m"
 
 # 
 # A help 
 # 
 
-def printHelp():
-    
+def printHelp() -> None:
+
     log(Log.INFO,         
     """
     Usage: ./android.py [options...]
@@ -44,10 +49,10 @@ def printHelp():
     -info - Prints info about connected device
     Example: ./android.py -info
 
-    -enter-creds - Enters the next 2 strings in the 2 text fileds if has focus
+    -enter-creds - Enters the next 2 strings in the 2 text fields if has focus
     Example: ./android.py -enter-creds email:password
 
-    -process-info - Shows proccess info for a process
+    -process-info - Shows process info for a process
     Example: ./android.py -process-info 13380
     or
     Example: ./android.py -process-info com.example.my.package.name
@@ -86,8 +91,8 @@ def printHelp():
 # Constants
 # 
 
-KEY_PASS="android"
-KEY_ALIAS="androiddebugkey"
+KEY_PASS: str = "android"
+KEY_ALIAS: str = "androiddebugkey"
 
 #
 #  Functions & Classes
@@ -98,14 +103,13 @@ KEY_ALIAS="androiddebugkey"
 # 
 
 class Log:
-    INFO = 1
-    ERROR = 2
-    DEBUG = 3
-    DEBUG_MODE = False
+    INFO: int = 1
+    ERROR: int = 2
+    DEBUG: int = 3
+    DEBUG_MODE: bool = False
 
-def log(level, message):
-    
-    formatted = ""
+def log(level: int, message: str) -> None:
+    formatted: str = ""
 
     if level == Log.ERROR:
         # Error formatting
@@ -119,88 +123,75 @@ def log(level, message):
 
     # Insert line number
     if Log.DEBUG_MODE:
-        lineNumber = inspect.stack()[1][2]
-        print(lineNumber, formatted, end="")
+        lineNumber: int = inspect.stack()[1][2]
+        print(f"{lineNumber} {formatted}", end="")
     else:
         print(formatted, end="")
 
-# Check if we have the passed argumnets
-def hasCommand(args_list) -> list:
-    value = ""
-    found = False
-    
-    # Iterate over a list of arguments starting from the first element
-    for index, arg in enumerate(sys.argv[1:]):    
-        
-        # Search for options and args.
-        for elem in args_list:
-            if elem == arg:
-                # Option is found.
-                found = True
-        
-        # Search for arg values.
-        # If it doesn't start with '-' symbol then get it
-        if not arg.startswith('-'):
-            value = arg
-        
-        # To exclude matches which have more flags 
-        # and some of them can be matched
-        if arg.startswith('-') and arg not in args_list:
-            found = False       
-            return (value, found)
-        
-    return (value, found) 
+def hasCommand(args_list: List[str]) -> Tuple[str, bool]:
+    """
+    Check if any of the provided arguments exist in the command-line arguments.
+    """
+    for arg in sys.argv[1:]:
+        if arg in args_list:
+            # Return the next argument if it doesn't start with '-'
+            next_arg = sys.argv[sys.argv.index(arg) + 1] if sys.argv.index(arg) + 1 < len(sys.argv) and not sys.argv[sys.argv.index(arg) + 1].startswith('-') else ""
+            return next_arg, True
+    return "", False
 
-def hasSingleCommand(arg) -> bool:
-    for index, a in enumerate(sys.argv[1:]):
-        if arg == a:
-            return True
-    return False
+def hasSingleCommand(arg: str) -> bool:
+    """
+    Check if a single command exists in the command-line arguments.
+    """
+    return arg in sys.argv[1:]
 
-def getArgWithValue(argument) -> str:
-    for index, arg in enumerate(sys.argv[1:]):  
-        if argument == arg:
-            nextArg = sys.argv[index + 2]
-            return nextArg         
-    return ""
+def getArgWithValue(argument: str) -> str:
+    """
+    Get the value associated with a specific argument.
+    """
+    try:
+        index = sys.argv.index(argument)
+        return sys.argv[index + 1] if index + 1 < len(sys.argv) else ""
+    except ValueError:
+        return ""
 
-def path(arg) -> str:
+def path(arg: str) -> str:
     return os.path.realpath(os.path.expanduser(arg))
 
 class Runner:
 
     # Executes shell command
     @classmethod
-    def run(cls, command, logs = False):
+    def run(cls, command: str, logs: bool = False) -> str:
         return cls.runInternalUsingCheckoutRun(command, logs)
 
     # Executes shell command
     @classmethod
-    def runInternalUsingSubprocessRun(cls, command, logs):
+    def runInternalUsingSubprocessRun(cls, command: str, logs: bool) -> None:
         if logs:
-            log(Log.INFO, Blue("Executing command: " + str(command) + "\n"))
+            log(Log.INFO, Blue(f"Executing command: {command}\n"))
         result = subprocess.run(command)
         if logs:
-            log(Log.INFO, Blue("Done. Code: " + str(result.returncode) + "\n")) 
+            log(Log.INFO, Blue(f"Done. Code: {result.returncode}\n")) 
 
     @classmethod
-    def runInternalUsingCheckoutRun(cls, command, logs):
+    def runInternalUsingCheckoutRun(cls, command: str, logs: bool) -> str:
         if logs:
-            log(Log.INFO, Blue("Executing command: " + str(command) + "\n"))
+            log(Log.INFO, Blue(f"Executing command: {command}\n"))
         
-        text_result = ""
+        text_result: str = ""
 
         try:
             output = subprocess.check_output(["bash", "-c", command])
             text_result = output.decode('utf-8')
         except subprocess.CalledProcessError:
             if logs:
-                log(Log.INFO, "Command retruned non zero status code")
+                log(Log.INFO, "Command returned non-zero status code")
 
         return text_result
 
     @classmethod
-    def exit(cls):
+    def exit(cls) -> None:
         # End the program
         sys.exit()
 
@@ -211,161 +202,146 @@ def isMac() -> bool:
     return sys.platform == 'darwin'
 
 def getAndroidBuildToolsPath() -> str:
-
-    android_home = os.getenv('ANDROID_HOME')
+    android_home: Optional[str] = os.getenv('ANDROID_HOME')
     if android_home is None:
         log(Log.ERROR, "Variable 'ANDROID_HOME' is not set. Please, set this variable.")
         return ""
 
-    command = ""
+    command: str = ""
 
     if isLinux():
         # On Linux you need to add '-P' option for 'grep'
         # Grep matching string like this "35.0.0"
-        command = "ls " + android_home + "/build-tools" + "| sort -r | grep -P \"\\d{2}.\\d{1}.\\d{1}$\" | head -n 1"
+        command = f"ls {android_home}/build-tools | sort -r | grep -P '\\d{{2}}.\\d{{1}}.\\d{{1}}$' | head -n 1"
     
     elif isMac():
         # On MAC you need to add '-E' option for 'grep'
         # Grep matching string like this "35.0.0"
-        command = "ls " + android_home + "/build-tools" + "| sort -r | grep -E \"\\d{2}.\\d{1}.\\d{1}$\" | head -n 1"
+        command = f"ls {android_home}/build-tools | sort -r | grep -E '\\d{{2}}.\\d{{1}}.\\d{{1}}$' | head -n 1"
 
     else:
         log(Log.ERROR, "getAndroidBuildToolsPath(): Failed to select OS")
     
-    version = Runner.run(command)
+    version: str = Runner.run(command)
 
-    path = f"{android_home}/build-tools/{version.strip()}/"
+    path: str = f"{android_home}/build-tools/{version.strip()}/"
     
     log(Log.INFO, f"Selected build tools: '{path}'\n")
     return path
 
 def getNDKPath() -> str:
-    android_home = os.getenv('ANDROID_HOME')
+    android_home: Optional[str] = os.getenv('ANDROID_HOME')
     if android_home is None:
         log(Log.ERROR, "Variable 'ANDROID_HOME' is not set. Please, set this variable.")
         return ""
 
-    command = ""
+    command: str = ""
 
     if isLinux():
         # On Linux you need to add '-P' option for 'grep'
         # Grep matching string like this "35.0.0"
-        command = "ls " + android_home + "/ndk" + "| sort -r | grep -P \"\\d{2}.\\d{1}.\\d{7}$\" | head -n 1"
+        command = f"ls {android_home}/ndk | sort -r | grep -P '\\d{{2}}.\\d{{1}}.\\d{{7}}$' | head -n 1"
     
     elif isMac():
         # On MAC you need to add '-E' option for 'grep'
         # Grep matching string like this "35.0.0"
-        command = "ls " + android_home + "/ndk" + "| sort -r | grep -E \"\\d{2}.\\d{1}.\\d{7}$\" | head -n 1"
+        command = f"ls {android_home}/ndk | sort -r | grep -E '\\d{{2}}.\\d{{1}}.\\d{{7}}$' | head -n 1"
 
     else:
         log(Log.ERROR, "getNDKPath(): Failed to select OS")
 
-    version = Runner.run(command)
+    version: str = Runner.run(command)
 
     return f"{android_home}/ndk/{version.strip()}/"
 
-# Get deafult Android keystore path
+# Get default Android keystore path
 def getAndroidKeystorePath() -> str:
+    KEY_STORE_PATH: str = ".android/debug.keystore"
 
-    KEY_STORE_PATH = ".android/debug.keystore"
-
-    home = os.getenv('HOME')   
+    home: Optional[str] = os.getenv('HOME')   
     if home is None:
         log(Log.ERROR, "Variable 'HOME' is not set. Please, set this variable.")
         return "" 
     
-    keystore = f"{home}/{KEY_STORE_PATH}"
+    keystore: str = f"{home}/{KEY_STORE_PATH}"
 
     log(Log.INFO, f"Selected key store file: '{keystore}'\n")
 
     return keystore
 
 def getRetracePath() -> str:
-
-    android_home = os.getenv('ANDROID_HOME')
+    android_home: Optional[str] = os.getenv('ANDROID_HOME')
     if android_home is None:
         log(Log.ERROR, "Variable 'ANDROID_HOME' is not set. Please, set this variable.")
         return ""
 
-    return android_home + "tools/proguard/lib"
+    return f"{android_home}tools/proguard/lib"
 
 def hasAnyDevices() -> bool:
-
-    res = Runner.run("adb devices")
-
-    lines = res.count('\n')
-
-    if lines > 2:
+    """
+    Check if any devices are connected via ADB.
+    """
+    res: str = Runner.run("adb devices")
+    # Count lines excluding the header and empty lines
+    if len([line for line in res.splitlines() if line.strip()]) > 1:
         return True
 
-    log(Log.ERROR, "Device list is empty. No devices currently available.\n")    
+    log(Log.ERROR, "Device list is empty. No devices currently available.\n")
     return False
 
-def downloadFile(url, filename) -> bool:
-
+def downloadFile(url: str, filename: str) -> bool:
+    """
+    Download a file from the given URL and save it to the specified filename.
+    """
     log(Log.INFO, f"Start downloading file: {url}\n")
 
     try:
         file, headers = urlretrieve(url, filename)
-        res = False
+        content_length = headers.get("Content-Length")
+        if content_length and int(content_length) > 0:
+            log(Log.INFO, f"Success: Content-Length: {content_length}\n")
+            return True
 
-        for name, value in headers.items():
-            if name == "Content-Length" and int(value) > 0:
-                log(Log.INFO, f"Success: Content-Length: {value}\n")
-                res = True
-                break
-
-        if res == False:
-            log(Log.ERROR, "Content length is 0. Failed.\n")
-
-        return res
-
-    except:
-        log(Log.ERROR, "Failed to download file. Try again later.\n")
+        log(Log.ERROR, "Content length is 0. Failed.\n")
+        return False
+    except Exception as e:
+        log(Log.ERROR, f"Failed to download file. Error: {e}\n")
         return False
 
-def confirmAction(message) -> bool:
-    
-    user_input = input(f"{message} (yes/no): ")
-    
-    if user_input.lower() == "yes":
-        print("Continuing...")
-        return True
-    else:
-        print("Stopping...")
-        return False
+def confirmAction(message: str) -> bool:
+    """
+    Prompt the user for confirmation with a yes/no question.
+    """
+    user_input: str = input(f"{message} (yes/no): ").strip().lower()
+    return user_input == "yes"
     
 # Global variables
-jadxExecFileName = "jadx.jar"      
+jadxExecFileName: str = "jadx.jar"      
     
 def downloadJadx() -> bool:
 
-    jadxLink = "https://github.com/skylot/jadx/releases/download/v1.5.1/jadx-1.5.1.zip"
-    jadxDownloadedFile = "jadx.zip"
-    fileToExtract = "lib/jadx-1.5.1-all.jar"
+    jadxLink: str = "https://github.com/skylot/jadx/releases/download/v1.5.1/jadx-1.5.1.zip"
+    jadxDownloadedFile: str = "jadx.zip"
+    fileToExtract: str = "lib/jadx-1.5.1-all.jar"
 
-    if os.path.isfile(jadxExecFileName) == False:
-
+    if not os.path.isfile(jadxExecFileName):
         print("Downloading jadx...")    
         
         if downloadFile(jadxLink, jadxDownloadedFile):
-
             print("Unzipping jadx...")  
 
             with ZipFile(path(f"./{jadxDownloadedFile}"), 'r') as zObject: 
-
                 zObject.extract(fileToExtract, path=path("./")) 
-                
                 zObject.close() 
 
             shutil.move(path(f"./{fileToExtract}"), path(f"./{jadxExecFileName}")) 
-
+            
             os.chmod(path(f"./{jadxExecFileName}"), 0o744)
 
             log(Log.INFO, Blue("Cleaning...\n"))
 
             os.rmdir(path("./lib"))
-            os.remove(path("./" + jadxDownloadedFile))
+            os.remove(path(f"./{jadxDownloadedFile}"))
 
     else:
         log(Log.INFO, "Jadx is already present. Nothing to do.\n")    
@@ -379,14 +355,16 @@ def downloadJadx() -> bool:
 TEXT, COMMAND_ENTER_TEXT_FOUND = hasCommand(["-i", "-input"])
 
 if COMMAND_ENTER_TEXT_FOUND:
-
-    if hasAnyDevices() == False:
+    
+    if not hasAnyDevices():
         Runner.exit()
 
     log(Log.INFO, f"Entering: '{TEXT}'\n")
-    result = Runner.run("adb shell input text " + TEXT)
+    
+    Runner.run(f"adb shell input text {TEXT}")
+    
     log(Log.INFO, "Done\n")
-    # print("Test")
+    
     Runner.exit()
 
 ##############################################################################################
@@ -401,6 +379,7 @@ if COMMAND_SHOW_TOP_ACTIVITY_FOUND:
     log(Log.INFO, "Top activity:\n")
     result = Runner.run("adb shell dumpsys activity | grep mCurrentFocus=Window")
     log(Log.INFO, result)
+    
     Runner.exit()
 
 ##############################################################################################
@@ -408,30 +387,22 @@ if COMMAND_SHOW_TOP_ACTIVITY_FOUND:
 _, COMMAND_DEVICE_INFO_FOUND = hasCommand(["-info"])
 
 if COMMAND_DEVICE_INFO_FOUND:
-
-    if hasAnyDevices() == False:
+    if not hasAnyDevices():
         Runner.exit()
 
-    result = Runner.run("adb shell getprop ro.build.version.release")
-    log(Log.INFO, Blue("Release version: ") + result)
+    commands = [
+        ("adb shell getprop ro.build.version.release", "Release version"),
+        ("adb shell getprop ro.build.version.release_or_codename", "Release or code name version"),
+        ("adb shell getprop ro.build.id", "Build ID"),
+        ("adb shell getprop ro.product.manufacturer", "Manufacturer"),
+        ("adb shell getprop ro.product.model", "Device model"),
+        ("adb shell getprop ro.product.cpu.abilist", "Supported ABI list"),
+        ("adb shell getprop ro.build.version.sdk", "SDK version"),
+    ]
 
-    result = Runner.run("adb shell getprop ro.build.version.release_or_codename")
-    log(Log.INFO, Blue("Release or code name version: ") + result)
-
-    result = Runner.run("adb shell getprop ro.build.id")
-    log(Log.INFO, Blue("Build ID: ") + result)
-
-    result = Runner.run("adb shell getprop ro.product.manufacturer")
-    log(Log.INFO, Blue("Manufacturer: ") + result)
-
-    result = Runner.run("adb shell getprop ro.product.model")
-    log(Log.INFO, Blue("Device model: ") + result)
-
-    result = Runner.run("adb shell getprop ro.product.cpu.abilist")
-    log(Log.INFO, Blue("Supported ABI list: ") + result)
-
-    result = Runner.run("adb shell getprop ro.build.version.sdk")
-    log(Log.INFO, Blue("SDK version: ") + result)
+    for cmd, description in commands:
+        result = Runner.run(cmd)
+        log(Log.INFO, f"{Blue(description)}: {result}")
 
     Runner.exit()
 
@@ -441,19 +412,24 @@ TEXT, COMMAND_ENTER_CREDENTIALS_FOUND = hasCommand(["-enter-creds"])
 
 if COMMAND_ENTER_CREDENTIALS_FOUND:
 
-    if hasAnyDevices() == False:
+    if not hasAnyDevices():
         Runner.exit()
 
-    strings = TEXT.split(':')
+    try:
+        
+        username, password = TEXT.split(":")
+        
+        log(Log.INFO, "Entering text...\n")
+        
+        Runner.run(f"adb shell input text {username}")
+        Runner.run("adb shell input keyevent 66")
+        Runner.run(f"adb shell input text {password}")
+        Runner.run("adb shell input keyevent 66")
+        
+        log(Log.INFO, "Done\n")
 
-    log(Log.INFO, "Entering text...\n")
-
-    Runner.run(f"adb shell input text {strings[0]}")
-    Runner.run("adb shell input keyevent 66")
-    Runner.run(f"adb shell input text {strings[1]}")
-    Runner.run("adb shell input keyevent 66")
-
-    log(Log.INFO, "Done\n")
+    except ValueError:
+        log(Log.ERROR, "Invalid credentials format. Use 'username:password'.\n")
 
     Runner.exit()
 
