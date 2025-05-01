@@ -4,15 +4,21 @@ import subprocess
 import sys
 import inspect
 import os
+import shutil
 
 from urllib.request import urlretrieve
+from zipfile import ZipFile 
 
 # 
 # Utility script for Android
+# 
+# It is developed for Linux and Mac OS
+# Note that some bugs coud be present.
 #
 
 def Red(mes): return "\033[91m{}\033[00m" .format(mes)
 def Green(mes): return "\033[92m{}\033[00m" .format(mes)
+def Blue(mes): return "\033[0;34m{}\033[00m" .format(mes)
 
 # 
 # A help 
@@ -21,45 +27,56 @@ def Green(mes): return "\033[92m{}\033[00m" .format(mes)
 def printHelp():
     Log.I("\nUsage: ./android.py [options...]\n\n")
 
-    Log.I(Green("-i, -input [text]") + " - Enters a text in the focused view on the screen\n")
+    Log.I(Blue("-i, -input [text]") + " - Enters a text in the focused view on the screen\n")
     Log.I("Example: ./android.py -i \"Some text\"\n")
 
-    Log.I(Green("-top-activity") + " - Prints current top activity\n")
+    Log.I(Blue("-top-activity") + " - Prints current top activity\n")
     Log.I("Example: ./android.py -top-activity\n")
 
-    Log.I(Green("-resign-apk, -no-prompt") + " - Resigns apk with default keystore\n")
+    Log.I(Blue("-resign-apk, -no-prompt") + " - Resigns apk with default keystore\n")
     Log.I("Example: ./android.py -resign-apk app_name.apk\n")
     Log.I("Or\n")
     Log.I("Example: ./android.py -resign-apk -no-prompt app_name.apk\n")
 
-    Log.I(Green("-info") + " - Prints info about connected device\n")
+    Log.I(Blue("-info") + " - Prints info about connected device\n")
     Log.I("Example: ./android.py -info\n")
 
-    Log.I(Green("-enter-creds") + " - Enters the next 2 strings in the 2 text fileds if has focus\n")
+    Log.I(Blue("-enter-creds") + " - Enters the next 2 strings in the 2 text fileds if has focus\n")
     Log.I("Example: ./android.py -enter-creds email:password\n")
 
-    Log.I(Green("-process-info") + " - Shows proccess info for a process\n")
+    Log.I(Blue("-process-info") + " - Shows proccess info for a process\n")
     Log.I("Example: ./android.py -process-info 13380\n")
     Log.I("Or\n")
     Log.I("Example: ./android.py -process-info com.example.my.package.name\n")
 
-    Log.I(Green("-cert-info") + " - Shows certificate signature info for apk\n")
+    Log.I(Blue("-cert-info") + " - Shows certificate signature info for apk\n")
     Log.I("Example: ./android.py -cert-info my.apk\n")
 
-    Log.I(Green("-package-info") + " - Shows detailed package info for app\n")
+    Log.I(Blue("-package-info") + " - Shows detailed package info for app\n")
     Log.I("Example: ./android.py -package-info my.good.package\n")
 
-    Log.I(Green("-decomp") + " - Decompile apk using apktool\n")
+    Log.I(Blue("-decomp") + " - Decompile apk using apktool\n")
     Log.I("Example: ./android.py -decomp my_good.apk\n")
 
-    Log.I(Green("-sym") + " - Symbolicate Java/Kotlin crash\n")
+    Log.I(Blue("-sym") + " - Symbolicate Java/Kotlin crash\n")
     Log.I("Example: ./android.py -sym mapping.txt crash_stack_logs.txt\n")
 
-    Log.I(Green("-build") + " - Build apk from decompiled code\n")
+    Log.I(Blue("-build") + " - Build apk from decompiled code\n")
     Log.I("Example: ./android.py -build folder_with_decompiled_apk_code\n")
 
-    Log.I(Green("-nsym debugData/ crash_logs.txt") + " - Symbolicate Native crash\n")
+    Log.I(Blue("-nsym debugData/ crash_logs.txt") + " - Symbolicate Native crash\n")
     Log.I("Example: ./android.py -nsym ~/my-symbols/armeabi-v7a/ crash_logs.txt\n")
+
+    Log.I(Blue("-smalitodex -o classes.dex -jar smali-3.0.9-dev-fat.jar ./smali_classes/") + " - Convert SMALI to DEX\n")
+    Log.I("Example: ./android.py -smalitodex -o classes.dex -jar smali-3.0.9-dev-fat.jar ./smali_classes/\n")
+    Log.I("Hint: \n")
+    Log.I("Smali assembler github page: https://github.com/google/smali/tree/main\n")
+
+    Log.I(Blue("-jadxopen classes.dex") + " - Open DEX file using Jadx\n")
+    Log.I("Example: ./android.py -jadxopen classes.dex\n")
+    Log.I("Hint: \n")
+    Log.I("Jadx github page: https://github.com/skylot/jadx\n")
+
 
 # 
 # Constants
@@ -126,15 +143,15 @@ class Runner:
     @classmethod
     def runInternalUsingSubprocessRun(cls, command, logs):
         if logs:
-            Log.I(Green("Executing command: " + str(command) + "\n"))
+            Log.I(Blue("Executing command: " + str(command) + "\n"))
         result = subprocess.run(command)
         if logs:
-            Log.I(Green("Done. Code: " + str(result.returncode) + "\n")) 
+            Log.I(Blue("Done. Code: " + str(result.returncode) + "\n")) 
 
     @classmethod
     def runInternalUsingCheckoutRun(cls, command, logs):
         if logs:
-            Log.I(Green("Executing command: " + str(command) + "\n"))
+            Log.I(Blue("Executing command: " + str(command) + "\n"))
         
         text_result = ""
 
@@ -182,7 +199,7 @@ class Log:
             formatted = Red(message)
         elif level == this.DEBUG:        
             # Main formatting
-            formatted = Green(message)  
+            formatted = Blue(message)  
         else:
             # No formatting
             formatted = message      
@@ -289,6 +306,80 @@ def hasAnyDevices() -> bool:
     Log.E("Device list is empty. No devices currently available.\n")    
     return False
 
+def downloadFile(url, filename) -> bool:
+
+    Log.I("Start downloading file: " + url + "\n")
+
+    try:
+        file, headers = urlretrieve(url, filename)
+        res = False
+
+        for name, value in headers.items():
+            if name == "Content-Length" and int(value) > 0:
+                Log.I("Success {Content-Length: " + value + "}\n")
+                res = True
+                break
+
+        if res == False:
+            Log.E("Content length is 0. Failed.\n")
+
+        #  7 - rwe
+        #  4 - r
+        os.chmod(file, 0o744)
+
+        return res
+
+    except:
+        Log.E("Failed to download file. Try again later.\n")
+        return False
+
+def confirmAction(message) -> bool:
+    
+    user_input = input(message + " (yes/no): ")
+    
+    if user_input.lower() == "yes":
+        print("Continuing...")
+        return True
+    else:
+        print("Stopping...")
+        return False
+    
+# Global variables
+jadxExecFileName = "jadx.jar"      
+    
+def downloadJadx() -> bool:
+
+    jadxLink = "https://github.com/skylot/jadx/releases/download/v1.5.1/jadx-1.5.1.zip"
+    jadxDownloadedFile = "jadx.zip"
+    fileToExtract = "lib/jadx-1.5.1-all.jar"
+
+    if os.path.isfile(jadxExecFileName) == False:
+
+        print("Downloading jadx...")    
+        
+        if downloadFile(jadxLink, jadxDownloadedFile):
+
+            print("Unzipping jadx...")  
+
+            with ZipFile(path("./" + jadxDownloadedFile), 'r') as zObject: 
+
+                zObject.extract(fileToExtract, path=path("./")) 
+                
+                zObject.close() 
+
+            shutil.move(path("./" + fileToExtract), path("./" + jadxExecFileName)) 
+
+            os.chmod(path("./" + jadxExecFileName), 0o744)
+
+            Log.I(Blue("Cleaning...\n"))
+
+            os.rmdir(path("./lib"))
+            os.remove(path("./" + jadxDownloadedFile))
+
+    else:
+        Log.I("Jadx is already present. Nothing to do.\n")    
+
+    return True            
 
 #
 # Start of the program
@@ -331,25 +422,25 @@ if COMMAND_DEVICE_INFO_FOUND:
         Runner.exit()
 
     result = Runner.run("adb shell getprop ro.build.version.release")
-    Log.I(Green("Release version: ") + result)
+    Log.I(Blue("Release version: ") + result)
 
     result = Runner.run("adb shell getprop ro.build.version.release_or_codename")
-    Log.I(Green("Release or code name version: ") + result)
+    Log.I(Blue("Release or code name version: ") + result)
 
     result = Runner.run("adb shell getprop ro.build.id")
-    Log.I(Green("Build ID: ") + result)
+    Log.I(Blue("Build ID: ") + result)
 
     result = Runner.run("adb shell getprop ro.product.manufacturer")
-    Log.I(Green("Manufacturer: ") + result)
+    Log.I(Blue("Manufacturer: ") + result)
 
     result = Runner.run("adb shell getprop ro.product.model")
-    Log.I(Green("Device model: ") + result)
+    Log.I(Blue("Device model: ") + result)
 
     result = Runner.run("adb shell getprop ro.product.cpu.abilist")
-    Log.I(Green("Supported ABI list: ") + result)
+    Log.I(Blue("Supported ABI list: ") + result)
 
     result = Runner.run("adb shell getprop ro.build.version.sdk")
-    Log.I(Green("SDK version: ") + result)
+    Log.I(Blue("SDK version: ") + result)
 
     Runner.exit()
 
@@ -414,7 +505,7 @@ if COMMAND_RESIGN_APK_FOUND and APK_NAME:
 
     if not SHOULD_PROMPT:
         # Ask for modification
-        Log.I(Green("Now it's time to modify the app. Please, add changes to [temp/] or click any key to continue...\n"))
+        Log.I(Blue("Now it's time to modify the app. Please, add changes to [temp/] or click any key to continue...\n"))
         input()
 
     Log.I("Zipping...\n")
@@ -490,11 +581,11 @@ if COMMAND_PACKAGE_INFO_FOUND and PACKAGE_NAME:
 
     result = Runner.run("adb shell dumpsys package " + PACKAGE_NAME)
 
-    Log.I(Green("START >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"))
+    Log.I(Blue("START >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"))
 
     Log.I(result)
 
-    Log.I(Green("END >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"))
+    Log.I(Blue("END >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"))
 
     Runner.exit()
 
@@ -583,7 +674,7 @@ if COMMAND_DECOMPILE_APK and APK_NAME:
 
     Runner.run("./apktool d " + APK_NAME + " -o " + destFolder)
 
-    Log.I(Green("Done. Find folder: '" + destFolder + "'\n"))
+    Log.I(Blue("Done. Find folder: '" + destFolder + "'\n"))
 
     Runner.exit()
 
@@ -605,7 +696,7 @@ if COMMAND_SYMB_CRASH_STACK:
 
     Runner.run("java -jar " + retrace_path + "/retrace.jar " + mappingFile + " " + crashLogFile + " > " + outFile)
 
-    Log.I(Green("Done. Find file: '" + outFile + "'\n"))
+    Log.I(Blue("Done. Find file: '" + outFile + "'\n"))
 
     Runner.exit()
 
@@ -617,9 +708,11 @@ if COMMAND_BUILD_APK and APK_FOLDER:
 
     Runner.run("apktool -v b " + APK_FOLDER)
 
-    Log.I(Green("Done\n"))
+    Log.I(Blue("Done\n"))
 
     Runner.exit()
+
+##############################################################################################
 
 NEXT, COMMAND_SYM_NATIVE_CRASH = hasCommand(["-nsym"])
 if COMMAND_SYM_NATIVE_CRASH:
@@ -639,8 +732,57 @@ if COMMAND_SYM_NATIVE_CRASH:
     # Example: /Users/sbutr/Library/Android/sdk/ndk/21.3.6528147/ndk-stack -sym ~/my-symbols/armeabi-v7a/ -dump ~/Desktop/crash 
     Runner.run(ndk + "ndk-stack -sym " + symbols + " -dump " + logs)
 
-    Log.I(Green("Done\n"))
+    Log.I(Blue("Done\n"))
     Runner.exit()
+
+##############################################################################################
+
+COMMAND_CONVERT_SMALI_TO_DEX = hasSingleCommand("-smalitodex")
+if COMMAND_CONVERT_SMALI_TO_DEX:
+
+    if len(sys.argv) < 7:
+        Log.E("Not enough arguments. Sorry.\n")
+        Runner.exit()   
+
+    outFile = getArgWithValue("-o")    
+    print("Out file: " + outFile)
+  
+    assembler = path(getArgWithValue("-jar"))  
+    print("Using smali assembler: " + assembler)
+
+    # Last argument is path to smali code
+    filePath = path(sys.argv[6])
+    print("Path to smali code: " + filePath + "\n")
+
+    # Full commad example
+    # java -jar /home/serhii/Downloads/smali/smali/build/libs/smali-3.0.9-dev-fat.jar assemble -o classes.dex ./output/smali_classes2/    
+    Runner.run("java -jar " + assembler + " assemble -o " + outFile + " " + filePath)
+
+    message = "Do you want to open '" + outFile + "' using Jadx ?"
+    if confirmAction(message):
+        
+        downloadJadx()
+
+        Log.I(Blue("Opening...\n"))
+
+        # java -jar jadx.jar classes.dex
+        Runner.run("java -jar " + jadxExecFileName + " " + outFile)    
+
+    Log.I(Blue("Done\n"))
+    Runner.exit()
+
+##############################################################################################
+
+NEXT, COMMAND_JADX_OPEN = hasCommand(["-jadxopen"])
+if COMMAND_JADX_OPEN:
+
+    downloadJadx()
+
+    # java -jar jadx.jar classes.dex
+    Runner.run("java -jar " + jadxExecFileName + " " + NEXT) 
+
+    Log.I(Blue("Done\n"))
+    Runner.exit()        
 
 # Looks like provided args are not correct, so show a help
 Log.E("Sorry, cannot execute this command. \nPlease, make sure that the arguments are correct. A help:\n")
