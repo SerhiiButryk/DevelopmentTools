@@ -114,6 +114,8 @@ alias gcomnoedit="git commit --amend --no-edit"
 alias lastdir="dirs -v"
 # Directory size
 alias dirsz="du -sh"
+# Sym link
+# ln -s [filename] [symlinkname]
 
 # Syntax highlighting settings https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md
 source ~/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
