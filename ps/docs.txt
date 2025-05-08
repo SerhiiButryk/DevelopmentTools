@@ -27,3 +27,6 @@ ls -l /proc/pid/fd // list opened file descriptors
 
 --- Show running JVM instances ---
 ps -ef | grep java
+
+-- View some proccess and set custom output format
+ps -L -o pid,tid,state,time,%cpu,%mem,start_time 10427
