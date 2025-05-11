@@ -14,6 +14,10 @@ Docs: http://linuxintro.org/wiki/Main_Page
 
 # Android ♨️
 
+# Compose
+
+https://lhwdev.github.io/note/compose/how-it-works/
+
 ## File descriptors
 
 https://developpaper.com/an-article-helps-you-understand-android-file-descriptors/
