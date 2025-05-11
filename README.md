@@ -1,6 +1,6 @@
 # Cheat sheets & Developer tools
 
-This repository provides short docs & refs for common developer tools.
+A quick docs/refs for common dev tools.
 
 # Bash/Shell 🍓
 

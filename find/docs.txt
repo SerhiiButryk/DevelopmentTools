@@ -1,6 +1,7 @@
 /**
  *
- *  find - Command for searching files
+ *  find command
+ *  https://www.youtube.com/watch?v=KCVaNb_zOuw&t=3s
  *
  */
 
@@ -52,7 +53,3 @@ $ find / -type f ! -perm 777
 # Find all empty directories
 
 $ find /tmp -type d -empty
-
-# More information
-
-https://www.youtube.com/watch?v=KCVaNb_zOuw&t=3s

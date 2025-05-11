@@ -3,3 +3,11 @@
  *  xargs - a program to run another command or action
  *
  */
+
+---- Find and archive images with tar program ---
+
+ $ find Pictures/ -name "*.png" -type f -print0 | xargs -0 tar -cvzf png.tar
+
+---- Find and delete files ---
+
+ $ find Downloads -name "Pictures" -type d -print0 | xargs -0 /bin/rm -v -rf "{}"

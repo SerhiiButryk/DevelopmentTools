@@ -2,7 +2,19 @@
 
 # Tested on Ubuntu 22.04
 
-for product in IntelliJIdea WebStorm DataGrip PhpStorm CLion PyCharm GoLand RubyMine; do
+# Edit to change product to reset trial period
+list_of_products=(
+# "IntelliJIdea"
+#     "WebStorm"
+#     "DataGrip"
+#     "PhpStorm"
+    "CLion"
+    # "PyCharm"
+    # "GoLand"
+    # "RubyMine"
+)
+
+for product in list_of_products; do
     echo "[+] Resetting trial period for $product"
 
     echo "[+] Removing Evaluation Key..."

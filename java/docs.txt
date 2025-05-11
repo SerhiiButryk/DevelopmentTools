@@ -8,7 +8,7 @@
 
 JAVA 8
 
-sudo $JAVA_HOME/bin/keytool -import -alias root_CA1 -keystore $JAVA_HOME/jre/lib/security/cacerts -file $downloaded_cert_file 
+sudo $JAVA_HOME/bin/keytool -import -alias root_CA1 -keystore $JAVA_HOME/jre/lib/security/cacerts -file $downloaded_cert_file
 sudo $JAVA_HOME/bin/keytool -importcert -file <cert> -cacerts -keypass changeit -storepass changeit -noprompt -alias <alias>
 
 Default password for keystore: changeit

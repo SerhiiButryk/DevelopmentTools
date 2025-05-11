@@ -30,6 +30,9 @@ source $ZSH/oh-my-zsh.sh
 # Preferred editor for local and remote sessions
 export EDITOR='code'
 
+# Sym link
+# ln -s [filename] [symlinkname]
+
 # Aliasses for git
 alias gcomall="git add -u && git commit"
 alias gcomnoedit="git commit --amend --no-edit"
@@ -38,8 +41,6 @@ alias lastdir="dirs -v"
 # Total dir size
 alias totals="du -sh"
 alias python="/usr/bin/python3"
-# Sym link
-# ln -s [filename] [symlinkname]
 
 # Syntax highlighting settings https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

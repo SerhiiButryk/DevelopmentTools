@@ -8,10 +8,6 @@
 
 $ openssl x509 -in aaa_cert.pem -noout -text
 
-# Connect with proxy
-
-$ curl -x localhost:8888 -k http://gd-lviv22.gd.sw.rim.net
-
  -----------------------
 
  Guides: https://www.digitalocean.com/community/tutorials/openssl-essentials-working-with-ssl-certificates-private-keys-and-csrs

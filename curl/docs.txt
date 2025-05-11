@@ -23,3 +23,7 @@ $ curl -X POST -H "Authorization: Bearer <token>" http://example.com -v -d 'post
 ------ Download a file ------
 
 curl -o filename.txt https://reqbin.com/echo
+
+------ Connect with proxy ------
+
+$ curl -x localhost:8888 -k http://example.com

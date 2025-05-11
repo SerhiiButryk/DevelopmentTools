@@ -15,7 +15,7 @@
 ./gradlew assembleRelease
 
 With flags
-./gradlew -PAPP_ABI=armeabi-v7a AppKinetics:assembleDebug
+./gradlew -PAPP_ABI=armeabi-v7a app:assembleDebug
 
 3. Execute single build script
 ./gradlew -b /path/to/some_script.gradle someTask
