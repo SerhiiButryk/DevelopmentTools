@@ -107,6 +107,9 @@ source $ZSH/oh-my-zsh.sh
 
 export EDITOR='code'
 
+# Sym link
+# ln -s [filename] [symlinkname]
+
 # Aliasses
 alias gcomall="git add -u && git commit"
 alias gcomnoedit="git commit --amend --no-edit"
@@ -114,8 +117,6 @@ alias gcomnoedit="git commit --amend --no-edit"
 alias lastdir="dirs -v"
 # Directory size
 alias dirsz="du -sh"
-# Sym link
-# ln -s [filename] [symlinkname]
 alias python="python3"
 
 # Syntax highlighting settings https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md

@@ -38,3 +38,15 @@ list = [3, 4, 1, 0, 2 ]
 sorted_list = sorted(list)  # Original is not modified
 print(list)  # Original list
 print(sorted_list)  # Sorted list
+
+# Element index
+print(list.index(4))
+
+# Iteration
+print("Iteration")
+for item in list:
+    print(item)
+
+print("Iteration with index")
+for index, item in enumerate(list):
+    print(index, item)    
