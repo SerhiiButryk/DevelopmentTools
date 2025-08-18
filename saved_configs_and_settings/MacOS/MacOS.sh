@@ -1,10 +1,14 @@
 #!/usr/bin/env zsh
 
+# MacOS configuration script
+# Author: Serhii Butryk 
+
 help() {
     echo "Help:"
     echo "Handy script to configure MacOS machine"
     echo "-i|--installapps      - Install apps using Homebrew"
     echo "-d|--installdotfiles  - Install dot files"
+    echo "-c|--copyconfigfiles  - Copy config files (Is not executed by -all option)"
     echo "-a|-all               - Do all tasks"
     echo "-h|-help              - This help"
 }
@@ -18,13 +22,18 @@ VISUAL_CODE_PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bi
 
 INSTALL_DOT_FILES=0
 INSTALL_APPS=0
+COPY_CONFIG_FILES=0
 
 # Define an array of packages to install using Homebrew.
 packages=(
     "git"
     "midnight-commander"
+    # Update if neccessary
     "openjdk@21"
     "zsh-syntax-highlighting"
+    "htop"
+    # For PlantUML
+    "graphviz"
 )
 
 # Define an array of packages to install with --cask option
@@ -33,6 +42,8 @@ usecask=(
     "google-chrome"
     "visual-studio-code"
     "postman"
+    "intellij-idea"
+    "fork"
 )
 
 dotfiles=(
@@ -64,6 +75,10 @@ while [[ "$#" -gt 0 ]]; do
       INSTALL_DOT_FILES=1
       shift
       ;;
+    -c|--copyconfigfiles)
+      COPY_CONFIG_FILES=1
+      shift
+      ;;  
     -h|-help)
       help
       shift
@@ -105,6 +120,10 @@ install_apps() {
         fi
     done
 
+    # -------------------------------
+    # Installing other software
+    # -------------------------------
+
     echo "Installing Oh my ZSH"
 
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -132,6 +151,40 @@ install_dotfiles() {
     done
 }
 
+copy_config_files() {
+
+    # -------------------------------
+    # Configuring VS code
+    # -------------------------------
+
+    VISUAL_CODE_CONFIGS_PATH="$HOME/Library/Application Support/Code/User"
+
+    if [ ! -d "$VISUAL_CODE_CONFIGS_PATH" ]; then
+        echo "Directory does not exist: $VISUAL_CODE_CONFIGS_PATH"
+        return 1
+    fi
+
+    echo "Copying Visual Studio Code config files..."
+
+    cp -vf "VSCode_keybindings.json" "$VISUAL_CODE_CONFIGS_PATH/keybindings.json"
+    cp -vf "VSCode_settings.json" "$VISUAL_CODE_CONFIGS_PATH/settings.json"
+
+    echo "Installing VSCode extensions..."
+
+    if command -v code &>/dev/null; then
+        code --install-extension fwcd.kotlin
+        # Hex Editor
+        code --install-extension ms-vscode.hexeditor
+        # PlantUML
+        code --install-extension jebbs.plantuml
+        code --install-extension ms-python.vscode-pylance
+        code --install-extension ms-python.python
+        code --install-extension ms-python.debugpy
+        code --install-extension ms-python.vscode-python-envs
+    else
+        echo "Command 'code' is not available. Stopped."
+    fi
+}
 
 if [ "$INSTALL_APPS" -eq 1 ]; then
 
@@ -209,7 +262,10 @@ if [ "$INSTALL_DOT_FILES" -eq 1 ]; then
 
 fi
 
-echo "ALL DONE !!!"
+if [ "$COPY_CONFIG_FILES" -eq 1 ]; then
 
+    copy_config_files
 
+fi
 
+echo "ALL DONE !!! Happy coding :)"

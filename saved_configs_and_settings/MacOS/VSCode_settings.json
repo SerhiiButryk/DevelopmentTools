@@ -1,0 +1,5 @@
+{
+    "workbench.colorTheme": "Monokai",
+    "kotlin.languageServer.enabled": false,
+    "kotlin.debugAdapter.enabled": false
+}

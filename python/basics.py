@@ -26,6 +26,7 @@ class People:
     # This is simmilar to static variables in other languages
     company_name = "Cool company Inc."
 
+    # Constructor
     def __init__(this, first_name, last_name) -> None:
         this.first_name = first_name
         this.last_name = last_name

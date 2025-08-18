@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+############################
+# List
+############################
+
 list = [1, 2, 3, 4, 5]
 print(list)
 
@@ -50,3 +54,29 @@ for item in list:
 print("Iteration with index")
 for index, item in enumerate(list):
     print(index, item)    
+
+
+############################
+# Tuple 
+############################
+
+# Immutable
+tuple_1 = ('One', 'Two', 'Three')    
+print(type(tuple_1))
+print(tuple_1)
+
+############################
+# Set
+############################
+
+set_1 = {'One', 'Two', 'Three'}
+print(type(set_1))
+print(set_1)
+
+############################
+# Dictionary
+############################
+
+map = { 'key':'val', 'key2':'val2' }
+print(type(map))
+print(map)
