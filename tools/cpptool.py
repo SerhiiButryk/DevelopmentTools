@@ -8,6 +8,7 @@ import subprocess
 # 
 # A tool for C/C++ program debugging or analysis
 #
+# TODO: Add otool for macOS support
 
 def Red(mes): return "\033[91m{}\033[00m" .format(mes)
 def Green(mes): return "\033[92m{}\033[00m" .format(mes)

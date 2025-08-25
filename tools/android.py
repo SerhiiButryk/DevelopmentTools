@@ -8,6 +8,8 @@ import shutil
 from typing import List, Tuple, Optional
 from urllib.request import urlretrieve
 from zipfile import ZipFile
+import ssl
+import zipfile
 
 # 
 # Utility script for Android
@@ -15,6 +17,13 @@ from zipfile import ZipFile
 # It is developed for Linux and Mac OS
 # Note that some bugs could be present.
 #
+
+# Global variables
+jadxExecFileName = "jadx.jar"   
+
+smaliDecompilerVersion = "3.0.6"
+smaliDecompilerDestFile = "smali_decoder.zip"
+smaliFatJarName = "smali-3.0.5-dev-fat.jar"
 
 def Red(mes: str) -> str:
     return f"\033[91m{mes}\033[00m"
@@ -75,15 +84,15 @@ def printHelp() -> None:
     -nsym debugData/ crash_logs.txt - Symbolicate Native crash
     Example: ./android.py -nsym ~/my-symbols/armeabi-v7a/ crash_logs.txt
 
-    -smalitodex -o classes.dex -jar smali-3.0.9-dev-fat.jar ./smali_classes/ - Convert SMALI to DEX
-    Example: ./android.py -smalitodex -o classes.dex -jar smali-3.0.9-dev-fat.jar ./smali_classes/
+    -smalitodex -o classes.dex ./smali_classes/ - Convert SMALI to DEX
+    Example: ./android.py -smalitodex -o classes.dex ./smali_classes/
     Hint:
-    Smali assembler github page: https://github.com/google/smali/tree/main
+    Smali assembler github repo: https://github.com/google/smali/tree/main
 
     -jadxopen classes.dex - Open DEX file using Jadx
     Example: ./android.py -jadxopen classes.dex
     Hint:
-    Jadx github page: https://github.com/skylot/jadx
+    Jadx github repo: https://github.com/skylot/jadx
     """ + '\n'
     )
 
@@ -192,6 +201,7 @@ class Runner:
 
     @classmethod
     def exit(cls) -> None:
+        log(Log.INFO, "Stopped.\n")
         # End the program
         sys.exit()
 
@@ -293,17 +303,27 @@ def downloadFile(url: str, filename: str) -> bool:
     """
     Download a file from the given URL and save it to the specified filename.
     """
-    log(Log.INFO, f"Start downloading file: {url}\n")
+    
+    if os.path.exists(filename):
+        log(Log.INFO, f"File '{filename}' already exists. Skipping the download.\n")
+        return True
+
+    log(Log.INFO, f"Started the downloading: {url}, file name: {filename}\n")
 
     try:
+        # Create an unverified SSL context to work around SSL certificate issues
+        ssl._create_default_https_context = ssl._create_unverified_context
         file, headers = urlretrieve(url, filename)
         content_length = headers.get("Content-Length")
-        if content_length and int(content_length) > 0:
-            log(Log.INFO, f"Success: Content-Length: {content_length}\n")
-            return True
-
-        log(Log.ERROR, "Content length is 0. Failed.\n")
-        return False
+        # Content length could be None for example for zip files
+        # Check this case and do not fail the download
+        if content_length:
+            if content_length and int(content_length) > 0:
+                log(Log.INFO, f"Success: Content-Length: {content_length}\n")
+                return True
+            log(Log.ERROR, "Content length is 0. Failed.\n")
+            return False
+        return True
     except Exception as e:
         log(Log.ERROR, f"Failed to download file. Error: {e}\n")
         return False
@@ -314,9 +334,44 @@ def confirmAction(message: str) -> bool:
     """
     user_input: str = input(f"{message} (yes/no): ").strip().lower()
     return user_input == "yes"
+
+# See https://github.com/google/smali
+def downloadSmaliDecompiler() -> bool:
+    return downloadFile(f"https://github.com/google/smali/archive/refs/tags/{smaliDecompilerVersion}.zip", smaliDecompilerDestFile)
+
+def buildSmaliFatJar() -> bool:
+
+    if os.path.exists(smaliFatJarName):
+        log(Log.INFO, f"Fat jar is present. Skipping build step.\n")
+        return True
+
+    if not os.path.exists(smaliDecompilerDestFile):
+        log(Log.ERROR, f"File '{smaliDecompilerDestFile}' does not exist. Cannot build smali fat jar.\n")
+        return False
+
+    tempDir = "smali-decompiler-temp"
+
+    # Unzip file
+    Runner.run(f"unzip -q {smaliDecompilerDestFile} -d {tempDir}/")
+
+    # Build fat jar
+
+    os.chdir(f"./{tempDir}/smali-{smaliDecompilerVersion}")
+    os.chmod("./gradlew", 0o744)
     
-# Global variables
-jadxExecFileName: str = "jadx.jar"      
+    Runner.run("./gradlew smali:fatJar")
+
+    # Copy fat jar
+    shutil.copy(src=f"./smali/build/libs/{smaliFatJarName}", dst="../../")
+
+    os.chdir("../../")
+    
+    # Clear files
+    shutil.rmtree(f"./{tempDir}")
+
+    log(Log.INFO, Blue("Built successfully !!!\n"))
+
+    return True
     
 def downloadJadx() -> bool:
 
@@ -344,7 +399,7 @@ def downloadJadx() -> bool:
             os.remove(path(f"./{jadxDownloadedFile}"))
 
     else:
-        log(Log.INFO, "Jadx is already present. Nothing to do.\n")    
+        log(Log.INFO, "Launching Jadx...\n")    
 
     return True            
 
@@ -570,9 +625,14 @@ if COMMAND_DECOMPILE_APK and APK_NAME:
     apkToolJar = "apktool_2.11.0.jar"
 
     noFiles = os.path.isfile(apkTool) == False or os.path.isfile(apkToolJar) == False
-    platfromIsSupported = isLinux() == True or isMac() == True
+    platfromIsSupported = isLinux() or isMac()
     
-    if noFiles and platfromIsSupported:
+    if not platfromIsSupported:
+        log(Log.ERROR, """Sorry, your platform is not supported. 
+            Only Mac and Linux platfroms are supported. Stopped.\n""")
+        Runner.exit()
+
+    if noFiles:
 
         if os.path.isfile(apkTool) == False:
 
@@ -602,15 +662,10 @@ if COMMAND_DECOMPILE_APK and APK_NAME:
             #  7 - rwe
             #  4 - r
             os.chmod(filename, 0o744)   
-
-    else:                        
-        log(Log.ERROR, "Sorry, your platform is not supported. Script supports only Mac and Linux platfroms. Stopped.\n")
-        Runner.exit()
                 
-
     Runner.run(f"./apktool d {APK_NAME} -o {destFolder}")
 
-    log(Log.INFO, Blue("Done. Find folder: '{destFolder}'\n"))
+    log(Log.INFO, Blue(f"Done. Find folder: '{destFolder}'\n"))
 
     Runner.exit()
 
@@ -676,23 +731,26 @@ if COMMAND_SYM_NATIVE_CRASH:
 COMMAND_CONVERT_SMALI_TO_DEX = hasSingleCommand("-smalitodex")
 if COMMAND_CONVERT_SMALI_TO_DEX:
 
-    if len(sys.argv) < 7:
-        log(Log.ERROR, "Not enough arguments. Sorry.\n")
+    if len(sys.argv) < 5:
+        log(Log.ERROR, "Not enough arguments.\n")
+        Runner.exit()   
+
+    if not downloadSmaliDecompiler():
+        Runner.exit()    
+
+    if not buildSmaliFatJar():
         Runner.exit()   
 
     outFile = getArgWithValue("-o")    
     print("Out file: " + outFile)
-  
-    assembler = path(getArgWithValue("-jar"))  
-    print(f"Using smali assembler: {assembler}")
 
     # Last argument is path to smali code
     filePath = path(sys.argv[6])
     print(f"Path to smali code: {filePath} \n")
 
     # Full commad example
-    # java -jar /home/serhii/Downloads/smali/smali/build/libs/smali-3.0.9-dev-fat.jar assemble -o classes.dex ./output/smali_classes2/    
-    Runner.run(f"java -jar {assembler} assemble -o {outFile} {filePath}")
+    # java -jar ./smali-3.0.9-dev-fat.jar assemble -o classes.dex ./output/smali_classes2/    
+    Runner.run(f"java -jar {smaliFatJarName} assemble -o {outFile} {filePath}")
 
     message = f"Do you want to open '{outFile}' using Jadx ?"
     if confirmAction(message):
