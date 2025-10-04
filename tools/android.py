@@ -745,7 +745,7 @@ if COMMAND_CONVERT_SMALI_TO_DEX:
     print("Out file: " + outFile)
 
     # Last argument is path to smali code
-    filePath = path(sys.argv[6])
+    filePath = path(sys.argv[4])
     print(f"Path to smali code: {filePath} \n")
 
     # Full commad example
