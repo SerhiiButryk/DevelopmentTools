@@ -90,3 +90,7 @@ https://chatgpt.com/g/g-2o7uPNVl0-android-string-resource-translator
 
 https://www.youtube.com/watch?v=xObBUVDMbQs
 https://real-world-plantuml.com/
+
+# AI tools 🧨
+
+https://www.vidnoz.com/image-to-video-ai.html
