@@ -12,7 +12,7 @@ https://www.youtube.com/watch?v=11xSK_qaJz0
 
 - MacOs_CryptoApp
 
-Crypto sample app for Mac OS which is buit upon OpenSSL 3.0
+Crypto sample app for Mac OS which is built upon OpenSSL 3.0
 
 CryptoApp -> CryptoFramework -> CxxCryptoFramework
 
@@ -23,4 +23,4 @@ CryptoFramework:
 Swift framework with Swift APIs
 
 CxxCryptoFramework: 
-Cpp Framework which links with OpenSSL 3.0 lib and espouses some Cpp APIs
+Cpp Framework which is linked with OpenSSL 3.0 lib and exposes Cpp APIs
