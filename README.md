@@ -2,6 +2,10 @@
 
 A quick docs/refs for common dev tools.
 
+# Cryptography 🍓
+
+https://garykessler.net/library/crypto.html
+
 # Bash/Shell 🍓
 
 Docs: https://tldp.org/LDP/abs/html/index.html

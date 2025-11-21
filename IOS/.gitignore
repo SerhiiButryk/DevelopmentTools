@@ -1,0 +1,126 @@
+# Xcode
+#
+# gitignore contributors: remember to update the global gitignore after changing this file
+# https://www.atlassian.com/git/tutorials/gitignore
+
+## User settings
+xcuserdata/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.xcuserdatad
+**/*xcuserdatad/
+
+## compatibility with Xcode 8 and earlier (ignoring not required starting Xcode 9)
+*.xccheckout
+*.playground
+
+## compatibility with Xcode 3 and earlier (ignoring not required starting Xcode 4)
+build/
+DerivedData/
+*.moved-aside
+*.pbxuser
+*.xccheckout
+*.xcscmblueprint
+
+## Xcode IDE
+.DS_Store
+xcuserdata/
+*.xcworkspace/xcuserdata/
+
+## Build artifacts
+build/
+Build/
+DerivedData/
+.build/
+
+## Xcode build products
+*.o
+*.LinkFileList
+*.hmap
+
+## Other
+*.ipa
+*.dSYM.zip
+*.dSYM
+*.app
+*.xcarchive
+
+## Swift Package Manager
+#
+# Add this line if you want to avoid checking in source code from Swift Package Manager dependencies.
+# Packages/
+# Package.resolved
+# *.xcodeproj/**/xcshareddata/swiftpm/
+.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+*.xcworkspace/xcuserdata/
+
+## CocoaPods
+#
+# We recommend against adding the Pods directory to your .gitignore. However
+# you should judge for yourself, the pros and cons are presented here.
+# https://guides.cocoapods.org/using/using-cocoapods.html#should-i-check-the-pods-directory-into-source-control
+#
+# Pods/
+# Add this line if you want to avoid checking in source code from CocoaPods dependencies.
+Pods/
+
+## Carthage
+#
+# Add this line if you want to avoid checking in source code from Carthage dependencies.
+Carthage/Checkouts
+Carthage/Build
+
+## Accio dependency management
+Dependencies/
+.accio/
+
+## fastlane
+#
+# It is recommended to not store the screenshots in the git repo.
+# Instead, use fastlane to re-generate the screenshots whenever they are needed.
+# For more information about the recommended setup visit:
+# https://docs.fastlane.tools/best-practices/source-control/#source-control
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+## Code coverage
+xcov_report/
+*.xcovreport
+
+## Temporary files
+*.swp
+*.swo
+*~.nib
+
+## OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+## IDE
+.vscode/
+.idea/
+*.swiftformat
+*.swiftlint
+
+## Debugging
+.lldb
+lldb_history
+
+## Environment files
+.env
+.env.local
+
+## Compiled C++ files
+*.o
+*.a
+*.so
+*.dylib

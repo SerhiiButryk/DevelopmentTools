@@ -5,7 +5,7 @@ import sys
 import inspect
 import os
 import shutil
-from typing import List, Tuple, Optional
+from typing import List, Tuple
 from urllib.request import urlretrieve
 from zipfile import ZipFile
 import ssl
@@ -212,7 +212,7 @@ def isMac() -> bool:
     return sys.platform == 'darwin'
 
 def getAndroidBuildToolsPath() -> str:
-    android_home: Optional[str] = os.getenv('ANDROID_HOME')
+    android_home: str | None = os.getenv('ANDROID_HOME')
     if android_home is None:
         log(Log.ERROR, "Variable 'ANDROID_HOME' is not set. Please, set this variable.")
         return ""
@@ -240,7 +240,7 @@ def getAndroidBuildToolsPath() -> str:
     return path
 
 def getNDKPath() -> str:
-    android_home: Optional[str] = os.getenv('ANDROID_HOME')
+    android_home: str | None = os.getenv('ANDROID_HOME')
     if android_home is None:
         log(Log.ERROR, "Variable 'ANDROID_HOME' is not set. Please, set this variable.")
         return ""
@@ -268,7 +268,7 @@ def getNDKPath() -> str:
 def getAndroidKeystorePath() -> str:
     KEY_STORE_PATH: str = ".android/debug.keystore"
 
-    home: Optional[str] = os.getenv('HOME')   
+    home: str | None = os.getenv('HOME')   
     if home is None:
         log(Log.ERROR, "Variable 'HOME' is not set. Please, set this variable.")
         return "" 
@@ -280,12 +280,19 @@ def getAndroidKeystorePath() -> str:
     return keystore
 
 def getRetracePath() -> str:
-    android_home: Optional[str] = os.getenv('ANDROID_HOME')
+    android_home: str | None = os.getenv('ANDROID_HOME')
     if android_home is None:
         log(Log.ERROR, "Variable 'ANDROID_HOME' is not set. Please, set this variable.")
         return ""
 
-    return f"{android_home}tools/proguard/lib"
+    cmdTools = "cmdline-tools" # Location of retrace tool
+    if os.path.isdir(f"{android_home}/{cmdTools}") == False:
+        log(Log.ERROR, f"Directory '{android_home}/{cmdTools}' does not exist. "
+            "Cannot get retrace path.\n Please download command line tools using "
+            "Android Studio SDK manager.")
+        return ""
+
+    return f"{android_home}/cmdline-tools/latest/bin"
 
 def hasAnyDevices() -> bool:
     """
@@ -685,9 +692,10 @@ if COMMAND_SYMB_CRASH_STACK:
     retrace_path = getRetracePath()
     outFile = "result.txt"
 
-    Runner.run(f"java -jar {retrace_path}/retrace.jar {mappingFile} {crashLogFile} {outFile}")
-
-    log(Log.INFO, Blue("Done. Find file: '{outFile}'\n"))
+    # Redirection to a file doesn't work. TODO: Check why
+    # Runner.run(f"{retrace_path}/retrace {mappingFile} {crashLogFile} > {outFile}")
+    output = Runner.run(f"{retrace_path}/retrace {mappingFile} {crashLogFile}")
+    print(output)
 
     Runner.exit()
 
