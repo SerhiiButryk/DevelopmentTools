@@ -121,6 +121,5 @@ lldb_history
 
 ## Compiled C++ files
 *.o
-*.a
 *.so
 *.dylib
