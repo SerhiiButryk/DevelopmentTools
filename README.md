@@ -98,3 +98,8 @@ https://real-world-plantuml.com/
 # AI tools 🧨
 
 https://www.vidnoz.com/image-to-video-ai.html
+
+# Internet 🗡
+
+https://garykessler.net/library/tcpip.html
+https://garykessler.net/library/ipv6_exp.html
