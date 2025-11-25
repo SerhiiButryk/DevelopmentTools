@@ -1,8 +1,4 @@
-/**
- *
- *  ps - a program to list unix processes
- *
- */
+# Tool to list unix processes
 
  --- View all processes ---
 

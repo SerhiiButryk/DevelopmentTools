@@ -1,8 +1,4 @@
-/**
- *
- *  nm - a program to list symbols from object files 
- *
- */
+# Tool to list symbols from object files 
 
  Docs: https://linux.die.net/man/1/nm
 

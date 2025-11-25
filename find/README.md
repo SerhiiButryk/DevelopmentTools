@@ -1,55 +1,54 @@
-/**
- *
- *  find command
- *  https://www.youtube.com/watch?v=KCVaNb_zOuw&t=3s
- *
- */
+ # Search tool
 
- # Case insecitive search 
+https://www.youtube.com/watch?v=KCVaNb_zOuw&t=3s
+
+ -- Case insecitive search 
 
  $ find . -iname "main*" -type f
 
- # Search by its time creation
+ -- Search by its time creation
 
  $ find . -type f -mmin -10 // Find file which was created less than 10 minutes ago  
+ 
  $ find . -type f -mmin +1 -mmin -10 // Find file which was created more than 1 minutes and less than 10 minutes ago
+ 
  $ find . -type f -mtime -10 // Find file which was created less than 1 day ago
 
- # Search file by its size
+ -- Search file by its size
 
 $ find . -size +5G // Find file which more than 5 Gb
 $ find . -size +5M // Find file which more than 5 Mb
 $ find . -size +5k // Find file which more than 5 kb
 
-# Search files only in the current directory 
+-- Search files only in the current directory 
 
 $ find . -name "*.jpg" -type f -maxdepth 1
 
-# Modification of file permissions usinf find command
+-- Modification of file permissions usinf find command
 
 $ find sample_dir/ -exec chown name1:name2 {} +
 $ find sample_dir/ -type d -exec chown 775 {} +
 
-# Delete files using find command
+-- Delete files using find command
 
 $ find . -name "*.jpg" -type f -exec rm {} +
 
-# Search for permissions
+-- Search for permissions
 
 $ find . -perm 775
 
-# Search for files which ends with .java or .kt extension   
+-- Search for files which ends with .java or .kt extension   
 
 $ find . -type f \( -name "*.java" -o -name "*.kt" \)
 
-# Find file with name "needle" and stop search if file is found
+-- Find file with name "needle" and stop search if file is found
 
 $ find / -name needle -print -quit
 
-# Find all the files without permission 777.
+-- Find all the files without permission 777.
 
 $ find / -type f ! -perm 777
 
-# Find all empty directories
+-- Find all empty directories
 
 $ find /tmp -type d -empty

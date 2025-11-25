@@ -1,7 +1,4 @@
-/*
-* Android tool for working with keystore
-*
-*/
+# Android tool for working with keystore
 
 -- Get certificate signing hash from key store --
 

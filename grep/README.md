@@ -1,9 +1,4 @@
-/**
- *
- *  grep - Search tool
- *
- */
-
+# Search tool
 
 # Simple search in file
 
@@ -81,10 +76,5 @@ grep ^vivek /etc/passwd
 
 grep vivek$ /etc/passwd
 
-/**
- *
- *  More info
- *
- */
-
+Guides:
 https://www.cyberciti.biz/faq/grep-regular-expressions/

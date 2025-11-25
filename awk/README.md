@@ -1,8 +1,4 @@
-/**
- *
- *  awk - a program to process text
- *
- */
+ #  Text processing tool
 
  --- Output only 1 field from a line ---
 

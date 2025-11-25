@@ -1,8 +1,4 @@
-/**
- *
- *  git - Version control tool
- *
- */
+# Version control tool 
 
 // Git visual tool -> gitk
 // Git merge tool -> git mergetool

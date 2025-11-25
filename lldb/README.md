@@ -1,6 +1,4 @@
-/*
-*  C/C++ Debugger
-*/
+# Mac C/C++ Debugger
 
 ------- Tell lldb where the source code is. The debbuger will use it for all matched references -------
 $ (lldb) settings set target.source-map /build/dir/path /my/local/source/path

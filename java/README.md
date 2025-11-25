@@ -1,8 +1,4 @@
-/**
- *
- *  Java tools and settings
- *
- */
+#  Java tools
 
 # Install certificates for Java keystore
 
@@ -20,3 +16,7 @@ $ ./bin/keytool -importcert -file <cert> -cacerts -keypass changeit -storepass c
 $ sudo ./bin/keytool -importcert -file ~/Downloads/Cert.crt -keypass changeit -storepass changeit -keystore ./lib/security/cacerts -alias root_CA1
 
 Where <alias> is a random uniq name for this cert in the java cert storage 
+
+-- Generate JNI header file from java file ---
+
+javac -h . ClassName.java

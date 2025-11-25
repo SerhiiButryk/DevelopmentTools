@@ -1,10 +1,6 @@
-/**
- *
- *  ndk-build - Android tools to compile and build C/C++ code for Android 
- *
- *  hello-NDK - demo program to try and experiment with ndk-build
- *
- */
+# Android tools to compile and build C/C++ code
+
+ hello-NDK - demo program to try out and experiment with ndk-build
 
 --- Android NDK ---
 
@@ -131,11 +127,8 @@ endif
 
 -----------------------------------------------------------------------------------------
 
-/**
- *
- *  Resources
- *
- */
+More information: 
+http://web.guohuiwang.com/technical-notes/androidndk1
 
-More information: http://web.guohuiwang.com/technical-notes/androidndk1
-Make function: https://www.gnu.org/software/make/manual/html_node/File-Name-Functions.html
+Make functions: 
+https://www.gnu.org/software/make/manual/html_node/File-Name-Functions.html

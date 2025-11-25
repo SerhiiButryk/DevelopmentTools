@@ -1,16 +1,15 @@
-/**
- *
- *  Globbing - a pattern for mathing files and pathes in Linux
- *
- */
+# Globbing 
 
  More info: https://www.javatpoint.com/linux-file-globbing
 
  Special charactes:
 
- * - matches any charactes
+ \* - matches any charactes
+ 
  ? - macthes one character
+ 
  [] - matches single or range of characters
+ 
  ! - not operator 
 
  Example of string patterns:

@@ -1,8 +1,4 @@
-/**
- *
- *  adb - Tool for Android development
- *
- */
+#  Android analysis & debugging tool
 
 --- CPU usage ---
 

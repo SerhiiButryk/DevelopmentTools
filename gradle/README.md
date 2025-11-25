@@ -1,8 +1,4 @@
-/**
- *
- * Gradle commands reference
- *
- */
+# Build tool
 
 1. Run test
 

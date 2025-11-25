@@ -1,8 +1,4 @@
-/**
- *
- *  gcc compiler for C/C++
- *
- */
+# C/C++ compiler
 
 --- Options that control optimization ---
 

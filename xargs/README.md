@@ -1,8 +1,4 @@
-/**
- *
- *  xargs - a program to run another command or action
- *
- */
+# Tool to run another command or action
 
 ---- Find and archive images with tar program ---
 

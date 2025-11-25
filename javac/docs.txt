@@ -1,9 +1,0 @@
-/**
- *
- *  javac - Java compiler
- *
- */
-
--- Generate JNI header file from java file ---
-
-# javac -h . ClassName.java

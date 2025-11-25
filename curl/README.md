@@ -1,8 +1,4 @@
-/**
- *
- *  curl - networking tool
- *
- */
+#  Network debbuging tool
 
  ------ POST request ------
 
