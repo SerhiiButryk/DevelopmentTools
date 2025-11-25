@@ -34,12 +34,6 @@ history | grep --max-count=5 git
 
 grep -wiro -C 2  "Tom" .
 
-/**
- *
- *  Globbing
- *
- */
-
 # Search for a word in .txt files
 
 grep -iwro --include=\*.txt "Tom"
@@ -53,12 +47,6 @@ grep -iwro --include=\*.{txt,cpp} "Tom"
 grep -iwro --include=\*.{txt,cpp} --exclude-dir=build "Tom"
 
 grep -iwro --include=\*.{txt,cpp} --exclude-dir={build, temp} "Tom"
-
-/**
- *
- *  Regular Expressions
- *
- */
 
 # Find a line which contian vivek or raj word (OR option)
  
