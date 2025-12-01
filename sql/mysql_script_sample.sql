@@ -1,5 +1,5 @@
 /*
-	MySQL samples
+	MySQL/SQL QUICK REFERENCE
 
 	1. SQL standard instruction list:
 
@@ -297,6 +297,11 @@ ORDER BY 1, 2;
     
     We can use simple SELECT and WHERE statments to declare simple join queries.
     But they are less flexible and less usefull
+    
+    Cоединение двух таблиц является произведением этих таблиц, из которого удалены некоторые строки. 
+    Удаляются те строки, которые не удовлетворяют условию (WHERE), налагаемому на связанные столбцы для данного 
+    соедине­ния. Понятие произведения очень важно, так как оно входит в формальное опре­ деление правил 
+    выполнения мноrотабличных запросов на выборку.
 
 */ 
 
@@ -362,10 +367,54 @@ FROM ORDERS JOIN CUSTOMERS ON CUST = CUST_NUМ
 			JOIN SALES_REPS ON REP = EMPL_NUМ
 WHERE AМOUNT > 25000.00;
 
+/*
+Перечислить все комбинации служащих и офисов, где плановый объем продаж служа­ щего больше, 
+чем план какого-либо офиса, независимо от места работы служащего.
+*/
 
+SELECT NAME, QUOTA, CITY, TARGET
+FROM SALES_REPS, OFFICES
+WHERE QUOTA > TARGET;
 
+/*
+'SALES_REPS.*' has special treatment
+Сообощитъ всю информацию о служащих и офисах, где они работают.
+*/
 
+SELECT SALES_REPS.*, CITY
+FROM SALES_REPS, OFFICES
+WHERE REP_OFFICE = OFFICE; 
 
+/*
+	SQL self-join
 
+	Для соединения таблицы с самой собой в SQL применяется метод "вообра­ жаемой копии". 
+    Вместо того чтобы на самом деле создавать копию таблицы, СУБД просто позволяет вам 
+    сослаться на нее, используя другое имя, псевдоним таблицы. Вот тот же запрос, 
+    но записанный с использованием псевдонимов EMPS и MGRS для таблицы SALESREPS.
+*/
+
+-- Въюести список всех служащих и их руководителей.
+
+SELECT EMPS.NAME AS 'EMPL NAME', MGRS.NAME AS 'MANAGER NAME'
+FROM SALES_REPS EMPS, SALES_REPS MGRS 
+WHERE EMPS.МANAGER = MGRS.EMPL_NUМ;
+
+-- Въюести список служащих, планъz продаж которых превъzшают планы их руководи­телей.
+
+SELECT SALES_REPS.NAME, SALES_REPS.QUOTA, MGRS.QUOTA 
+FROM SALES_REPS, SALES_REPS MGRS
+WHERE SALES_REPS.МANAGER = MGRS.EMPL_NUМ AND SALES_REPS.QUOTA > MGRS.QUOTA;
+
+/*
+	TABLE ALIAS
+*/
+
+-- Вывести список имен, плановых обьемов продаж и дней рождения служащих.
+
+-- JUST AN EXAMPLE, THIS IS NOT VALID QUERY FOR THIS DATABASE
+SELECT S.NAМE, S.QUOTA, B.BIRTH_DATE
+FROM SALESREPS S, SAМ.BIRTHDAYS В 
+WHERE S.NAМE = В.NАМЕ;
 
 

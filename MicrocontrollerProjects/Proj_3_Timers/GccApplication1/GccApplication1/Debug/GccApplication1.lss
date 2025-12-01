@@ -1,0 +1,177 @@
+
+GccApplication1.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000000a4  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  00000118  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000001  00800060  00800060  00000118  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  00000118  2**0
+                  CONTENTS, READONLY
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000148  2**2
+                  CONTENTS, READONLY
+  5 .debug_aranges 00000040  00000000  00000000  00000184  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   0000059b  00000000  00000000  000001c4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 000004d6  00000000  00000000  0000075f  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   00000271  00000000  00000000  00000c35  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  00000064  00000000  00000000  00000ea8  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    00000317  00000000  00000000  00000f0c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000030  00000000  00000000  00001223  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	12 c0       	rjmp	.+36     	; 0x26 <__ctors_end>
+   2:	21 c0       	rjmp	.+66     	; 0x46 <__bad_interrupt>
+   4:	20 c0       	rjmp	.+64     	; 0x46 <__bad_interrupt>
+   6:	1f c0       	rjmp	.+62     	; 0x46 <__bad_interrupt>
+   8:	1e c0       	rjmp	.+60     	; 0x46 <__bad_interrupt>
+   a:	1d c0       	rjmp	.+58     	; 0x46 <__bad_interrupt>
+   c:	1c c0       	rjmp	.+56     	; 0x46 <__bad_interrupt>
+   e:	1b c0       	rjmp	.+54     	; 0x46 <__bad_interrupt>
+  10:	1a c0       	rjmp	.+52     	; 0x46 <__bad_interrupt>
+  12:	19 c0       	rjmp	.+50     	; 0x46 <__bad_interrupt>
+  14:	18 c0       	rjmp	.+48     	; 0x46 <__bad_interrupt>
+  16:	17 c0       	rjmp	.+46     	; 0x46 <__bad_interrupt>
+  18:	16 c0       	rjmp	.+44     	; 0x46 <__bad_interrupt>
+  1a:	15 c0       	rjmp	.+42     	; 0x46 <__bad_interrupt>
+  1c:	14 c0       	rjmp	.+40     	; 0x46 <__bad_interrupt>
+  1e:	13 c0       	rjmp	.+38     	; 0x46 <__bad_interrupt>
+  20:	12 c0       	rjmp	.+36     	; 0x46 <__bad_interrupt>
+  22:	11 c0       	rjmp	.+34     	; 0x46 <__bad_interrupt>
+  24:	10 c0       	rjmp	.+32     	; 0x46 <__bad_interrupt>
+
+00000026 <__ctors_end>:
+  26:	11 24       	eor	r1, r1
+  28:	1f be       	out	0x3f, r1	; 63
+  2a:	cf e5       	ldi	r28, 0x5F	; 95
+  2c:	d4 e0       	ldi	r29, 0x04	; 4
+  2e:	de bf       	out	0x3e, r29	; 62
+  30:	cd bf       	out	0x3d, r28	; 61
+
+00000032 <__do_clear_bss>:
+  32:	20 e0       	ldi	r18, 0x00	; 0
+  34:	a0 e6       	ldi	r26, 0x60	; 96
+  36:	b0 e0       	ldi	r27, 0x00	; 0
+  38:	01 c0       	rjmp	.+2      	; 0x3c <.do_clear_bss_start>
+
+0000003a <.do_clear_bss_loop>:
+  3a:	1d 92       	st	X+, r1
+
+0000003c <.do_clear_bss_start>:
+  3c:	a1 36       	cpi	r26, 0x61	; 97
+  3e:	b2 07       	cpc	r27, r18
+  40:	e1 f7       	brne	.-8      	; 0x3a <.do_clear_bss_loop>
+  42:	1f d0       	rcall	.+62     	; 0x82 <main>
+  44:	2d c0       	rjmp	.+90     	; 0xa0 <_exit>
+
+00000046 <__bad_interrupt>:
+  46:	dc cf       	rjmp	.-72     	; 0x0 <__vectors>
+
+00000048 <setupTimer1>:
+}
+
+void setupTimer1() {
+	// 16-bit Timer/Counter1 Control Register where we can
+	// enable timer and set prescaler
+	TCCR1B = 0;
+  48:	1e bc       	out	0x2e, r1	; 46
+	TCCR1B |= (1<<1); // Select 8 prescaler value 
+  4a:	8e b5       	in	r24, 0x2e	; 46
+  4c:	82 60       	ori	r24, 0x02	; 2
+  4e:	8e bd       	out	0x2e, r24	; 46
+	
+	// 16-bit register where we check the actual value of timer
+	// during runtime.
+	TCNT1 = 0; // Reset register
+  50:	1d bc       	out	0x2d, r1	; 45
+  52:	1c bc       	out	0x2c, r1	; 44
+  54:	08 95       	ret
+
+00000056 <countTimer1>:
+}
+
+void countTimer1() {
+	// Means 1/2 of MAX value of 16-bit timer
+	if (TCNT1 == 0x00ff) {
+  56:	8c b5       	in	r24, 0x2c	; 44
+  58:	9d b5       	in	r25, 0x2d	; 45
+  5a:	8f 3f       	cpi	r24, 0xFF	; 255
+  5c:	91 05       	cpc	r25, r1
+  5e:	51 f4       	brne	.+20     	; 0x74 <countTimer1+0x1e>
+		// With 8 prescaler time is ~ 2.2 sec
+		if (counter == 0) {
+  60:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <__DATA_REGION_ORIGIN__>
+  64:	81 11       	cpse	r24, r1
+  66:	04 c0       	rjmp	.+8      	; 0x70 <countTimer1+0x1a>
+			// 2.2 sec is elapsed, reset
+			counter = 5;
+  68:	85 e0       	ldi	r24, 0x05	; 5
+  6a:	80 93 60 00 	sts	0x0060, r24	; 0x800060 <__DATA_REGION_ORIGIN__>
+  6e:	02 c0       	rjmp	.+4      	; 0x74 <countTimer1+0x1e>
+		} else {
+			counter = 0;
+  70:	10 92 60 00 	sts	0x0060, r1	; 0x800060 <__DATA_REGION_ORIGIN__>
+		}
+	}
+	// Reset register
+	if (TCNT1 == 0xffff) {
+  74:	8c b5       	in	r24, 0x2c	; 44
+  76:	9d b5       	in	r25, 0x2d	; 45
+  78:	01 96       	adiw	r24, 0x01	; 1
+  7a:	11 f4       	brne	.+4      	; 0x80 <countTimer1+0x2a>
+		TCNT1 = 0;	
+  7c:	1d bc       	out	0x2d, r1	; 45
+  7e:	1c bc       	out	0x2c, r1	; 44
+  80:	08 95       	ret
+
+00000082 <main>:
+// Calculation of 16-bit Timer/Counter1 value
+void countTimer1();
+
+int main(void)
+{
+	setupTimer1();
+  82:	e2 df       	rcall	.-60     	; 0x48 <setupTimer1>
+	
+	// Setup PC 0-2 for output mode 
+	DDRC |= (1 << 0) | (1 << 1) | (1 << 2); 	
+  84:	84 b3       	in	r24, 0x14	; 20
+  86:	87 60       	ori	r24, 0x07	; 7
+  88:	84 bb       	out	0x14, r24	; 20
+	
+    while (1) 
+    {
+		countTimer1();
+  8a:	e5 df       	rcall	.-54     	; 0x56 <countTimer1>
+		
+		// Time is elapsed, light the bulb !
+		if (counter == 5) {
+  8c:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <__DATA_REGION_ORIGIN__>
+  90:	85 30       	cpi	r24, 0x05	; 5
+  92:	21 f4       	brne	.+8      	; 0x9c <main+0x1a>
+			PORTC |= (1 << 0) | (1 << 1) | (1 << 2);
+  94:	85 b3       	in	r24, 0x15	; 21
+  96:	87 60       	ori	r24, 0x07	; 7
+  98:	85 bb       	out	0x15, r24	; 21
+  9a:	f7 cf       	rjmp	.-18     	; 0x8a <main+0x8>
+		} else {
+			PORTC = 0;
+  9c:	15 ba       	out	0x15, r1	; 21
+  9e:	f5 cf       	rjmp	.-22     	; 0x8a <main+0x8>
+
+000000a0 <_exit>:
+  a0:	f8 94       	cli
+
+000000a2 <__stop_program>:
+  a2:	ff cf       	rjmp	.-2      	; 0xa2 <__stop_program>
