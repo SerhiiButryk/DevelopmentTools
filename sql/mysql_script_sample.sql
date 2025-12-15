@@ -1,5 +1,5 @@
 /*
-	MySQL/SQL QUICK REFERENCE
+	SQL/MySQL QUICK REFERENCE
 
 	1. SQL standard instruction list:
 
@@ -96,16 +96,16 @@
     a) Natural joins - comparison comlumn names
 */
     
--- ------------------------------------
+-- ------------------- ------------------------------------------------------
 -- Database modification
--- --------------------------------------
+-- ------------------- ------------------------------------------------------
     
 ALTER DATABASE trade_company_db READ ONLY = 0;
 ALTER SESSION SET NLS_DATE_FORМAT= 'YYYY-MM-DD';
     
--- -------------------
+-- ------------------- ------------------------------------------------------
 -- Select query
--- -------------------
+-- ------------------- ------------------------------------------------------
 
 USE trade_company_db;
 
@@ -127,15 +127,15 @@ FROM OFFICES;
 SELECT CITY, (SALES - TARGET) AS 'Over/below plan amount'
 FROM OFFICES;
 
--- -------------------
+-- ------------------- ------------------------------------------------------
 -- DISTINCT keyword
--- -------------------
+-- ------------------- ------------------------------------------------------
     
 SELECT DISTINCT REGION FROM OFFICES;
 
--- -------------------
+-- ------------------- ------------------------------------------------------
 -- LIMIT keyword
--- -------------------
+-- ------------------- ------------------------------------------------------
 
 -- Select a sample of data 
 
@@ -143,13 +143,13 @@ SELECT CITY, REGION
 FROM OFFICES
 LIMIT 3;
 
--- -------------------
+-- ------------------- ------------------------------------------------------
 -- Ranges
---
--- (NOT) BETWEEN .. AND equals to (А >= В) AND (А <= С)
---
+-- (NOT) BETWEEN .. AND 
+-- Simmilar to 
+-- (А >= В) AND (А <= С)
 -- Range is inclusive
--- -------------------
+-- ------------------- ------------------------------------------------------
 
 SELECT *
 FROM SALESREPS
@@ -163,9 +163,12 @@ SELECT NАМЕ, SALES, QUOTA
 FROM SALESREPS
 WHERE SALES NOT BETWEEN ( .8 * QUOTA) AND (1.2 * QUOTA);
 
--- -------------------
--- (NOT) IN checks (множество) equals to (Х=А) OR (Х= В) OR (Х=С)
--- -------------------
+-- ------------------- ------------------------------------------------------
+-- Set checks
+-- (NOT) IN (множество) 
+-- Simmilar to
+-- (Х = А) OR (Х = В) OR (Х = С)
+-- ------------------- ------------------------------------------------------
 
 SELECT NAME, QUOTA, SALES
 FROM SALESREPS
@@ -179,10 +182,10 @@ SELECT ORDER_NUМ, ORDER_DATE, AМOUNT
 FROM ORDERS 
 WHERE ORDER_DATE IN ('2008-01-04', '2008-01-11', '2008-01-18', '2008-01-25');
 
--- -------------------
--- Pattern matching using LIKE
+-- ------------------- ------------------------------------------------------
+-- Pattern matching 
 -- (NOT) LIKE (ESCAPE)
--- -------------------
+-- ------------------- ------------------------------------------------------
 
 SELECT *
 FROM SALESREPS
@@ -209,21 +212,21 @@ SELECT ORDER_NUМ, PRODUCT
 FROM ORDERS
 WHERE PRODUCT LIKE 'А$%ВС%' ESCAPE '$';
 
--- -------------------
+-- ------------------- ------------------------------------------------------
 -- IS checks
 -- (...) IS (NOT) NULL
 -- (...) IS FALSE
 -- (...) IS TRUE
 -- (...) IS UNKNOWN
--- -------------------
+-- ------------------- ------------------------------------------------------
 
 SELECT NАМЕ
 FROM SALESREPS
 WHERE REP_OFFICE IS NULL;
 
--- -------------------
--- Complex logical queries
--- -------------------
+-- ------------------- ------------------------------------------------------
+-- Complex logical instruction
+-- ------------------- ------------------------------------------------------
 
 SELECT NАМЕ
 FROM SALESREPS
@@ -259,9 +262,9 @@ FROM SALES_REPS
 ORDER BY 2 DESC
 LIMIT 1;
 
--- -------------------
+-- ------------------- ------------------------------------------------------
 -- UNION instruction
--- -------------------
+-- ------------------- ------------------------------------------------------
     
 -- We can merger the results from 2 or more queries into one result (table)
 -- Here repeated records are removed
@@ -286,9 +289,9 @@ FROM ORDERS
 WHERE AМOUNT > 30000.00
 ORDER BY 1, 2;
 
--- -------------------
+-- ------------------- ------------------------------------------------------
 -- JOIN instruction
--- -------------------
+-- ------------------- ------------------------------------------------------
 
 /* 
 	Cоединения представляют собой основу многотабличных запросов в SQL. 
@@ -416,5 +419,19 @@ WHERE SALES_REPS.МANAGER = MGRS.EMPL_NUМ AND SALES_REPS.QUOTA > MGRS.QUOTA;
 SELECT S.NAМE, S.QUOTA, B.BIRTH_DATE
 FROM SALESREPS S, SAМ.BIRTHDAYS В 
 WHERE S.NAМE = В.NАМЕ;
+
+SELECT NAME, CITY
+FROM SALES_REPS LEFT OUTER JOIN OFFICES ON REP_OFFICE = OFFICE;
+
+/*
+	Перекрестное соединение (cross join) представляет собой другое 
+    название декартова произведения двух таблиц, описанного ранее в этой главе.
+    По определению декартово произведение (иногда называемое перекрестным произведением (cross product), 
+    отсюда и название CROSS JOIN) содержит все воз­ можные пары строк из двух таблиц.
+*/
+
+SELECT * FROM SALES_REPS, OFFICES;
+
+SELECT * FROM SALES_REPS CROSS JOIN OFFICES;
 
 
