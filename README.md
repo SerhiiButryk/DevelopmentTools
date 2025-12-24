@@ -2,6 +2,10 @@
 
 A quick docs/refs for common dev tools.
 
+# KMP 🏝
+
+https://github.com/terrakok/kmp-awesome
+
 # Cryptography 🍓
 
 https://garykessler.net/library/crypto.html
