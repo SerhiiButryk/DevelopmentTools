@@ -2,6 +2,10 @@
 
 A quick docs/refs for common dev tools.
 
+# embedded/ ♨️
+
+Folder has quick setup & samples for AVR & Arduino development
+
 # KMP 🏝
 
 https://github.com/terrakok/kmp-awesome
