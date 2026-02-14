@@ -27,15 +27,15 @@
     <eraseonlaunchrule>0</eraseonlaunchrule>
     <AsfFrameworkConfig>
       <framework-data>
-        <options />
-        <configurations />
-        <files />
-        <documentation help="" />
-        <offline-documentation help="" />
-        <dependencies>
-          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.44.1" />
-        </dependencies>
-      </framework-data>
+  <options />
+  <configurations />
+  <files />
+  <documentation help="" />
+  <offline-documentation help="" />
+  <dependencies>
+    <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.44.1" />
+  </dependencies>
+</framework-data>
     </AsfFrameworkConfig>
     <preserveEEPROM>true</preserveEEPROM>
     <ResetRule>0</ResetRule>
@@ -79,14 +79,13 @@
   </armgcc.compiler.symbols.DefSymbols>
   <armgcc.compiler.directories.IncludePaths>
     <ListValues>
+      <Value>../../../Sketch1</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/avr</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/libb64</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/spiffs</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/umm_malloc</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/variants/d1</Value>
-      <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/libraries/ESP8266WiFi/src</Value>
-      <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/libraries/ESP8266WebServer/src</Value>
       <Value>C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2/tools/sdk/include</Value>
       <Value>C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2/tools/sdk/lwip2/include</Value>
       <Value>C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2/tools/sdk/libc/xtensa-lx106-elf/include</Value>
@@ -133,14 +132,13 @@
   </armgcccpp.compiler.symbols.DefSymbols>
   <armgcccpp.compiler.directories.IncludePaths>
     <ListValues>
+      <Value>../../../Sketch1</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/avr</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/libb64</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/spiffs</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/umm_malloc</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/variants/d1</Value>
-      <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/libraries/ESP8266WiFi/src</Value>
-      <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/libraries/ESP8266WebServer/src</Value>
       <Value>C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2/tools/sdk/include</Value>
       <Value>C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2/tools/sdk/lwip2/include</Value>
       <Value>C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2/tools/sdk/libc/xtensa-lx106-elf/include</Value>
@@ -189,11 +187,9 @@
       <VisualMicroSettings>
         <config.Debug.customdebug_esp8266_d1_debugger_type>universal</config.Debug.customdebug_esp8266_d1_debugger_type>
         <ValidatedAS7>1</ValidatedAS7>
-        <arduino.upload.port>COM3</arduino.upload.port>
-        <custom_esp8266_d1_wipe>all</custom_esp8266_d1_wipe>
       </VisualMicroSettings>
     </VisualMicroSettings>
-    <VMSETTING_IncludePaths>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266;C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/avr;C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/libb64;C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/spiffs;C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/umm_malloc;C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/variants/d1;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2/tools/sdk/include;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2/tools/sdk/lwip/include;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2/tools/sdk/libc/xtensa-lx106-elf/include;{build.path}/core;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//tools//xtensa-lx106-elf-gcc//3.1.0-gcc10.3-e5f9fec//xtensa-lx106-elf//include//c++//4.8.2;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//tools//xtensa-lx106-elf-gcc//3.1.0-gcc10.3-e5f9fec//xtensa-lx106-elf//include//c++//4.8.2//xtensa-lx106-elf;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//tools//xtensa-lx106-elf-gcc//3.1.0-gcc10.3-e5f9fec//xtensa-lx106-elf//include;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//tools//xtensa-lx106-elf-gcc//3.1.0-gcc10.3-e5f9fec//lib//gcc//xtensa-lx106-elf//4.8.2//include;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2//tools//sdk//include;{vm.intellisense.add-paths};C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2/tools/sdk/lwip2/include;C://Users//Serhii//AppData//Local//Temp//VMBuilds//Sketch1//esp8266_d1//Debug/core;../../../Sketch1;C://Users//Serhii//Desktop//MicrocontrollersProjects//ARDUINO//wemos_esp8266//Sketch1//Sketch1;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2//cores//esp8266;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2//variants//d1;C://Program Files (x86)//Atmel//Studio//7.0//Extensions//2q3py52x.jhd//Micro Platforms//default//debuggers//VM_DBG;C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/libraries/ESP8266WiFi/src;C://Users//Serhii//Desktop//Git//DevelopmentTools//embedded//ARDUINO//wemos_esp8266//Sketch1//Sketch1;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2//libraries//ESP8266WiFi//src;C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/libraries/ESP8266WebServer/src;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2//libraries//ESP8266WebServer//src;</VMSETTING_IncludePaths>
+    <VMSETTING_IncludePaths>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266;C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/avr;C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/libb64;C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/spiffs;C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/umm_malloc;C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/variants/d1;C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/libraries/ESP8266WiFi/src;C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/libraries/ESP8266WebServer/src;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2/tools/sdk/include;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2/tools/sdk/lwip/include;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2/tools/sdk/libc/xtensa-lx106-elf/include;{build.path}/core;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//tools//xtensa-lx106-elf-gcc//3.1.0-gcc10.3-e5f9fec//xtensa-lx106-elf//include//c++//4.8.2;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//tools//xtensa-lx106-elf-gcc//3.1.0-gcc10.3-e5f9fec//xtensa-lx106-elf//include//c++//4.8.2//xtensa-lx106-elf;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//tools//xtensa-lx106-elf-gcc//3.1.0-gcc10.3-e5f9fec//xtensa-lx106-elf//include;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//tools//xtensa-lx106-elf-gcc//3.1.0-gcc10.3-e5f9fec//lib//gcc//xtensa-lx106-elf//4.8.2//include;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2//tools//sdk//include;{vm.intellisense.add-paths};C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2/tools/sdk/lwip2/include;C://Users//Serhii//AppData//Local//Temp//VMBuilds//Sketch1//esp8266_d1//Debug/core;../../../Sketch1;C://Users//Serhii//Desktop//Git//DevelopmentTools//embedded//ARDUINO//Proj1_AnalogIO//Sketch1//Sketch1;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2//cores//esp8266;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2//variants//d1;</VMSETTING_IncludePaths>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
@@ -233,14 +229,13 @@
   </armgcc.compiler.symbols.DefSymbols>
   <armgcc.compiler.directories.IncludePaths>
     <ListValues>
+      <Value>../../../Sketch1</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/avr</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/libb64</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/spiffs</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/umm_malloc</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/variants/d1</Value>
-      <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/libraries/ESP8266WiFi/src</Value>
-      <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/libraries/ESP8266WebServer/src</Value>
       <Value>C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2/tools/sdk/include</Value>
       <Value>C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2/tools/sdk/lwip2/include</Value>
       <Value>C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2/tools/sdk/libc/xtensa-lx106-elf/include</Value>
@@ -287,14 +282,13 @@
   </armgcccpp.compiler.symbols.DefSymbols>
   <armgcccpp.compiler.directories.IncludePaths>
     <ListValues>
+      <Value>../../../Sketch1</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/avr</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/libb64</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/spiffs</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/umm_malloc</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/variants/d1</Value>
-      <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/libraries/ESP8266WiFi/src</Value>
-      <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/libraries/ESP8266WebServer/src</Value>
       <Value>C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2/tools/sdk/include</Value>
       <Value>C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2/tools/sdk/lwip2/include</Value>
       <Value>C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2/tools/sdk/libc/xtensa-lx106-elf/include</Value>
@@ -343,19 +337,11 @@
       <VisualMicroSettings>
         <config.Debug.customdebug_esp8266_d1_debugger_type>universal</config.Debug.customdebug_esp8266_d1_debugger_type>
         <ValidatedAS7>1</ValidatedAS7>
-        <arduino.upload.port>COM3</arduino.upload.port>
-        <custom_esp8266_d1_wipe>all</custom_esp8266_d1_wipe>
       </VisualMicroSettings>
     </VisualMicroSettings>
-    <VMSETTING_IncludePaths>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266;C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/avr;C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/libb64;C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/spiffs;C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/umm_malloc;C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/variants/d1;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2/tools/sdk/include;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2/tools/sdk/lwip/include;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2/tools/sdk/libc/xtensa-lx106-elf/include;{build.path}/core;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//tools//xtensa-lx106-elf-gcc//3.1.0-gcc10.3-e5f9fec//xtensa-lx106-elf//include//c++//4.8.2;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//tools//xtensa-lx106-elf-gcc//3.1.0-gcc10.3-e5f9fec//xtensa-lx106-elf//include//c++//4.8.2//xtensa-lx106-elf;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//tools//xtensa-lx106-elf-gcc//3.1.0-gcc10.3-e5f9fec//xtensa-lx106-elf//include;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//tools//xtensa-lx106-elf-gcc//3.1.0-gcc10.3-e5f9fec//lib//gcc//xtensa-lx106-elf//4.8.2//include;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2//tools//sdk//include;{vm.intellisense.add-paths};C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2/tools/sdk/lwip2/include;C://Users//Serhii//AppData//Local//Temp//VMBuilds//Sketch1//esp8266_d1//Debug/core;../../../Sketch1;C://Users//Serhii//Desktop//MicrocontrollersProjects//ARDUINO//wemos_esp8266//Sketch1//Sketch1;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2//cores//esp8266;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2//variants//d1;C://Program Files (x86)//Atmel//Studio//7.0//Extensions//2q3py52x.jhd//Micro Platforms//default//debuggers//VM_DBG;C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/libraries/ESP8266WiFi/src;C://Users//Serhii//Desktop//Git//DevelopmentTools//embedded//ARDUINO//wemos_esp8266//Sketch1//Sketch1;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2//libraries//ESP8266WiFi//src;C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/libraries/ESP8266WebServer/src;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2//libraries//ESP8266WebServer//src;</VMSETTING_IncludePaths>
+    <VMSETTING_IncludePaths>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266;C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/avr;C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/libb64;C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/spiffs;C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/umm_malloc;C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/variants/d1;C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/libraries/ESP8266WiFi/src;C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/libraries/ESP8266WebServer/src;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2/tools/sdk/include;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2/tools/sdk/lwip/include;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2/tools/sdk/libc/xtensa-lx106-elf/include;{build.path}/core;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//tools//xtensa-lx106-elf-gcc//3.1.0-gcc10.3-e5f9fec//xtensa-lx106-elf//include//c++//4.8.2;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//tools//xtensa-lx106-elf-gcc//3.1.0-gcc10.3-e5f9fec//xtensa-lx106-elf//include//c++//4.8.2//xtensa-lx106-elf;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//tools//xtensa-lx106-elf-gcc//3.1.0-gcc10.3-e5f9fec//xtensa-lx106-elf//include;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//tools//xtensa-lx106-elf-gcc//3.1.0-gcc10.3-e5f9fec//lib//gcc//xtensa-lx106-elf//4.8.2//include;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2//tools//sdk//include;{vm.intellisense.add-paths};C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2/tools/sdk/lwip2/include;C://Users//Serhii//AppData//Local//Temp//VMBuilds//Sketch1//esp8266_d1//Debug/core;../../../Sketch1;C://Users//Serhii//Desktop//Git//DevelopmentTools//embedded//ARDUINO//Proj1_AnalogIO//Sketch1//Sketch1;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2//cores//esp8266;C://Users//Serhii//AppData//Local//arduino15//packages//esp8266//hardware//esp8266//3.1.2//variants//d1;</VMSETTING_IncludePaths>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CarController.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="CarController.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="Sketch1.ino">
       <SubType>compile</SubType>
     </Compile>
