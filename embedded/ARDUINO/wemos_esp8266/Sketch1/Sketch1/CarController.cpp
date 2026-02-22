@@ -20,15 +20,27 @@ namespace Car {
 		// Low	     Low	   Stops    (Coast)
 		// High	     High      Stops    (Brake)
 		
-		if (options == FORWARD) {
-			digitalWrite(input1, HIGH);
-			digitalWrite(input2, LOW);
-		} else {
-			digitalWrite(input1, LOW);
-			digitalWrite(input2, HIGH);
+		uint8_t pin1 = input1;
+		uint8_t pin2 = input2;
+		
+		if (options & FORWARD == 1) {
+			pin1 = input2;
+			pin2 = input1;
 		}
 		
-		analogWrite(enable, speed);
+		digitalWrite(pin1, LOW);
+		digitalWrite(pin2, HIGH);
+		
+		// Do not increase speed gradually
+		if (options & FAST_INCREASE == 1) {
+			analogWrite(enable, speed);
+		} else {
+			// RAMP UP: Gradually increase speed from 0 to speed
+			for (int value = 0; value <= speed; value++) {
+				analogWrite(enable, speed);
+				delay(20);
+			}
+		}
 	}
 
 }
