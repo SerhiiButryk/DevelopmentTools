@@ -79,6 +79,7 @@
   </armgcc.compiler.symbols.DefSymbols>
   <armgcc.compiler.directories.IncludePaths>
     <ListValues>
+      <Value>../../../Sketch1</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/avr</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/libb64</Value>
@@ -133,6 +134,7 @@
   </armgcccpp.compiler.symbols.DefSymbols>
   <armgcccpp.compiler.directories.IncludePaths>
     <ListValues>
+      <Value>../../../Sketch1</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/avr</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/libb64</Value>
@@ -233,6 +235,7 @@
   </armgcc.compiler.symbols.DefSymbols>
   <armgcc.compiler.directories.IncludePaths>
     <ListValues>
+      <Value>../../../Sketch1</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/avr</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/libb64</Value>
@@ -287,6 +290,7 @@
   </armgcccpp.compiler.symbols.DefSymbols>
   <armgcccpp.compiler.directories.IncludePaths>
     <ListValues>
+      <Value>../../../Sketch1</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/avr</Value>
       <Value>C:/Users/Serhii/AppData/Local/arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266/libb64</Value>
@@ -354,6 +358,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="CarController.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="NetworkManager.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="NetworkManager.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Sketch1.ino">

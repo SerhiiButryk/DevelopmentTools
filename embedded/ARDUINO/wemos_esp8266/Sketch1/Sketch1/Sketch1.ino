@@ -8,21 +8,10 @@
  * https://www.wemos.cc/en/latest/tutorials/d32/get_started_with_arduino_d32.html
  * https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/readme.html
  *
- * Arduino framework docs:
- * https://docs.arduino.cc/programming/?_gl=1*ives24*_up*MQ..*_ga*NTE2NjY5ODYxLjE3Njk3MDAyMjQ.*_ga_NEXN8H46L5*czE3Njk3MDMzNzAkbzIkZzAkdDE3Njk3MDMzNzAkajYwJGwwJGgxNTA3OTgzMzA1
- *
  */ 
 
 #include "CarController.h"
 #include "NetworkManager.h"
-
-
-const uint8_t IN_1 = D8;
-const uint8_t IN_2 = D9;
-
-const uint8_t ENABLE_1 = D10;
-const uint8_t L_IN_1 = D11;
-const uint8_t R_IN_2 = D12;
 
 Car::NetworkManager netManager = Car::NetworkManager();
 Car::CarController car = Car::CarController();
@@ -35,8 +24,8 @@ Car::CarController car = Car::CarController();
 	http://192.168.4.22/motor?options=6&speed=255    // Backward fast mode
 	http://192.168.4.22/motor?options=5&speed=255    // Forward fast mode  
 	http://192.168.4.22/motor?options=4&speed=0      // Stop   
-	http://192.168.4.22/motor?options=9&speed=255    // Turn right
-	http://192.168.4.22/motor?options=8&speed=255    // Turn left
+	http://192.168.4.22/motor?options=9&speed=100    // Turn right
+	http://192.168.4.22/motor?options=8&speed=100    // Turn left
 */
 
 void handleRoot();
@@ -46,6 +35,13 @@ void setup()
 {
 	// IO setup
 	
+	const uint8_t IN_1 = D8;
+	const uint8_t IN_2 = D9;
+
+	const uint8_t ENABLE_1 = D7;
+	const uint8_t TURN_IN_1 = D6;
+	const uint8_t TURN_IN_2 = D5;
+
 	analogWriteFreq(20000);
 	
 	pinMode(IN_1, OUTPUT);
@@ -55,13 +51,13 @@ void setup()
 	analogWrite(IN_2, 0);
 	
 	pinMode(ENABLE_1, OUTPUT);
-	pinMode(L_IN_1, OUTPUT);
-	pinMode(R_IN_2, OUTPUT);
+	pinMode(TURN_IN_1, OUTPUT);
+	pinMode(TURN_IN_2, OUTPUT);
 	
-	digitalWrite(L_IN_1, LOW);
-	digitalWrite(R_IN_2, LOW);
+	digitalWrite(TURN_IN_1, LOW);
+	digitalWrite(TURN_IN_2, LOW);
 	
-	car.setIO(IN_1, IN_2, ENABLE_1, L_IN_1, R_IN_2);
+	car.setIO(IN_1, IN_2, ENABLE_1, TURN_IN_1, TURN_IN_2);
 	
 	// General lib setup
 	

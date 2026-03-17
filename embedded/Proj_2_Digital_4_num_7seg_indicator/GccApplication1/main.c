@@ -167,7 +167,7 @@ void write(uint16_t addr, uint16_t data) {
 		Registers:
 		EECR - The EEPROM Control Register
 		EEAR - The EEPROM Address Register
-		EEDR – The EEPROM Data Register
+		EEDR - The EEPROM Data Register
 	*/
 	
 	while(EECR & (1<<EEWE));
@@ -198,7 +198,7 @@ uint16_t read(uint16_t addr) {
 		Registers:
 		EECR - The EEPROM Control Register
 		EEAR - The EEPROM Address Register
-		EEDR – The EEPROM Data Register
+		EEDR - The EEPROM Data Register
 	*/
 	
 	while(EECR & (1<<EEWE));

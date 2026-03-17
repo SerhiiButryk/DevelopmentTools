@@ -13,9 +13,9 @@
 	Program for ATmega8A-PU
 	
 	There are 3 registers for PB0-PB7, PC0-PC6 and PD0-PD7 pins: 
-	DDRB – The Port B Data Direction Register
-	DDRC – The Port C Data Direction Register
-	DDRD – The Port D Data Direction Register 
+	DDRB - The Port B Data Direction Register
+	DDRC - The Port C Data Direction Register
+	DDRD - The Port D Data Direction Register 
 */
 
 #define _LED_LIGHT_TIME_ 300

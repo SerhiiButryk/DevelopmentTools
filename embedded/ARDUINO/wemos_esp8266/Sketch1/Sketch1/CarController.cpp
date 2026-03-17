@@ -2,7 +2,14 @@
 
 namespace Car {
 
-	void CarController::setIO(uint8_t input1, uint8_t input2, uint8_t enable, uint8_t inputTurn1, uint8_t inputTurn2) {
+	void CarController::setIO
+	(
+		uint8_t input1, 
+		uint8_t input2, 
+		uint8_t enable, 
+		uint8_t inputTurn1, 
+		uint8_t inputTurn2
+	) {
 		this->input1 = input1;
 		this->input2 = input2;
 		this->enable = enable;
@@ -43,7 +50,7 @@ namespace Car {
 			
 			analogWrite(enable, speed);
 			
-			delay(100);
+			delay(80);
 			
 			// Turn Off
 			digitalWrite(pin1, LOW);
