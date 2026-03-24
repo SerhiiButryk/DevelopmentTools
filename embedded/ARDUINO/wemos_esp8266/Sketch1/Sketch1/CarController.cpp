@@ -1,4 +1,4 @@
-﻿#include "CarController.h"
+#include "CarController.h"
 
 namespace Car {
 
@@ -50,7 +50,7 @@ namespace Car {
 			
 			analogWrite(enable, speed);
 			
-			delay(80);
+			delay(100);
 			
 			// Turn Off
 			digitalWrite(pin1, LOW);

@@ -1,5 +1,5 @@
 /*
- * LOLIN(WeMos) esp8266 D1 R1 arduino compatible board.
+ * LOLIN(WeMos) esp8266 arduino compatible board.
  *
  * Build process:
  * https://docs.arduino.cc/arduino-cli/sketch-build-process/
@@ -8,25 +8,25 @@
  * https://www.wemos.cc/en/latest/tutorials/d32/get_started_with_arduino_d32.html
  * https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/readme.html
  *
- */ 
+ */
+
+ /* 
+	Car control REST API:
+
+	http://192.168.4.22/motor?options=1&speed=80     // Forward gradually
+	http://192.168.4.22/motor?options=2&speed=80     // Backward gradually
+	http://192.168.4.22/motor?options=6&speed=80     // Backward fast mode
+	http://192.168.4.22/motor?options=5&speed=80     // Forward fast mode  
+	http://192.168.4.22/motor?options=4&speed=0      // Stop   
+	http://192.168.4.22/motor?options=9&speed=200    // Turn right
+	http://192.168.4.22/motor?options=8&speed=200    // Turn left
+*/ 
 
 #include "CarController.h"
 #include "NetworkManager.h"
 
 Car::NetworkManager netManager = Car::NetworkManager();
 Car::CarController car = Car::CarController();
-
-/* 
-	Motor control REST API:
-
-	http://192.168.4.22/motor?options=1&speed=80     // Forward gradually
-	http://192.168.4.22/motor?options=2&speed=80     // Backward gradually
-	http://192.168.4.22/motor?options=6&speed=255    // Backward fast mode
-	http://192.168.4.22/motor?options=5&speed=255    // Forward fast mode  
-	http://192.168.4.22/motor?options=4&speed=0      // Stop   
-	http://192.168.4.22/motor?options=9&speed=100    // Turn right
-	http://192.168.4.22/motor?options=8&speed=100    // Turn left
-*/
 
 void handleRoot();
 void handleMotor();
@@ -35,12 +35,12 @@ void setup()
 {
 	// IO setup
 	
-	const uint8_t IN_1 = D8;
-	const uint8_t IN_2 = D9;
+	const uint8_t IN_1 = D6;
+	const uint8_t IN_2 = D7;
 
-	const uint8_t ENABLE_1 = D7;
-	const uint8_t TURN_IN_1 = D6;
-	const uint8_t TURN_IN_2 = D5;
+	const uint8_t ENABLE_1 = D5;
+	const uint8_t TURN_IN_1 = D4;
+	const uint8_t TURN_IN_2 = D3;
 
 	analogWriteFreq(20000);
 	
