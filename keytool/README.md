@@ -1,5 +1,0 @@
-# Android tool for working with keystore
-
--- Get certificate signing hash from key store --
-
-$ keytool -list -v -keystore NAME_OF_KEYSTORE -alias KEY_ALIAS

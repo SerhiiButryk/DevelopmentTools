@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Net configs for testing with Charles proxy for Debug build
+    Ref: https://www.charlesproxy.com/documentation/configuration/browser-and-system-configuration/
+-->
+<network-security-config>
+    <debug-overrides>
+        <trust-anchors>
+            <certificates src="system"/>
+            <certificates src="user"/> <!-- This line trusts user-added CAs -->
+        </trust-anchors>
+    </debug-overrides>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">192.168.4.22</domain>
+    </domain-config>
+</network-security-config>
