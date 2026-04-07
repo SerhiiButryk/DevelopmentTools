@@ -12,16 +12,18 @@ import ssl
 import zipfile
 
 # 
-# Utility script for Android
+# Utility script for Android 
 # 
-# It is developed for Linux and Mac OS
-# Note that some bugs could be present.
+# Linux and Mac OS are supported. Windows is not supported.
+# Note that bugs can exist.
 #
 
-# Global variables
-jadxExecFileName = "jadx.jar"   
-
+# Verions
 smaliDecompilerVersion = "3.0.6"
+jadxVersion = "1.5.5"
+apktoolVersion = "3.0.1"
+
+jadxExecFileName = "jadx.jar"   
 smaliDecompilerDestFile = "smali_decoder.zip"
 smaliFatJarName = "smali-3.0.5-dev-fat.jar"
 
@@ -42,6 +44,7 @@ def printHelp() -> None:
 
     log(Log.INFO,         
     """
+    A tool for Android app debugging.
     Usage: ./android.py [options...]
 
     -i, -input [text] - Enters a text in the focused view on the screen
@@ -50,10 +53,8 @@ def printHelp() -> None:
     -top-activity - Prints current top activity
     Example: ./android.py -top-activity
 
-    -resign-apk, -no-prompt - Resigns apk with default keystore
+    -resign-apk - Resigns apk with default keystore
     Example: ./android.py -resign-apk app_name.apk
-    or
-    Example: ./android.py -resign-apk -no-prompt app_name.apk
 
     -info - Prints info about connected device
     Example: ./android.py -info
@@ -382,9 +383,9 @@ def buildSmaliFatJar() -> bool:
     
 def downloadJadx() -> bool:
 
-    jadxLink: str = "https://github.com/skylot/jadx/releases/download/v1.5.1/jadx-1.5.1.zip"
-    jadxDownloadedFile: str = "jadx.zip"
-    fileToExtract: str = "lib/jadx-1.5.1-all.jar"
+    jadxLink: str = f"https://github.com/skylot/jadx/releases/download/v{jadxVersion}/jadx-{jadxVersion}.zip"
+    jadxDownloadedFile: str = f"jadx-{jadxVersion}.zip"
+    fileToExtract: str = f"lib/jadx-{jadxVersion}-all.jar"
 
     if not os.path.isfile(jadxExecFileName):
         print("Downloading jadx...")    
@@ -497,21 +498,16 @@ if COMMAND_ENTER_CREDENTIALS_FOUND:
 
 ##############################################################################################
 
-APK_NAME, COMMAND_RESIGN_APK_FOUND = hasCommand(["-resign-apk", "-no-prompt"])
-SHOULD_PROMPT = hasSingleCommand("-no-prompt")
+APK_NAME, COMMAND_RESIGN_APK_FOUND = hasCommand(["-resign-apk"])
 
 if COMMAND_RESIGN_APK_FOUND and APK_NAME:
-
-    if hasAnyDevices() == False:
-        Runner.exit()
     
     # Steps to resign app:
     # 1. Unzip.
-    # 2. Modify if neccessary.
-    # 3. Remove META-INF
-    # 4. Zip
-    # 5. Run zipalign
-    # 6. Resign with selected keystore  
+    # 2. Remove META-INF
+    # 3. Zip
+    # 4. Run zipalign
+    # 5. Resign with selected keystore  
 
     build_tools_path = getAndroidBuildToolsPath()
 
@@ -532,11 +528,6 @@ if COMMAND_RESIGN_APK_FOUND and APK_NAME:
     # Remove META-INF/
     Runner.run("rm -rf temp/META-INF")
 
-    if not SHOULD_PROMPT:
-        # Ask for modification
-        log(Log.INFO, Blue("Now it's time to modify the app. Please, add changes to [temp/] or click any key to continue...\n"))
-        input()
-
     log(Log.INFO, "Zipping...\n")
 
     # Zip
@@ -547,10 +538,10 @@ if COMMAND_RESIGN_APK_FOUND and APK_NAME:
     log(Log.INFO, "Signing...\n")
 
     # Zipalign
-    Runner.run(f"{build_tools_path} zipalign -p -f 4 temp/temp.zip resigned-app.apk")
+    Runner.run(f"{build_tools_path}zipalign -p -f 4 temp/temp.zip resigned-app.apk")
 
     # Sign
-    command = f"{build_tools_path} apksigner sign --ks {getAndroidKeystorePath()} --ks-pass pass:{KEY_PASS} --ks-key-alias {KEY_ALIAS} resigned-app.apk"
+    command = f"{build_tools_path}apksigner sign --ks {getAndroidKeystorePath()} --ks-pass pass:{KEY_PASS} --ks-key-alias {KEY_ALIAS} resigned-app.apk"
     Runner.run(command)
 
     log(Log.INFO, "Find file: resigned-app.apk\n")
@@ -629,7 +620,7 @@ if COMMAND_DECOMPILE_APK and APK_NAME:
     destFolder = "output"
 
     apkTool = "apktool"
-    apkToolJar = "apktool_2.11.0.jar"
+    apkToolJar = f"apktool_{apktoolVersion}.jar"
 
     noFiles = os.path.isfile(apkTool) == False or os.path.isfile(apkToolJar) == False
     platfromIsSupported = isLinux() or isMac()
@@ -647,9 +638,9 @@ if COMMAND_DECOMPILE_APK and APK_NAME:
 
             url = ""
             if isLinux():
-                url = ("https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool")
+                url = "https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool"
             elif isMac():
-                url = ("https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/osx/apktool")
+                url = "https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/osx/apktool"
 
             filename = "apktool"
 
@@ -661,7 +652,7 @@ if COMMAND_DECOMPILE_APK and APK_NAME:
 
         if os.path.isfile(apkToolJar) == False:
 
-            url = (f"https://bitbucket.org/iBotPeaches/apktool/downloads/{apkToolJar}")
+            url = f"https://bitbucket.org/iBotPeaches/apktool/downloads/{apkToolJar}"
             filename = apkToolJar
 
             downloadFile(url=url, filename=filename) 
@@ -670,7 +661,8 @@ if COMMAND_DECOMPILE_APK and APK_NAME:
             #  4 - r
             os.chmod(filename, 0o744)   
                 
-    Runner.run(f"./apktool d {APK_NAME} -o {destFolder}")
+    # To process very large apks you can increase the heap size by changin '-JXmx2G' option.             
+    Runner.run(f"./apktool -JXmx2G d {APK_NAME} -o {destFolder}")
 
     log(Log.INFO, Blue(f"Done. Find folder: '{destFolder}'\n"))
 
@@ -705,9 +697,9 @@ APK_FOLDER, COMMAND_BUILD_APK = hasCommand(["-build"])
 
 if COMMAND_BUILD_APK and APK_FOLDER:
 
-    Runner.run(f"apktool -v b {APK_FOLDER}")
+    Runner.run(f"./apktool b {APK_FOLDER} -o modified.apk")
 
-    log(Log.INFO, Blue("Done\n"))
+    log(Log.INFO, Blue("Done. Find file: 'modified.apk'\n"))
 
     Runner.exit()
 
