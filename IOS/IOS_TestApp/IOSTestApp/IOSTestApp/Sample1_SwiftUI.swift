@@ -1,23 +1,22 @@
-//
-//  ExampleSwiftUI.swift
-//  IOSTestApp
-//
-//  Created by Serhii on 31.03.2026.
-//
-
 import SwiftUI
 
+/*
+    A view implemented in SwiftUI
+ */
 struct ActivitiesView: View {
     
-    private let activitiyList = ["Archery", "Baseball", "Basketball"]
-    private let colorList: [Color] = [.blue, .cyan, .green]
+    // SwiftUI automatically updates UI when these values are changed
+    @State private var model = Sample1_ViewModel()
     
-    // UI state variables. Swift UI updates automatically
-    // when its value changes.
-    @State private var currActivity = "Archery"
-    @State private var currColor: Color = .blue
+    @State private var currActivity: String = ""
+    @State private var currColor: Color = Color.white
     
     @State private var index = 0
+    
+    init() {
+        currActivity = model.activitiyList[0]
+        currColor = model.colorList[0]
+    }
     
     var body: some View {
         
@@ -41,13 +40,13 @@ struct ActivitiesView: View {
             Button("Try again") {
                 
                 index += 1
-                if index >= colorList.count {
+                if index >= model.colorList.count {
                     index = 0
                 }
                 
                 withAnimation {
-                    currColor = colorList[index]
-                    currActivity = activitiyList[index]
+                    currColor = model.colorList[index]
+                    currActivity = model.activitiyList[index]
                 }
                 
             }.padding()
@@ -58,7 +57,7 @@ struct ActivitiesView: View {
     
 }
 
-struct Preview : PreviewProvider {
+struct ActivitiesViewPreview : PreviewProvider {
     static var previews: some View {
         ActivitiesView()
     }

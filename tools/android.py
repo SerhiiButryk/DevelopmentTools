@@ -9,7 +9,6 @@ from typing import List, Tuple
 from urllib.request import urlretrieve
 from zipfile import ZipFile
 import ssl
-import zipfile
 
 # 
 # Utility script for Android 
@@ -47,7 +46,7 @@ def printHelp() -> None:
     A tool for Android app debugging.
     Usage: ./android.py [options...]
 
-    -i, -input [text] - Enters a text in the focused view on the screen
+    -i, -input "text" - Enters a text in the focused view on the screen
     Example: ./android.py -i \"Some text\"
 
     -top-activity - Prints current top activity
@@ -90,10 +89,15 @@ def printHelp() -> None:
     Hint:
     Smali assembler github repo: https://github.com/google/smali/tree/main
 
-    -jadxopen classes.dex - Open DEX file using Jadx
+    -jadxopen classes.dex classes.class classes.jar - Decompile DEX/CLASS/JAR file using Jadx
     Example: ./android.py -jadxopen classes.dex
     Hint:
     Jadx github repo: https://github.com/skylot/jadx
+
+    -disassemble classes.class classes.jar - Disassemble a class file using javap
+    Example: ./android.py -disassemble classes.class
+    Hint:
+    javap: https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javap.html
     """ + '\n'
     )
 
@@ -777,6 +781,21 @@ if COMMAND_JADX_OPEN:
 
     log(Log.INFO, Blue("Done\n"))
     Runner.exit()        
+
+##############################################################################################
+
+NEXT, COMMAND_DISASSEMBLE = hasCommand(["-disassemble"])
+if COMMAND_DISASSEMBLE:
+
+    if NEXT.endswith(".class"):
+        output = Runner.run(f"javap -verbose {NEXT}")
+        print(output)
+    else:
+        log(Log.INFO, Red("Wrong file type\n"))
+
+    log(Log.INFO, Blue("Done\n"))
+    Runner.exit()      
+
 
 # Looks like provided args are not correct, so show a help
 log(Log.ERROR, "Sorry, cannot execute this command. \nPlease, make sure that the arguments are correct. A help:\n")
