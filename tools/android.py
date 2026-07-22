@@ -11,20 +11,25 @@ from zipfile import ZipFile
 import ssl
 
 # 
-# Utility script for Android 
+# Utility script for Android developers
 # 
 # Linux and Mac OS are supported. Windows is not supported.
-# Note that bugs can exist.
 #
 
-# Verions
-smaliDecompilerVersion = "3.0.6"
-jadxVersion = "1.5.5"
-apktoolVersion = "3.0.1"
+# Versions
+
+# https://github.com/google/smali/tree/main
+smaliDecompilerVersion = "3.0.7"
+
+# https://github.com/skylot/jadx
+jadxVersion = "1.5.6"
+
+# https://github.com/iBotPeaches/Apktool
+apktoolVersion = "3.2.0"
 
 jadxExecFileName = "jadx.jar"   
 smaliDecompilerDestFile = "smali_decoder.zip"
-smaliFatJarName = "smali-3.0.5-dev-fat.jar"
+smaliFatJarName = f"smali-{smaliDecompilerVersion}-dev-fat.jar"
 
 def Red(mes: str) -> str:
     return f"\033[91m{mes}\033[00m"
@@ -347,7 +352,6 @@ def confirmAction(message: str) -> bool:
     user_input: str = input(f"{message} (yes/no): ").strip().lower()
     return user_input == "yes"
 
-# See https://github.com/google/smali
 def downloadSmaliDecompiler() -> bool:
     return downloadFile(f"https://github.com/google/smali/archive/refs/tags/{smaliDecompilerVersion}.zip", smaliDecompilerDestFile)
 
