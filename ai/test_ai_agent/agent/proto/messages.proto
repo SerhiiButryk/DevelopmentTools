@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package com.ai.proto;
+
+message Company {
+  string name = 1;
+  string contact_info = 2;
+  string summary = 3;
+  string email = 4;
+  string outreach_message = 5;
+  string url = 6;
+  repeated Keywords keywords = 7;
+}
+
+message Keywords {
+  string name = 1;
+}
+
+message AIMessage {
+  string systemprompt = 1;
+  string userquery = 2;
+  repeated Company items = 3;
+}
+

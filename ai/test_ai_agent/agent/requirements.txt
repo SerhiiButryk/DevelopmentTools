@@ -6,3 +6,7 @@ pydantic
 duckduckgo-search
 beautifulsoup4  
 langchain-exa
+websockets
+grpcio-tools
+curl_cffi
+exa-py
