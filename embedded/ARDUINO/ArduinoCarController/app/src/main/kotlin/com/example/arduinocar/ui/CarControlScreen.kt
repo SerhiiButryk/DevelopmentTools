@@ -1,4 +1,4 @@
-package com.example.arduinocar.ui.screen
+package com.example.arduinocar.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,8 +15,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.Button
@@ -24,7 +22,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -38,7 +35,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.example.arduinocar.viewmodel.CarControl
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun CarRemoteControl(
@@ -49,7 +46,8 @@ fun CarRemoteControl(
     onStop: () -> Unit,
     onSlowDown: () -> Unit,
     onSpeedChanged: (Int, Int) -> Unit,
-    onFastMode: (Boolean) -> Unit
+    onFastMode: (Boolean) -> Unit,
+    state: CarControlViewModel.UiState,
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -77,7 +75,7 @@ fun CarRemoteControl(
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    CarSkeletonCanvas(driving = true, speed = 1.0f)
+                    Text(text = state.state, fontSize = 18.sp)
                 }
 
                 Row(
@@ -125,11 +123,11 @@ fun CarRemoteControl(
                         onPress = { onBottom(CarControl.PRESSED) },
                         onRelease = { onBottom(CarControl.RELEASED) })
 
-                    // Left Button
-                    DirectionButton(
-                        Icons.Default.KeyboardArrowLeft, "Left",
-                        onPress = { onLeft(CarControl.PRESSED) },
-                        onRelease = { onLeft(CarControl.RELEASED) })
+//                    // Left Button
+//                    DirectionButton(
+//                        Icons.Default.KeyboardArrowLeft, "Left",
+//                        onPress = { onLeft(CarControl.PRESSED) },
+//                        onRelease = { onLeft(CarControl.RELEASED) })
 
                     // Stop Button
                     DirectionButton(
@@ -148,11 +146,11 @@ fun CarRemoteControl(
                         Icons.Default.Stop, "Stop",
                         onPress = { onStop() })
 
-                    // Right Button
-                    DirectionButton(
-                        Icons.Default.KeyboardArrowRight, "Right",
-                        onPress = { onRight(CarControl.PRESSED) },
-                        onRelease = { onRight(CarControl.RELEASED) })
+//                    // Right Button
+//                    DirectionButton(
+//                        Icons.Default.KeyboardArrowRight, "Right",
+//                        onPress = { onRight(CarControl.PRESSED) },
+//                        onRelease = { onRight(CarControl.RELEASED) })
 
                     // Backward Button
                     DirectionButton(
@@ -167,32 +165,22 @@ fun CarRemoteControl(
                 modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 10.dp).fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
-                IntegerInput { newValue ->
+                IntegerInput(label = "Enter move speed") { newValue ->
                     onSpeedChanged(newValue, CarControl.MOVE_SPEED)
                 }
             }
 
-            Row(
-                modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 10.dp).fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                IntegerInput { newValue ->
-                    onSpeedChanged(newValue, CarControl.TURN_SPEED)
-                }
-            }
+//            Row(
+//                modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 10.dp).fillMaxWidth(),
+//                horizontalArrangement = Arrangement.Center
+//            ) {
+//                IntegerInput(label = "Enter turn speed") { newValue ->
+//                    onSpeedChanged(newValue, CarControl.TURN_SPEED)
+//                }
+//            }
 
         }
     }
-}
-
-@Composable
-fun MyToggle(
-    isChecked: Boolean,
-    onToggle: (Boolean) -> Unit
-) {
-    var initial by remember { mutableStateOf(isChecked) }
-
-    Switch(checked = initial, onCheckedChange = onToggle)
 }
 
 @Composable

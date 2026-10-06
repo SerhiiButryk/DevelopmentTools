@@ -22,7 +22,7 @@ async def main():
 
     global handler
 
-    print(f"Working...")
+    print(f"Backend running...")
 
     # Globally disable SSL certificate verification checks
     try:

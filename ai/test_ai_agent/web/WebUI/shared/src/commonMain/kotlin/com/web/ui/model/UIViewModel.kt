@@ -4,17 +4,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.web.data.SYSTEM_PROMPT_KEY
+import com.web.data.PromptData
 import com.web.data.Storage
-import com.web.data.defaultSystemPrompt
-import com.web.data.defaultUserQuery
-import com.web.repo.AIPromptManager
+import com.web.repo.Repository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
+const val SYSTEM_PROMPT_KEY = "SYSTEM_PROMPT_KEY"
 
 class UIViewModel : ViewModel() {
 
@@ -28,7 +28,7 @@ class UIViewModel : ViewModel() {
 
     private val scope: CoroutineScope = viewModelScope
 
-    private val promptManager = AIPromptManager()
+    private val promptManager = Repository()
 
     private var sharedMessages = MutableStateFlow(ResultsUIState())
     val messagesState = sharedMessages.asSharedFlow()
@@ -36,19 +36,19 @@ class UIViewModel : ViewModel() {
     private var sharedPromptState = MutableStateFlow(PromptUIState())
     val promptState = sharedPromptState.asSharedFlow()
 
-    private var sharedSettingsState = MutableStateFlow(
-        SettingsUIState(systemPrompt = defaultSystemPrompt)
-    )
+    private var sharedSettingsState = MutableStateFlow(SettingsUIState(systemPrompt = ""))
     val settingsState = sharedSettingsState.asSharedFlow()
 
     init {
-        scope.launch {
+        scope.launch(Dispatchers.Default) {
+
+            PromptData.load()
 
             val storage = Storage()
-            val systemPrompt = storage.load(SYSTEM_PROMPT_KEY) ?: defaultSystemPrompt
-            sharedSettingsState.emit(SettingsUIState(systemPrompt = systemPrompt))
+            val systemPrompt = storage.load(SYSTEM_PROMPT_KEY) ?: PromptData.defaultSystemPrompt
 
-            sharedPromptState.emit(PromptUIState(defaultUserQuery))
+            sharedSettingsState.emit(SettingsUIState(systemPrompt = systemPrompt))
+            sharedPromptState.emit(PromptUIState(userQuery = PromptData.defaultUserQuery))
         }
     }
 
@@ -59,28 +59,26 @@ class UIViewModel : ViewModel() {
     }
 
     fun onTextEnter(onNavToNextScreen: () -> Unit) {
-        scope.launch {
-            withContext(Dispatchers.Default) {
 
-                onProgress(true)
+        scope.launch(Dispatchers.Default) {
 
-                val systemPrompt = sharedSettingsState.value.systemPrompt
-                val query = sharedPromptState.value.userQuery
-                val companies = promptManager.sendRequest(query, systemPrompt)
+            onProgress(true)
 
-                sharedMessages.emit(
-                    ResultsUIState(
-                        companies = companies,
-                        hasError = companies.isEmpty()
-                    )
+            val systemPrompt = sharedSettingsState.value.systemPrompt
+            val query = sharedPromptState.value.userQuery
+            val companies = promptManager.sendRequest(query, systemPrompt)
+
+            sharedMessages.emit(
+                ResultsUIState(
+                    companies = companies,
+                    hasError = companies.isEmpty()
                 )
+            )
 
-                onProgress(false)
+            onProgress(false)
 
-                withContext(Dispatchers.Main) {
-                    onNavToNextScreen()
-                }
-
+            withContext(Dispatchers.Main) {
+                onNavToNextScreen()
             }
         }
     }

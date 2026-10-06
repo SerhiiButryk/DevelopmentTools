@@ -1,7 +1,7 @@
 import SwiftUI
 
 /*
-    A simple object model class
+    UI state class
  */
 struct Plant: Identifiable {
     let id = UUID()
@@ -13,11 +13,7 @@ struct Plant: Identifiable {
 @Observable
 class Sample2_ViewModel {
     
-    /*
-        Changes to this field are automatically tracked by SwiftUI
-        thanks to '@Observable'
-     */
-    var plantsList = [ Plant(name: "Apple"), Plant(name: "Lemon") ]
+   var plantsList = [ Plant(name: "Apple"), Plant(name: "Lemon") ]
     
     func doAction() {
         plantsList.append(Plant(name: "Tomato"))

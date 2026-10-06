@@ -103,7 +103,42 @@ kotlin {
         }
         // -------------------------------------------- //
         wasmJsMain.dependencies {
-//            implementation(libs.kotlinx.browser)
         }
     }
+}
+
+// -------------------------------------------- //
+// !!! Copies asset files !!!
+// -------------------------------------------- //
+val copyAssets by tasks.registering(Copy::class) {
+
+    val assets = listOf("system_prompt.txt", "user_prompt.txt")
+
+    assets.forEach {
+
+        logger.log(LogLevel.INFO, "Calling copy function '${rootProject.projectDir}'")
+
+        val src = rootProject.file("../../$it")
+        val dest = file("src/commonMain/composeResources/files/$it")
+
+        if (src.exists()) {
+            // Copy if destination is missing, sizes differ, or source is newer
+            val needsCopy = !dest.exists() ||
+                    src.length() != dest.length() ||
+                    src.lastModified() > dest.lastModified()
+
+            if (needsCopy) {
+                src.copyTo(dest, overwrite = true)
+                logger.lifecycle("Updated ${dest.name} from ${src.path}")
+            }
+        }
+    }
+
+}
+
+tasks.matching {
+    it.name.endsWith("ProcessResources", ignoreCase = true) ||
+            it.name.startsWith("compileKotlin")
+}.configureEach {
+    dependsOn(copyAssets)
 }

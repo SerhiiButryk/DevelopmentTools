@@ -29,7 +29,7 @@ def basic_search(
         include: list[str] = [], 
         exclude: list[str] = [], 
         domain: str = "", 
-        debug: bool = True,
+        debug: bool = False,
     ) -> str:
 
     """ 

@@ -1,21 +1,18 @@
 import SwiftUI
 
-/*
-    A view implemented in SwiftUI
- */
 struct MainContent: View {
     
     @State private var model = Sample2_ViewModel()
     
     var body: some View {
-        ActivityList(model: model)
+        ActivityList(model: $model)
     }
 }
 
 
 struct ActivityList: View {
     
-    @State var model: Sample2_ViewModel
+    @Binding var model: Sample2_ViewModel
     
     var body: some View {
         
@@ -42,7 +39,7 @@ struct ActivityList: View {
                 ListItem(plant: plant)
             }
             
-            ActionButton(model: model)
+            ActionButton(model: $model)
             
         }
     }
@@ -67,7 +64,7 @@ struct ListItem: View {
 
 struct ActionButton: View {
     
-    @State var model: Sample2_ViewModel
+    @Binding var model: Sample2_ViewModel
     
     var body: some View {
         Button("Action", systemImage: "trophy") {
@@ -76,8 +73,10 @@ struct ActionButton: View {
     }
 }
 
-struct ActivityListPreview : PreviewProvider {
-    static var previews: some View {
-        MainContent()
-    }
+#Preview("Portrait Prev", traits: .portrait) {
+    MainContent()
+}
+
+#Preview("Landscape Prev", traits: .landscapeLeft) {
+    MainContent()
 }

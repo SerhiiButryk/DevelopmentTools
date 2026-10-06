@@ -3,7 +3,7 @@ package com.web.repo
 import com.ai.proto.Company
 import com.web.net.WebSocketClient
 
-class AIPromptManager {
+class Repository {
 
     private val webSocketConnection = WebSocketClient()
 

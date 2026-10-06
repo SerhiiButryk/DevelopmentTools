@@ -70,7 +70,7 @@ class Agent:
             # response = raw_response['messages'][-1].content
             response = raw_response["structured_response"]
 
-            log(f"Final answer: type = '{type(response)}' , response = '{response}'")  
+            # log(f"Final answer: type = '{type(response)}' , response = '{response}'")  
 
             return response
 

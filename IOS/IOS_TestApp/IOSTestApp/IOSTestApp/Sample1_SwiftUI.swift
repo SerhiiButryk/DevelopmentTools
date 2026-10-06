@@ -1,21 +1,20 @@
 import SwiftUI
 
-/*
-    A view implemented in SwiftUI
- */
 struct ActivitiesView: View {
     
-    // SwiftUI automatically updates UI when these values are changed
+    // This has 'Observable' attribute but 'State' attribute is required!
     @State private var model = Sample1_ViewModel()
     
-    @State private var currActivity: String = ""
-    @State private var currColor: Color = Color.white
-    
-    @State private var index = 0
+    /*
+        Changes to these fields are automatically tracked by SwiftUI
+        and the dependent Views get updated accordingly
+     */
+    @State private var currActivity = ""
+    @State private var currColor = Color.white
     
     init() {
-        currActivity = model.activitiyList[0]
-        currColor = model.colorList[0]
+        currActivity = model.currActivity
+        currColor = model.currColor
     }
     
     var body: some View {
@@ -39,14 +38,11 @@ struct ActivitiesView: View {
             
             Button("Try again") {
                 
-                index += 1
-                if index >= model.colorList.count {
-                    index = 0
-                }
+                model.moveNext()
                 
                 withAnimation {
-                    currColor = model.colorList[index]
-                    currActivity = model.activitiyList[index]
+                    currColor = model.getCurrColor()
+                    currActivity = model.getCurrActivity()
                 }
                 
             }.padding()
@@ -57,8 +53,10 @@ struct ActivitiesView: View {
     
 }
 
-struct ActivitiesViewPreview : PreviewProvider {
-    static var previews: some View {
-        ActivitiesView()
-    }
+#Preview("Portrait Prev", traits: .portrait) {
+    ActivitiesView()
+}
+
+#Preview("Landscape Prev", traits: .landscapeLeft) {
+    ActivitiesView()
 }
