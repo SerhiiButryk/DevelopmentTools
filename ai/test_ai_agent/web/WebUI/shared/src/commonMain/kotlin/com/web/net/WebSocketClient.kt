@@ -8,6 +8,8 @@ import io.ktor.websocket.*
 
 class WebSocketClient {
 
+    private val tag = "WebSocketClient"
+
     private val host: String = BuildKonfig.websocketHost
     private val port: Int = BuildKonfig.websocketPort.toInt()
     private val path: String = ""
@@ -23,11 +25,11 @@ class WebSocketClient {
 
     suspend fun makeSureConnected() {
         if (session != null) {
-            println("makeSureConnected: already connected")
+            println("$tag:makeSureConnected: already connected")
             return
         }
         try {
-            println("makeSureConnected: connecting...")
+            println("$tag:makeSureConnected: connecting...")
             // Open WebSocket connection
             session = client.webSocketSession(
                 host = host,
@@ -35,7 +37,7 @@ class WebSocketClient {
                 path = path
             )
         } catch (e: Exception) {
-            println("makeSureConnected: error: $e")
+            println("$tag:makeSureConnected: error: $e")
             e.printStackTrace()
             throw e
         }
@@ -43,7 +45,9 @@ class WebSocketClient {
 
     suspend fun send(payload: ByteArray, retry: Boolean = true): ByteArray {
 
-        println("send()")
+        println("$tag:send()")
+
+        makeSureConnected()
 
         try {
 
@@ -53,23 +57,24 @@ class WebSocketClient {
 
                 val response = it.incoming.receive()
 
+                println("$tag:send: got a response, type: '${response.frameType}', size: '${response.data.size}'")
+
                 if (response is Frame.Binary) {
-                    println("send: got a response")
                     return response.readBytes()
                 }
 
             }
 
         } catch (e: CancellationException) {
+            println("$tag:send: exception ${e.message}")
             session?.close()
             session = null
-            makeSureConnected()
             if (retry) {
-                println("send: retrying...")
+                println("$tag:send: retrying...")
                 send(payload, false)
             }
         } catch (e: Exception) {
-            println("send: error: $e")
+            println("$tag:send: error: $e")
             e.printStackTrace()
         }
 
@@ -77,6 +82,7 @@ class WebSocketClient {
     }
 
     suspend fun close() {
+        println("$tag:close")
         session?.close()
         session = null
         client.close()

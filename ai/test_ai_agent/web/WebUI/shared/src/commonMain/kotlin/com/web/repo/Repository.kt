@@ -5,11 +5,13 @@ import com.web.net.WebSocketClient
 
 class Repository {
 
+    private val tag = "Repository"
+
     private val webSocketConnection = WebSocketClient()
 
     suspend fun sendRequest(query: String, systemPrompt: String): List<Company> {
 
-        println("sendRequest() sending...")
+        println("$tag:sendRequest() sending...")
 
         if (query.isBlank()) return emptyList()
 
@@ -22,12 +24,13 @@ class Repository {
         val rawResponse = webSocketConnection.send(payload)
         val aiResponse = com.ai.proto.AIMessage.ADAPTER.decode(rawResponse)
 
-        println("sendRequest: received items size = ${aiResponse.items.size}")
+        println("$tag:sendRequest: result size = ${aiResponse.items.size}")
 
         return aiResponse.items
     }
 
     suspend fun onClose() {
+        println("$tag:onClose")
         webSocketConnection.close()
     }
 

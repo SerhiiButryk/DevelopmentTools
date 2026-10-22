@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from ast import arg
 import subprocess
 import sys
 import inspect
@@ -19,13 +20,13 @@ import ssl
 # Versions
 
 # https://github.com/google/smali/tree/main
-smaliDecompilerVersion = "3.0.7"
+smaliDecompilerVersion = "3.0.6"
 
 # https://github.com/skylot/jadx
 jadxVersion = "1.5.6"
 
-# https://github.com/iBotPeaches/Apktool
-apktoolVersion = "3.2.0"
+# https://bitbucket.org/iBotPeaches/apktool/downloads/
+apktoolVersion = "3.0.3"
 
 jadxExecFileName = "jadx.jar"   
 smaliDecompilerDestFile = "smali_decoder.zip"
@@ -44,66 +45,66 @@ def Blue(mes: str) -> str:
 # A help 
 # 
 
-def printHelp() -> None:
+def help() -> None:
 
     log(Log.INFO,         
     """
-    A tool for Android app debugging.
-    Usage: ./android.py [options...]
+A tool for Android apps debugging.
+Usage: ./android.py [options...]
 
-    -i, -input "text" - Enters a text in the focused view on the screen
-    Example: ./android.py -i \"Some text\"
+-i, -input "text" - Enters a text in the focused view on the screen
+Example: ./android.py -i \"Some text\"
 
-    -top-activity - Prints current top activity
-    Example: ./android.py -top-activity
+-top-activity - Prints current top activity
+Example: ./android.py -top-activity
 
-    -resign-apk - Resigns apk with default keystore
-    Example: ./android.py -resign-apk app_name.apk
+-resign-apk - Resigns apk with default keystore
+Example: ./android.py -resign-apk app_name.apk
 
-    -info - Prints info about connected device
-    Example: ./android.py -info
+-info - Prints info about connected device
+Example: ./android.py -info
 
-    -enter-creds - Enters the next 2 strings in the 2 text fields if has focus
-    Example: ./android.py -enter-creds email:password
+-enter-creds - Enters the next 2 strings in the 2 text fields if has focus
+Example: ./android.py -enter-creds email:password
 
-    -process-info - Shows process info for a process
-    Example: ./android.py -process-info 13380
-    or
-    Example: ./android.py -process-info com.example.my.package.name
+-process-info - Shows process info for a process
+Example: ./android.py -process-info 13380
+or
+Example: ./android.py -process-info com.example.my.package.name
 
-    -cert-info - Shows certificate signature info for apk
-    Example: ./android.py -cert-info my.apk
+-cert-info - Shows certificate signature info for apk
+Example: ./android.py -cert-info my.apk
 
-    -package-info - Shows detailed package info for app
-    Example: ./android.py -package-info my.good.package
+-package-info - Shows detailed package info for app
+Example: ./android.py -package-info my.good.package
 
-    -decomp - Decompile apk using apktool
-    Example: ./android.py -decomp my_good.apk
+-decomp - Decompile apk using apktool
+Example: ./android.py -decomp my_good.apk
 
-    -sym - Symbolicate Java/Kotlin crash
-    Example: ./android.py -sym mapping.txt crash_stack_logs.txt
+-sym - Symbolicate Java/Kotlin crash
+Example: ./android.py -sym mapping.txt crash_stack_logs.txt
 
-    -build - Build apk from decompiled code
-    Example: ./android.py -build folder_with_decompiled_apk_code
+-build - Build apk from decompiled code
+Example: ./android.py -build folder_with_decompiled_apk_code
 
-    -nsym debugData/ crash_logs.txt - Symbolicate Native crash
-    Example: ./android.py -nsym ~/my-symbols/armeabi-v7a/ crash_logs.txt
+-nsym debugData/ crash_logs.txt - Symbolicate Native crash
+Example: ./android.py -nsym ~/my-symbols/armeabi-v7a/ crash_logs.txt
 
-    -smalitodex -o classes.dex ./smali_classes/ - Convert SMALI to DEX
-    Example: ./android.py -smalitodex -o classes.dex ./smali_classes/
-    Hint:
-    Smali assembler github repo: https://github.com/google/smali/tree/main
+-smalitodex -o classes.dex ./smali_classes/ - Convert SMALI to DEX
+Example: ./android.py -smalitodex -o classes.dex ./smali_classes/
+Hint:
+Smali assembler github repo: https://github.com/google/smali/tree/main
 
-    -jadxopen classes.dex classes.class classes.jar - Decompile DEX/CLASS/JAR file using Jadx
-    Example: ./android.py -jadxopen classes.dex
-    Hint:
-    Jadx github repo: https://github.com/skylot/jadx
+-jadxopen classes.dex classes.class classes.jar - Decompile DEX/CLASS/JAR file using Jadx
+Example: ./android.py -jadxopen classes.dex
+Hint:
+Jadx github repo: https://github.com/skylot/jadx
 
-    -disassemble classes.class classes.jar - Disassemble a class file using javap
-    Example: ./android.py -disassemble classes.class
-    Hint:
-    javap: https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javap.html
-    """ + '\n'
+-disassemble classes.class classes.jar - Disassemble a class file using javap
+Example: ./android.py -disassemble classes.class
+Hint:
+javap: https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javap.html
+""" + '\n'
     )
 
 # 
@@ -186,10 +187,10 @@ class Runner:
 
     # Executes shell command
     @classmethod
-    def runInternalUsingSubprocessRun(cls, command: str, logs: bool) -> None:
+    def runInternalUsingSubprocessRun(cls, command: str, logs: bool = False) -> None:
         if logs:
             log(Log.INFO, Blue(f"Executing command: {command}\n"))
-        result = subprocess.run(command)
+        result = subprocess.run(command, shell=True)
         if logs:
             log(Log.INFO, Blue(f"Done. Code: {result.returncode}\n")) 
 
@@ -417,50 +418,55 @@ def downloadJadx() -> bool:
     else:
         log(Log.INFO, "Launching Jadx...\n")    
 
-    return True            
+    return True    
+
+def processCommand(commands: list[str], actionFunc, hasArgs = True, deviceReq = True) -> None:
+    
+    arg, isFound = hasCommand(commands)  
+
+    if not isFound:
+        return
+    
+    if hasArgs and not arg:
+        return
+
+    if deviceReq and not hasAnyDevices():
+        log(Log.ERROR, f"No available devices\n")
+        return    
+    
+    actionFunc(arg)
+    Runner.exit()             
 
 #
 # Start of the program
 #
 
-TEXT, COMMAND_ENTER_TEXT_FOUND = hasCommand(["-i", "-input"])
-
-if COMMAND_ENTER_TEXT_FOUND:
+def processInputCommand(args) -> None:
     
-    if not hasAnyDevices():
-        Runner.exit()
-
-    log(Log.INFO, f"Entering: '{TEXT}'\n")
+    log(Log.INFO, f"Entering: '{args}'\n")
     
-    Runner.run(f"adb shell input text {TEXT}")
+    Runner.run(f"adb shell input text {args}")
     
     log(Log.INFO, "Done\n")
-    
-    Runner.exit()
+
+processCommand(["-i", "-input"], processInputCommand)    
 
 ##############################################################################################
 
-_, COMMAND_SHOW_TOP_ACTIVITY_FOUND = hasCommand(["-top-activity"])
-
-if COMMAND_SHOW_TOP_ACTIVITY_FOUND:
-
-    if hasAnyDevices() == False:
-        Runner.exit()
-
+def processTopActivityCommand(args) -> None:
+    
     log(Log.INFO, "Top activity:\n")
+
     result = Runner.run("adb shell dumpsys activity | grep mCurrentFocus=Window")
-    log(Log.INFO, result)
     
-    Runner.exit()
+    log(Log.INFO, result)
+
+processCommand(["-top-activity"], processTopActivityCommand, hasArgs=False)      
 
 ##############################################################################################
 
-_, COMMAND_DEVICE_INFO_FOUND = hasCommand(["-info"])
-
-if COMMAND_DEVICE_INFO_FOUND:
-    if not hasAnyDevices():
-        Runner.exit()
-
+def processInfoCommand(args) -> None:
+    
     commands = [
         ("adb shell getprop ro.build.version.release", "Release version"),
         ("adb shell getprop ro.build.version.release_or_codename", "Release or code name version"),
@@ -470,25 +476,20 @@ if COMMAND_DEVICE_INFO_FOUND:
         ("adb shell getprop ro.product.cpu.abilist", "Supported ABI list"),
         ("adb shell getprop ro.build.version.sdk", "SDK version"),
     ]
-
+    
     for cmd, description in commands:
         result = Runner.run(cmd)
         log(Log.INFO, f"{Blue(description)}: {result}")
 
-    Runner.exit()
+processCommand(["-info"], processInfoCommand, hasArgs=False)       
 
 ##############################################################################################
 
-TEXT, COMMAND_ENTER_CREDENTIALS_FOUND = hasCommand(["-enter-creds"])
-
-if COMMAND_ENTER_CREDENTIALS_FOUND:
-
-    if not hasAnyDevices():
-        Runner.exit()
-
+def processEnterCredsCommand(args) -> None:
+    
     try:
-        
-        username, password = TEXT.split(":")
+            
+        username, password = args.split(":")
         
         log(Log.INFO, "Entering text...\n")
         
@@ -502,13 +503,11 @@ if COMMAND_ENTER_CREDENTIALS_FOUND:
     except ValueError:
         log(Log.ERROR, "Invalid credentials format. Use 'username:password'.\n")
 
-    Runner.exit()
+processCommand(["-enter-creds"], processEnterCredsCommand)       
 
 ##############################################################################################
 
-APK_NAME, COMMAND_RESIGN_APK_FOUND = hasCommand(["-resign-apk"])
-
-if COMMAND_RESIGN_APK_FOUND and APK_NAME:
+def processResignCommand(args) -> None:
     
     # Steps to resign app:
     # 1. Unzip.
@@ -531,7 +530,7 @@ if COMMAND_RESIGN_APK_FOUND and APK_NAME:
     Runner.run("mkdir temp")
 
     # Unzip
-    Runner.run(f"unzip -q {APK_NAME} -d temp/")
+    Runner.run(f"unzip -q {args} -d temp/")
 
     # Remove META-INF/
     Runner.run("rm -rf temp/META-INF")
@@ -555,76 +554,59 @@ if COMMAND_RESIGN_APK_FOUND and APK_NAME:
     log(Log.INFO, "Find file: resigned-app.apk\n")
 
     log(Log.INFO, "Done\n")
-    
-    Runner.exit()
+
+processCommand(["-resign-apk"], processResignCommand, deviceReq=False)      
 
 ##############################################################################################
 
-PID, COMMAND_PROCESS_INFO_FOUND = hasCommand(["-process-info"])
-
-if COMMAND_PROCESS_INFO_FOUND and PID:
-
-    if hasAnyDevices() == False:
-        Runner.exit()
-
-    result = Runner.run(f"adb shell ps -A | grep {PID}")
-
+def processProcInfoCommand(args) -> None:
+    
+    result = Runner.run(f"adb shell ps -A | grep {args}")
+    
     if not result:
         log(Log.INFO, "Process is not alive\n")
     else:
         log(Log.INFO, result)
 
-    Runner.exit()
+processCommand(["-process-info"], processProcInfoCommand)         
 
 ##############################################################################################
 
-APK, COMMAND_CERT_INFO_FOUND = hasCommand(["-cert-info"])
-
-if COMMAND_CERT_INFO_FOUND and APK:
-
-    if hasAnyDevices() == False:
-        Runner.exit()
-
+def processCertInfoCommand(args) -> None:
+    
     build_tools_path = getAndroidBuildToolsPath()
-
+    
     # If cannot get path then exit
     if not build_tools_path:
         log(Log.INFO, "No build tool path. Stopped.")
         Runner.exit()
 
-    result = Runner.run(f"{build_tools_path} apksigner verify --print-certs {APK}")
+    result = Runner.run(f"{build_tools_path} apksigner verify --print-certs {args}")
 
     log(Log.INFO, result)
 
-    Runner.exit()
+processCommand(["-cert-info"], processCertInfoCommand, deviceReq=False)      
 
 ##############################################################################################
 
-PACKAGE_NAME, COMMAND_PACKAGE_INFO_FOUND = hasCommand(["-package-info"])
-
-if COMMAND_PACKAGE_INFO_FOUND and PACKAGE_NAME:
-
-    if hasAnyDevices() == False:
-        Runner.exit()
-
-    result = Runner.run(f"adb shell dumpsys package {PACKAGE_NAME}")
-
+def processPackageInfoCommand(args) -> None:
+    
+    result = Runner.run(f"adb shell dumpsys package {args}")
+    
     log(Log.INFO, Blue("START >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"))
 
     log(Log.INFO, result)
 
     log(Log.INFO, Blue("END >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"))
 
-    Runner.exit()
+processCommand(["-package-info"], processPackageInfoCommand)       
 
 ##############################################################################################
 
-APK_NAME, COMMAND_DECOMPILE_APK = hasCommand(["-decomp"])
-
-if COMMAND_DECOMPILE_APK and APK_NAME:
-
-    log(Log.INFO, f"Decompiling '{APK_NAME}'\n")
-
+def processDecompileCommand(args) -> None:
+    
+    log(Log.INFO, f"Decompiling '{args}'\n")
+    
     destFolder = "output"
 
     apkTool = "apktool"
@@ -670,18 +652,16 @@ if COMMAND_DECOMPILE_APK and APK_NAME:
             os.chmod(filename, 0o744)   
                 
     # To process very large apks you can increase the heap size by changin '-JXmx2G' option.             
-    Runner.run(f"./apktool -JXmx2G d {APK_NAME} -o {destFolder}")
+    Runner.run(f"./apktool -JXmx2G d {args} -o {destFolder}")
 
     log(Log.INFO, Blue(f"Done. Find folder: '{destFolder}'\n"))
 
-    Runner.exit()
+processCommand(["-decomp"], processDecompileCommand, deviceReq=False)  
 
 ##############################################################################################    
-
-_, COMMAND_SYMB_CRASH_STACK = hasCommand(["-sym"])
-
-if COMMAND_SYMB_CRASH_STACK:
-
+    
+def processSymCommand(args) -> None:
+    
     if len(sys.argv) < 4:
         log(Log.ERROR, "Sorry. Not enoght arguments.")            
         Runner.exit()
@@ -697,31 +677,28 @@ if COMMAND_SYMB_CRASH_STACK:
     output = Runner.run(f"{retrace_path}/retrace {mappingFile} {crashLogFile}")
     print(output)
 
-    Runner.exit()
+processCommand(["-sym"], processSymCommand, hasArgs=False, deviceReq=False)  
 
 ##############################################################################################
 
-APK_FOLDER, COMMAND_BUILD_APK = hasCommand(["-build"])
-
-if COMMAND_BUILD_APK and APK_FOLDER:
-
-    Runner.run(f"./apktool b {APK_FOLDER} -o modified.apk")
-
+def processBuildCommand(args) -> None:
+    
+    Runner.run(f"./apktool b {args} -o modified.apk")
+    
     log(Log.INFO, Blue("Done. Find file: 'modified.apk'\n"))
 
-    Runner.exit()
+processCommand(["-build"], processBuildCommand, deviceReq=False)      
 
 ##############################################################################################
 
-NEXT, COMMAND_SYM_NATIVE_CRASH = hasCommand(["-nsym"])
-if COMMAND_SYM_NATIVE_CRASH:
-
+def processNSymCommand(args) -> None:
+    
     if len(sys.argv) < 4:
         log(Log.ERROR, "Not enough arguments. Sorry.\n")
-        Runner.exit()    
+        return    
     
     symbols = getArgWithValue("-nsym")
-    logs = path(NEXT)
+    logs = path(args)
     ndk = getNDKPath()
 
     print(f"Folder with symbols: {symbols}")
@@ -732,22 +709,22 @@ if COMMAND_SYM_NATIVE_CRASH:
     Runner.run(f"{ndk} ndk-stack -sym {symbols} -dump {logs}")
 
     log(Log.INFO, Blue("Done\n"))
-    Runner.exit()
+
+processCommand(["-nsym"], processNSymCommand, hasArgs=False, deviceReq=False)      
 
 ##############################################################################################
 
-COMMAND_CONVERT_SMALI_TO_DEX = hasSingleCommand("-smalitodex")
-if COMMAND_CONVERT_SMALI_TO_DEX:
-
+def processSmaliDexCommand(args) -> None:
+    
     if len(sys.argv) < 5:
         log(Log.ERROR, "Not enough arguments.\n")
-        Runner.exit()   
+        return 
 
     if not downloadSmaliDecompiler():
-        Runner.exit()    
+        return    
 
     if not buildSmaliFatJar():
-        Runner.exit()   
+        return   
 
     outFile = getArgWithValue("-o")    
     print("Out file: " + outFile)
@@ -771,36 +748,37 @@ if COMMAND_CONVERT_SMALI_TO_DEX:
         Runner.run(f"java -jar {jadxExecFileName} {outFile}")    
 
     log(Log.INFO, Blue("Done\n"))
-    Runner.exit()
 
-##############################################################################################
+processCommand(["-smalitodex"], processSmaliDexCommand, deviceReq=False, hasArgs=False)       
 
-NEXT, COMMAND_JADX_OPEN = hasCommand(["-jadxopen"])
-if COMMAND_JADX_OPEN:
+##############################################################################################      
 
+def processJadxOpenCommand(args) -> None:
+    
     downloadJadx()
 
+    # Launch in the background
     # java -jar jadx.jar classes.dex
-    Runner.run(f"java -jar {jadxExecFileName} {NEXT}") 
+    Runner.run(f"java -jar {jadxExecFileName} {args} &> /dev/null &") 
 
     log(Log.INFO, Blue("Done\n"))
-    Runner.exit()        
+
+processCommand(["-jadxopen"], processJadxOpenCommand, deviceReq=False)      
 
 ##############################################################################################
 
-NEXT, COMMAND_DISASSEMBLE = hasCommand(["-disassemble"])
-if COMMAND_DISASSEMBLE:
-
-    if NEXT.endswith(".class"):
-        output = Runner.run(f"javap -verbose {NEXT}")
+def processDisassembleCommand(args) -> None:
+    
+    if args.endswith(".class"):
+        output = Runner.run(f"javap -verbose {args}")
         print(output)
     else:
         log(Log.INFO, Red("Wrong file type\n"))
 
     log(Log.INFO, Blue("Done\n"))
-    Runner.exit()      
 
+processCommand(["-disassemble"], processDisassembleCommand, deviceReq=False)          
 
 # Looks like provided args are not correct, so show a help
 log(Log.ERROR, "Sorry, cannot execute this command. \nPlease, make sure that the arguments are correct. A help:\n")
-printHelp()
+help()

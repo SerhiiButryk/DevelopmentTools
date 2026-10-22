@@ -1,4 +1,5 @@
-from datetime import datetime
+from datetime import date, datetime, timedelta
+
 import os
 import re
 
@@ -37,7 +38,6 @@ def basic_search(
     basic_search(query="android", include=["developer"], domain="eleks.com") 
     """
 
-
     duckduckgo_url = "https://html.duckduckgo.com/html/"
 
     query = f"\"{query}\" "
@@ -49,7 +49,13 @@ def basic_search(
         query += f"-{item} "    
 
     if domain:
-        query += f"site:{domain} "           
+        query += f"site:{domain} "    
+
+    # Filter results by a date range 
+    # beforeDate = date.today() - timedelta(days=30)
+    # beforeDateStr = beforeDate.strftime("%Y-%m-%d")    
+
+    # query += f"after:{beforeDateStr} "  
 
     data = {
         "q": query,
