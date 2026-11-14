@@ -581,7 +581,7 @@ def processCertInfoCommand(args) -> None:
         log(Log.INFO, "No build tool path. Stopped.")
         Runner.exit()
 
-    result = Runner.run(f"{build_tools_path} apksigner verify --print-certs {args}")
+    result = Runner.run(f"{build_tools_path}apksigner verify --print-certs {args}")
 
     log(Log.INFO, result)
 
