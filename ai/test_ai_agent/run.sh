@@ -4,6 +4,7 @@
 set -e
 
 help() {
+    echo "A program to run the backend server and the web UI."
     echo "Usage: $0 [--server] [--webui]"
     echo "Options:"
     echo "  --server   Run the backend server"

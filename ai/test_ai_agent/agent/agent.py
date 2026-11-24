@@ -1,29 +1,18 @@
 import os
 
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain.agents import create_agent
+
 from pydantic import BaseModel
+
 from deepagents import create_deep_agent
 from deepagents.backends.filesystem import FilesystemBackend
+
 from langchain_deepseek import ChatDeepSeek
 
+from data_formats import EmptyResponse
 from tools import raw_search_tool, scraping_tool, search_tool  
 
 from utils import log
-
-# Define the structure of each lead in the output
-class LeadResponse(BaseModel):
-    company: str
-    contact_info: str
-    email: str
-    summary: str
-    outreach_message: str
-    url: str
-    tools_used: list[str]
-
-# Define a list structure to hold multiple leads
-class LeadResponseList(BaseModel):
-    leads: list[LeadResponse]
 
 class Agent:
 
@@ -33,7 +22,7 @@ class Agent:
 
         model_name = os.getenv("MODEL_NAME")
 
-        if model_name.startswith("gemini"):
+        if model_name.startswith("gemini") or model_name.startswith("gemma"):
                 
             llm = ChatGoogleGenerativeAI(   
                 model=model_name
@@ -60,9 +49,9 @@ class Agent:
         raise ValueError(f"Unsupported model: {model_name}. Please set MODEL_NAME to a valid model name.")
 
 
-    def runQuery(self, user_query, system_prompt, debug = True) -> LeadResponseList:
+    def runQuery(self, user_query, system_prompt, response_format: BaseModel, debug = False) -> BaseModel:
 
-        log(f"Running query... size = '{len(user_query)}', system prompt size = '{len(system_prompt)}'")   
+        log(f"runQuery() size = '{len(user_query)}', system prompt size = '{len(system_prompt)}'")   
 
         llm = self.selectAgent()
 
@@ -72,7 +61,7 @@ class Agent:
         # Lifecycle of the agent:
         #
         #                                                          | -> if 'tool_calls' is in the AI response -> call the tool
-        # Loading SKILLs --> Apply system prompt -> Call model ->  | 
+        # Load SKILLs --> Apply system prompt -> Call model ->  | 
         #                                                          | -> if 'tool_calls' is not in the AI response -> stop and return the response
         #
         # Responses:
@@ -86,7 +75,7 @@ class Agent:
             model=llm,
             system_prompt=system_prompt,
             tools=tools,
-            response_format=LeadResponseList,
+            response_format=response_format,
             skills=["./skills/"],
             backend=backend,
         )
@@ -111,4 +100,4 @@ class Agent:
 
             log(f"Received an EMPTY response")
             
-            return LeadResponseList()
+            return EmptyResponse()

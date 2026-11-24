@@ -84,6 +84,9 @@ Example: ./apple.py -sil 'file.swift'
 -binarydeps - Print binary dependencies
 Example: ./apple.py -binarydeps 'ios_app_binary'
 
+-archinfo - Print architecture information
+Example: ./apple.py -archinfo 'ios_app_binary'
+
 -expsymbols - Print exported symbols
 Example: ./apple.py -expsymbols 'ios_app_binary'
 
@@ -345,6 +348,17 @@ def processImportedSymbolsCommand(args) -> None:
     log(Log.INFO, f"{result}")
     
 processCommand(["-impsymbols"], processImportedSymbolsCommand)
+
+# -------------------------------------------------------------------
+
+def processArchInfoCommand(args) -> None:
+    
+    command = f"file '{args}'"
+    result = Runner.run(command)
+
+    log(Log.INFO, f"{result}")
+    
+processCommand(["-archinfo"], processArchInfoCommand)
 
 # Looks like provided args are not correct, so show a help
 log(Log.ERROR, "Sorry, cannot execute this command. \nPlease, make sure that the arguments are correct. A help:\n")

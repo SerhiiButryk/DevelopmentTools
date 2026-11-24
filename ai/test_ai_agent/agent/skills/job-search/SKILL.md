@@ -7,7 +7,7 @@ description: Use this skill when searching for IT job vacancies in Ukrainian tec
 
 1. ELEKS 
 2. EPAM
-3. SoftServe
+<!--3. SoftServe
 4. GlobalLogic
 5. Ajax
 6. Genesis
@@ -23,7 +23,7 @@ description: Use this skill when searching for IT job vacancies in Ukrainian tec
 16. Sombra
 17. Luxoft
 18. Indeema
-19. Uklon
+19. Uklon-->
 
 # Ukraine IT Company Career Portal
 
